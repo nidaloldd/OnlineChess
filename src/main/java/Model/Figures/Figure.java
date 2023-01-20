@@ -1,9 +1,15 @@
-package Model;
+package Model.Figures;
+
+import Model.Color;
+import Model.Direction;
+import Model.Position;
+import Model.Table;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Figure {
+    private boolean isFigureNotMoved;
     protected Color color;
     protected Position position;
     protected Table table;
@@ -16,24 +22,18 @@ public abstract class Figure {
         return position;
     }
     public void setPosition(Position position) {
+        isFigureNotMoved = false;
         this.position = position;
+    }
+    public boolean getIfFigureNotMoved(){
+        return isFigureNotMoved;
     }
 
     public Figure(Table table,Color color, Position position){
         this.color = color;
         this.position = position;
         this.table = table;
-    }
-
-    public boolean isPositionOccupied(Position position){
-        if(table.getFigureOn(position)==null){return false;}
-        return true;
-    }
-    public boolean isPositionOccupiedByEnemy(Position position, Color color){
-        if(!isPositionOccupied(position)){return false;}
-
-        if(table.getFigureOn(position).getColor() == Color.getOpposite(color)){return true;}
-        return false;
+        isFigureNotMoved = true;
     }
 
     public List<Position> getValidMoves() {
@@ -41,17 +41,17 @@ public abstract class Figure {
     }
 
     public abstract List<Position> getValidMoves(boolean handleKingInCheck);
-    public List<Position> getValidMovesFromOneDirection(Direction direction,String step ){
+    public List<Position> getValidMovesFromOneDirection(Direction direction, String step ){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;
         while (true){
             actualPosition = actualPosition.stepToDirection(direction);
             if(!actualPosition.isPositionValid()){return validMoves;}
-            if(isPositionOccupiedByEnemy(actualPosition,color)){
+            if(table.isPositionOccupiedByEnemy(actualPosition,color)){
                 validMoves.add(actualPosition);
                 return validMoves;
             }
-            if(!isPositionOccupied(actualPosition)) {
+            if(!table.isPositionOccupied(actualPosition)) {
                 validMoves.add(actualPosition);
             }
             if(step == ("onlyOneStep")){return validMoves;}
@@ -63,11 +63,11 @@ public abstract class Figure {
         while (true){
             actualPosition = actualPosition.stepToDirection(direction);
             if(!actualPosition.isPositionValid()){return validMoves;}
-            if(isPositionOccupiedByEnemy(actualPosition,color)){
+            if(table.isPositionOccupiedByEnemy(actualPosition,color)){
                 validMoves.add(actualPosition);
                 return validMoves;
             }
-            if(!isPositionOccupied(actualPosition)) {
+            if(!table.isPositionOccupied(actualPosition)) {
                 validMoves.add(actualPosition);
             }
             else {

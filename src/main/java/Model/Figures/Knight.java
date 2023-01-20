@@ -32,18 +32,18 @@ public class Knight extends Figure {
         stepPosition = stepPosition.stepToDirection(direction);
         Position actualPosition = stepPosition;
 
-        Direction[] dirs = {Direction.getDirectionOf(direction.getxChange(),0),
-                            Direction.getDirectionOf(0,direction.getyChange())};
+        Direction[] dirs = {Direction.getDirectionOf(direction.getXChange(),0),
+                            Direction.getDirectionOf(0,direction.getYChange())};
 
         for(Direction dir : dirs){
             actualPosition = stepPosition;
             actualPosition = actualPosition.stepToDirection(dir);
             if(!actualPosition.isPositionValid()){continue;}
-            if(isPositionOccupiedByEnemy(actualPosition,color)){
+            if(table.isPositionOccupiedByEnemy(actualPosition,color)){
                 validMoves.add(actualPosition);
                 continue;
             }
-            if(!isPositionOccupied(actualPosition)) {
+            if(!table.isPositionOccupied(actualPosition)) {
                 validMoves.add(actualPosition);
             }
         }
@@ -52,7 +52,7 @@ public class Knight extends Figure {
 
     @Override
     public String toString() {
-        if(color == Color.White){
+        if(color == Color.WHITE){
             return " WN ";
         }
         return " BN ";

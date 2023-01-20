@@ -87,12 +87,10 @@ public class TestMoves {
                 ,chessParty.getTable().makeTableToString(Position.toPosition("C7"))
 
         );
-
     }
     @Test
     void King(){
         jumpEarlyGame();
-
         assertEquals("""
                          BR  BN  BB  BQ  BK  BB  BN  BR\s
                          BP  BP  BP  00  00  BP  BP  BP\s
@@ -155,7 +153,7 @@ public class TestMoves {
         );
 
         chessParty.getTable().makeMove(Position.toPosition("C8"),Position.toPosition("F5"));
-        //assertTrue(chessParty.getTable().getKing(Color.White).inCheck);
+        //assertTrue(chessParty.getTable().getKing(Color.WHITE).inCheck);
         assertEquals("""
                          BR  BN  00  BQ  00  BB  BN  BR\s
                          BP  BP  BP  00  00  BP  BP  BP\s
@@ -169,9 +167,6 @@ public class TestMoves {
                 ,chessParty.getTable().makeTableToString(Position.toPosition("D3"))
         );
 
-        for(Position p : chessParty.getTable().getFigureOn("B2").getValidMoves(true)){
-            System.out.println(Position.toString(p));
-        }
         assertEquals("""
                          BR  BN  00  BQ  00  BB  BN  BR\s
                          BP  BP  BP  00  00  BP  BP  BP\s
@@ -196,9 +191,147 @@ public class TestMoves {
                         """
                 ,chessParty.getTable().makeTableToString(Position.toPosition("D1"))
         );
+    }
+    @Test
+    void testCastle(){
+        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("E4"));
+        chessParty.getTable().makeMove(Position.toPosition("D7"),Position.toPosition("D5"));
+        chessParty.getTable().makeMove(Position.toPosition("F1"),Position.toPosition("D3"));
+        chessParty.getTable().makeMove(Position.toPosition("C8"),Position.toPosition("E6"));
+        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("F3"));
+        chessParty.getTable().makeMove(Position.toPosition("B8"),Position.toPosition("C6"));
 
+        assertEquals("""
+                         BR  00  00  BQ  BK  BB  BN  BR\s
+                         BP  BP  BP  00  BP  BP  BP  BP\s
+                         00  00  BN  00  BB  00  00  00\s
+                         00  00  00  BP  00  00  00  00\s
+                         00  00  00  00  WP  00  00  00\s
+                         00  00  00  WB  00  WN  00  00\s
+                         WP  WP  WP  WP  VV  WP  WP  WP\s
+                         WR  WN  WB  WQ  WK  VV  VV  WR\s
+                        """
+                ,chessParty.getTable().makeTableToString(Position.toPosition("E1"))
+        );
+        chessParty.getTable().makeMove(Position.toPosition("E1"),Position.toPosition("G1"));
+
+        assertEquals("""
+                         BR  00  00  BQ  BK  BB  BN  BR\s
+                         BP  BP  BP  00  BP  BP  BP  BP\s
+                         00  00  BN  00  BB  00  00  00\s
+                         00  00  00  BP  00  00  00  00\s
+                         00  00  00  00  WP  00  00  00\s
+                         00  00  00  WB  00  WN  00  00\s
+                         WP  WP  WP  WP  00  WP  WP  WP\s
+                         WR  WN  WB  WQ  00  WR  WK  00\s
+                        """
+                ,chessParty.getTable().makeTableToString()
+        );
+
+        chessParty.getTable().makeMove(Position.toPosition("D8"),Position.toPosition("D6"));
+        chessParty.getTable().makeMove(Position.toPosition("C2"),Position.toPosition("C3"));
+        chessParty.getTable().makeMove(Position.toPosition("E8"),Position.toPosition("C8"));
+        assertEquals("""
+                         00  00  BK  BR  00  BB  BN  BR\s
+                         BP  BP  BP  00  BP  BP  BP  BP\s
+                         00  00  BN  BQ  BB  00  00  00\s
+                         00  00  00  BP  00  00  00  00\s
+                         00  00  00  00  WP  00  00  00\s
+                         00  00  WP  WB  00  WN  00  00\s
+                         WP  WP  00  WP  00  WP  WP  WP\s
+                         WR  WN  WB  WQ  00  WR  WK  00\s
+                        """
+                ,chessParty.getTable().makeTableToString()
+        );
+
+        init();
+        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("E4"));
+        chessParty.getTable().makeMove(Position.toPosition("E7"),Position.toPosition("E5"));
+        chessParty.getTable().makeMove(Position.toPosition("F1"),Position.toPosition("C4"));
+        chessParty.getTable().makeMove(Position.toPosition("D8"),Position.toPosition("H4"));
+        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("F3"));
+        chessParty.getTable().makeMove(Position.toPosition("F7"),Position.toPosition("F6"));
+        chessParty.getTable().makeMove(Position.toPosition("E1"),Position.toPosition("E2"));
+        chessParty.getTable().makeMove(Position.toPosition("G7"),Position.toPosition("G6"));
+        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("E1"));
+        chessParty.getTable().makeMove(Position.toPosition("D7"),Position.toPosition("D6"));
+        assertEquals("""
+                         BR  BN  BB  00  BK  BB  BN  BR\s
+                         BP  BP  BP  00  00  00  00  BP\s
+                         00  00  00  BP  00  BP  BP  00\s
+                         00  00  00  00  BP  00  00  00\s
+                         00  00  WB  00  WP  00  00  BQ\s
+                         00  00  00  00  00  WN  00  00\s
+                         WP  WP  WP  WP  VV  WP  WP  WP\s
+                         WR  WN  WB  WQ  WK  VV  00  WR\s
+                        """
+                ,chessParty.getTable().makeTableToString(Position.toPosition("E1"))
+        );
 
     }
+    @Test
+    void testEnPassant(){
+        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("E4"));
+        chessParty.getTable().makeMove(Position.toPosition("C7"),Position.toPosition("C5"));
+        chessParty.getTable().makeMove(Position.toPosition("E4"),Position.toPosition("E5"));
+        chessParty.getTable().makeMove(Position.toPosition("D7"),Position.toPosition("D5"));
+        assertEquals("""
+                         BR  BN  BB  BQ  BK  BB  BN  BR\s
+                         BP  BP  00  00  BP  BP  BP  BP\s
+                         00  00  00  VV  VV  00  00  00\s
+                         00  00  BP  BP  WP  00  00  00\s
+                         00  00  00  00  00  00  00  00\s
+                         00  00  00  00  00  00  00  00\s
+                         WP  WP  WP  WP  00  WP  WP  WP\s
+                         WR  WN  WB  WQ  WK  WB  WN  WR\s
+                        """
+                ,chessParty.getTable().makeTableToString(Position.toPosition("E5"))
+        );
+
+
+        chessParty.getTable().makeMove(Position.toPosition("E5"),Position.toPosition("D6"));
+        assertEquals("""
+                         BR  BN  BB  BQ  BK  BB  BN  BR\s
+                         BP  BP  00  VV  VV  BP  BP  BP\s
+                         00  00  00  WP  00  00  00  00\s
+                         00  00  BP  00  00  00  00  00\s
+                         00  00  00  00  00  00  00  00\s
+                         00  00  00  00  00  00  00  00\s
+                         WP  WP  WP  WP  00  WP  WP  WP\s
+                         WR  WN  WB  WQ  WK  WB  WN  WR\s
+                        """
+                ,chessParty.getTable().makeTableToString(Position.toPosition("D6"))
+        );
+
+    }
+    @Test
+    void testPawnPromotion(){
+        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("E4"));
+        chessParty.getTable().makeMove(Position.toPosition("C7"),Position.toPosition("C5"));
+        chessParty.getTable().makeMove(Position.toPosition("E4"),Position.toPosition("E5"));
+
+        chessParty.getTable().makeMove(Position.toPosition("D7"),Position.toPosition("D5"));
+        chessParty.getTable().makeMove(Position.toPosition("E5"),Position.toPosition("D6"));
+        chessParty.getTable().makeMove(Position.toPosition("D8"),Position.toPosition("A5"));
+        chessParty.getTable().makeMove(Position.toPosition("D6"),Position.toPosition("D7"));
+        chessParty.getTable().makeMove(Position.toPosition("E8"),Position.toPosition("D8"));
+        chessParty.getTable().makeMove(Position.toPosition("D7"),Position.toPosition("C8"));
+
+        assertEquals("""
+                         BR  BN  WQ  BK  00  BB  BN  BR\s
+                         BP  BP  00  00  BP  BP  BP  BP\s
+                         00  00  00  00  00  00  00  00\s
+                         BQ  00  BP  00  00  00  00  00\s
+                         00  00  00  00  00  00  00  00\s
+                         00  00  00  00  00  00  00  00\s
+                         WP  WP  WP  WP  00  WP  WP  WP\s
+                         WR  WN  WB  WQ  WK  WB  WN  WR\s
+                        """
+                ,chessParty.getTable().makeTableToString()
+        );
+
+    }
+
 
     @Test
     void StartingPositions(){
@@ -215,130 +348,4 @@ public class TestMoves {
                 ,chessParty.getTable().makeTableToString()
         );
     }
-
-    @Test
-    void TestChessGame(){
-
-        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("F3"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  BB  BN  BR\s
-                         BP  BP  BP  BP  BP  BP  BP  BP\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  00  00  00  WN  00  00\s
-                         WP  WP  WP  WP  WP  WP  WP  WP\s
-                         WR  WN  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        chessParty.getTable().makeMove(Position.toPosition("G8"),Position.toPosition("F6"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  BB  00  BR\s
-                         BP  BP  BP  BP  BP  BP  BP  BP\s
-                         00  00  00  00  00  BN  00  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  00  00  00  WN  00  00\s
-                         WP  WP  WP  WP  WP  WP  WP  WP\s
-                         WR  WN  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        chessParty.getTable().makeMove(Position.toPosition("C2"),Position.toPosition("C4"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  BB  00  BR\s
-                         BP  BP  BP  BP  BP  BP  BP  BP\s
-                         00  00  00  00  00  BN  00  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  WP  00  00  00  00  00\s
-                         00  00  00  00  00  WN  00  00\s
-                         WP  WP  00  WP  WP  WP  WP  WP\s
-                         WR  WN  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        chessParty.getTable().makeMove(Position.toPosition("G7"),Position.toPosition("G6"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  BB  00  BR\s
-                         BP  BP  BP  BP  BP  BP  00  BP\s
-                         00  00  00  00  00  BN  BP  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  WP  00  00  00  00  00\s
-                         00  00  00  00  00  WN  00  00\s
-                         WP  WP  00  WP  WP  WP  WP  WP\s
-                         WR  WN  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        chessParty.getTable().makeMove(Position.toPosition("B1"),Position.toPosition("C3"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  BB  00  BR\s
-                         BP  BP  BP  BP  BP  BP  00  BP\s
-                         00  00  00  00  00  BN  BP  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  WP  00  00  00  00  00\s
-                         00  00  WN  00  00  WN  00  00\s
-                         WP  WP  00  WP  WP  WP  WP  WP\s
-                         WR  00  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        chessParty.getTable().makeMove(Position.toPosition("F8"),Position.toPosition("G7"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  00  00  BR\s
-                         BP  BP  BP  BP  BP  BP  BB  BP\s
-                         00  00  00  00  00  BN  BP  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  WP  00  00  00  00  00\s
-                         00  00  WN  00  00  WN  00  00\s
-                         WP  WP  00  WP  WP  WP  WP  WP\s
-                         WR  00  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        chessParty.getTable().makeMove(Position.toPosition("D2"),Position.toPosition("D4"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  00  00  BR\s
-                         BP  BP  BP  BP  BP  BP  BB  BP\s
-                         00  00  00  00  00  BN  BP  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  WP  WP  00  00  00  00\s
-                         00  00  WN  00  00  WN  00  00\s
-                         WP  WP  00  00  WP  WP  WP  WP\s
-                         WR  00  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        chessParty.getTable().makeMove(Position.toPosition("D2"),Position.toPosition("D4"));
-        assertEquals("""
-                         BR  BN  BB  BQ  BK  00  00  BR\s
-                         BP  BP  BP  BP  BP  BP  BB  BP\s
-                         00  00  00  00  00  BN  BP  00\s
-                         00  00  00  00  00  00  00  00\s
-                         00  00  WP  WP  00  00  00  00\s
-                         00  00  WN  00  00  WN  00  00\s
-                         WP  WP  00  00  WP  WP  WP  WP\s
-                         WR  00  WB  WQ  WK  WB  00  WR\s
-                        """
-                ,chessParty.getTable().makeTableToString()
-        );
-
-        /*
-        chessParty.getTable().makeMove(Position.toPosition("C7"),Position.toPosition("C6"));
-        chessParty.getTable().makeMove(Position.toPosition("B3"),Position.toPosition("B4"));
-        chessParty.getTable().makeMove(Position.toPosition("C6"),Position.toPosition("C5"));
-        chessParty.getTable().makeMove(Position.toPosition("B4"),Position.toPosition("C5"));
-        */
-
-
-    }
-
 }

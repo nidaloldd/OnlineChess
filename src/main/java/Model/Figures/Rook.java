@@ -25,7 +25,7 @@ public class Rook extends Figure {
     }
     @Override
     public String toString() {
-        if(color == Color.White){
+        if(color == Color.WHITE){
             return " WR ";
         }
         return " BR ";

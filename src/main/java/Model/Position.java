@@ -1,5 +1,7 @@
 package Model;
 
+import Model.Figures.Figure;
+
 public class Position {
     private int posX;
     private int posY;
@@ -40,13 +42,14 @@ public class Position {
     public boolean isEmpty(Table table){
         for (Figure f : table.getFigures() ) {
             if (this.equals(f.getPosition())) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
-
     public static String toString(Position position){
+
+
         String posString = "";
         switch (position.posX){
             case 0: posString+="A";break;
@@ -111,20 +114,15 @@ public class Position {
     }
 
     public boolean isPositionValid(){
-        if(posX < Table.tableSize && posX >= 0 &&
-                posY < Table.tableSize && posY >= 0){
+        if(posX < Table.TABLE_SIZE && posX >= 0 &&
+                posY < Table.TABLE_SIZE && posY >= 0){
             return true;
         }
         return false;
     }
 
     public Position stepToDirection(final Direction direction) {
-        return new Position(posX + direction.getxChange(),
-                posY + direction.getyChange());
-    }
-
-    public static void main(String[] args) {
-        Position position = new Position(0,0);
-        System.out.println(Position.toString(position));
+        return new Position(posX + direction.getXChange(),
+                posY + direction.getYChange());
     }
 }

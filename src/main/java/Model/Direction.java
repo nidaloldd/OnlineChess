@@ -36,26 +36,26 @@ public enum Direction {
         return null;
     }
     public static Direction getDirectionForward(Color color){
-        if(color == Color.White){return Up;}
-        else if(color == Color.Black){return Down;}
+        if(color == Color.WHITE){return Up;}
+        else if(color == Color.BLACK){return Down;}
         return null;
     }
     public static Direction getDirectionForwardRight(Color color){
-        if(color == Color.White){return UpRight;}
-        else if(color == Color.Black){return DownLeft;}
+        if(color == Color.WHITE){return UpRight;}
+        else if(color == Color.BLACK){return DownLeft;}
         return null;
     }
     public static Direction getDirectionForwardLeft(Color color){
-        if(color == Color.White){return UpLeft;}
-        else if(color == Color.Black){return DownRight;}
+        if(color == Color.WHITE){return UpLeft;}
+        else if(color == Color.BLACK){return DownRight;}
         return null;
     }
 
-    public int getxChange() {
+    public int getXChange() {
         return xChange;
     }
 
-    public int getyChange() {
+    public int getYChange() {
         return yChange;
     }
 

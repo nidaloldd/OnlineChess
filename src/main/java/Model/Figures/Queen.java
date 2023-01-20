@@ -26,7 +26,7 @@ public class Queen extends Figure {
     }
     @Override
     public String toString() {
-        if(color == Color.White){
+        if(color == Color.WHITE){
             return " WQ ";
         }
         return " BQ ";

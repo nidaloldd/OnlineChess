@@ -24,7 +24,7 @@ public class Bishop extends Figure {
     }
     @Override
     public String toString() {
-        if(color == Color.White){
+        if(color == Color.WHITE){
             return " WB ";
         }
         return " BB ";
