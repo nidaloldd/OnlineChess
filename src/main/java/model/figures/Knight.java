@@ -1,6 +1,6 @@
-package Model.Figures;
+package model.figures;
 
-import Model.*;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Knight extends Figure {
         Position stepPosition = position;
 
         stepPosition = stepPosition.stepToDirection(direction);
-        Position actualPosition = stepPosition;
+        Position actualPosition;
 
         Direction[] dirs = {Direction.getDirectionOf(direction.getXChange(),0),
                             Direction.getDirectionOf(0,direction.getYChange())};
@@ -38,12 +38,12 @@ public class Knight extends Figure {
         for(Direction dir : dirs){
             actualPosition = stepPosition;
             actualPosition = actualPosition.stepToDirection(dir);
-            if(!actualPosition.isPositionValid()){continue;}
+            if(actualPosition.isPositionNotValid()){continue;}
             if(table.isPositionOccupiedByEnemy(actualPosition,color)){
                 validMoves.add(actualPosition);
                 continue;
             }
-            if(!table.isPositionOccupied(actualPosition)) {
+            if(table.isPositionNotOccupied(actualPosition)) {
                 validMoves.add(actualPosition);
             }
         }

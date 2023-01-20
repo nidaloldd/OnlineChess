@@ -1,5 +1,5 @@
-package Model.Figures;
-import Model.*;
+package model.figures;
+import model.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +18,10 @@ public class Pawn extends Figure {
         Direction forwardRight = Direction.getDirectionForwardRight(color);
         Direction forwardLeft = Direction.getDirectionForwardLeft(color);
 
-        if(!table.isPositionOccupied(position.stepToDirection(forward))){
+        if(table.isPositionNotOccupied(position.stepToDirection(forward))){
             validMoves.add(position.stepToDirection(forward));
 
-            if(!table.isPositionOccupied(position.stepToDirection(forward)
+            if(table.isPositionNotOccupied(position.stepToDirection(forward)
                     .stepToDirection(forward)) &&
                     isStartingRow(position)){
                 validMoves.add(position.stepToDirection(forward).stepToDirection(forward));
@@ -35,7 +35,7 @@ public class Pawn extends Figure {
             validMoves.add(position.stepToDirection(forwardLeft));
         }
 
-        validMoves = addPossibleEnPassant(validMoves);
+        addPossibleEnPassant(validMoves);
 
         if(handleKingInCheck){
             validMoves = handleKingInCheck(validMoves);
@@ -58,21 +58,15 @@ public class Pawn extends Figure {
         if(color == Color.BLACK && Position.toString(position).charAt(1)=='7'){
             return true;
         }
-        if(color == Color.WHITE && Position.toString(position).charAt(1)=='2'){
-            return true;
-        }
-        return false;
+        return color == Color.WHITE && Position.toString(position).charAt(1) == '2';
     }
     public boolean isLastRow(Position position){
         if(color == Color.BLACK && Position.toString(position).charAt(1)=='1'){
             return true;
         }
-        if(color == Color.WHITE && Position.toString(position).charAt(1)=='8'){
-            return true;
-        }
-        return false;
+        return color == Color.WHITE && Position.toString(position).charAt(1) == '8';
     }
-    private List<Position> addPossibleEnPassant(List<Position> validMoves){
+    private void addPossibleEnPassant(List<Position> validMoves){
         Direction forwardRight = Direction.getDirectionForwardRight(color);
         Direction forwardLeft = Direction.getDirectionForwardLeft(color);
 
@@ -82,7 +76,6 @@ public class Pawn extends Figure {
         if(canDoEntPassantRight){
             validMoves.add(position.stepToDirection(forwardRight));
         }
-        return validMoves;
     }
     public void makeEnPassantFalse(){
         canDoEntPassantLeft = false;

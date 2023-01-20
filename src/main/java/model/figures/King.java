@@ -1,6 +1,6 @@
-package Model.Figures;
+package model.figures;
 
-import Model.*;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +19,15 @@ public class King extends Figure {
         }
 
         validMoves.removeAll(table.getEnemyValidMoves(color));
-        validMoves = addPossibleCastle(validMoves);
+        addPossibleCastle(validMoves);
 
         if(handleKingInCheck){
             validMoves =handleKingInCheck(validMoves);
         }
         return validMoves;
     }
-    private List<Position> addPossibleCastle(List<Position> validMoves){
+    private void addPossibleCastle(List<Position> validMoves){
         validMoves.addAll(addPossibleCastleForColor(validMoves,color));
-        return validMoves;
     }
     private List<Position> addPossibleCastleForColor(List<Position> validMoves, Color color){
         final String row;

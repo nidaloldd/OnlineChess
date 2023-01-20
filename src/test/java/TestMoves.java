@@ -1,5 +1,5 @@
-import Model.*;
-import Model.Position;
+import model.*;
+import model.Position;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -329,10 +329,7 @@ public class TestMoves {
                         """
                 ,chessParty.getTable().makeTableToString()
         );
-
     }
-
-
     @Test
     void StartingPositions(){
         assertEquals("""

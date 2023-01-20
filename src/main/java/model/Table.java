@@ -1,6 +1,6 @@
-package Model;
+package model;
 
-import Model.Figures.*;
+import model.figures.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,10 @@ import java.util.List;
 public class Table {
     public static final int TABLE_SIZE = 8;
     private Color activePlayerColor = Color.WHITE;
-    private King whiteKing , blackKing;
+    private King whiteKing;
+    private King blackKing;
     private final List<Figure> figures = new ArrayList<>();
-    private List<Figure> takenFigures = new ArrayList<>();
+    private final List<Figure> takenFigures = new ArrayList<>();
     public List<Figure> getFigures() {
         return figures;
     }
@@ -46,20 +47,20 @@ public class Table {
 
     private boolean isContainsTheTwoKing(List<Figure> figures){
         if(figures.isEmpty()){return false;}
-        int WhiteKingNumber = 0;
-        int BlackKingNumber = 0;
+        int whiteKingNumber = 0;
+        int blackKingNumber = 0;
         for(Figure figure : figures){
             if(figure instanceof King ){
                 if(figure.getColor()==Color.WHITE){
-                    WhiteKingNumber += 1;
+                    whiteKingNumber += 1;
                 }
                 else {
-                    BlackKingNumber += 1;
+                    blackKingNumber += 1;
                 }
-                if(WhiteKingNumber > 1 || BlackKingNumber>1){ return false;}
+                if(whiteKingNumber > 1 || blackKingNumber>1){ return false;}
             }
         }
-        return WhiteKingNumber != 0 && BlackKingNumber != 0;
+        return whiteKingNumber != 0 && blackKingNumber != 0;
     }
     public Table(List<Figure> figures){
         if(!isContainsTheTwoKing(figures)){return;}
@@ -110,12 +111,7 @@ public class Table {
 
     public Boolean isKingInCheck(Color color){
 
-        if(getEnemyValidMoves(color).contains(getKing(color).getPosition())){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return getEnemyValidMoves(color).contains(getKing(color).getPosition());
 
     }
     public List<Position> getEnemyValidMoves(Color color){
@@ -185,32 +181,6 @@ public class Table {
                 }
         }
     }
-    private boolean isSmallCastle(Position moveFrom, Position moveTo,Color color){
-        final String row;
-        if(color == Color.WHITE){row = "1";}
-        else {row = "8";}
-
-        if(moveFrom.equals(Position.toPosition("E"+row))) {
-            if (moveTo.equals(Position.toPosition("G"+row))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isBigCastle(Position moveFrom, Position moveTo,Color color){
-        final String row;
-        if(color == Color.WHITE){row = "1";}
-        else {row = "8";}
-
-        if(moveFrom.equals(Position.toPosition("E"+row))) {
-            if (moveTo.equals(Position.toPosition("B"+row))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     private void takeFigure(Figure figure){
         takenFigures.add(figure);
@@ -218,8 +188,7 @@ public class Table {
     }
 
     private void handlePawnPromotion(Position moveFrom, Position moveTo){
-        if(!(getFigureOn(moveFrom) instanceof Pawn)){return;}
-        var pawn = ((Pawn) getFigureOn(moveFrom));
+        if(!(getFigureOn(moveFrom) instanceof Pawn pawn)){return;}
 
         if(pawn.isLastRow(moveTo)){
             setFigureOn(moveTo,new Queen(this,activePlayerColor,Position.toString(moveTo)));
@@ -232,18 +201,19 @@ public class Table {
             }
         }
         if(!(getFigureOn(moveFrom) instanceof Pawn)){return;}
-        var pawn = ((Pawn) getFigureOn(moveFrom));
 
         if(Math.abs(moveFrom.getPosY()-moveTo.getPosY()) == 2){
-            var rightNeighbor = getFigureOn(moveTo.stepToDirection(Direction.Right));
-            var leftNeighbor = getFigureOn(moveTo.stepToDirection(Direction.Left));
-            if(rightNeighbor instanceof Pawn && rightNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
-                ((Pawn) rightNeighbor).canDoEntPassantLeft = true;
-            }
-            if(leftNeighbor instanceof Pawn && rightNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
-                ((Pawn) leftNeighbor).canDoEntPassantRight = true;
+            var rightNeighbor = getFigureOn(moveTo.stepToDirection(Direction.RIGHT));
+            var leftNeighbor = getFigureOn(moveTo.stepToDirection(Direction.LEFT));
 
-            }
+                if( rightNeighbor instanceof Pawn && rightNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
+                    ((Pawn) rightNeighbor).canDoEntPassantLeft = true;
+                }
+
+                if(leftNeighbor instanceof Pawn && leftNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
+                    ((Pawn) leftNeighbor).canDoEntPassantRight = true;
+
+                }
         }
 
         var back = Direction.getDirectionForward(Color.getOpposite(activePlayerColor));
@@ -255,15 +225,10 @@ public class Table {
         var forwardLeft = Direction.getDirectionForwardLeft(activePlayerColor);
         var forwardRight = Direction.getDirectionForwardRight(activePlayerColor);
         var back = Direction.getDirectionForward(Color.getOpposite(activePlayerColor));
-        if(moveTo.isEmpty(this) &&
-                (moveFrom.stepToDirection(forwardLeft).equals(moveTo)||moveFrom.stepToDirection(forwardRight).equals(moveTo)) &&
+        return moveTo.isEmpty(this) &&
+                (moveFrom.stepToDirection(forwardLeft).equals(moveTo) || moveFrom.stepToDirection(forwardRight).equals(moveTo)) &&
                 getFigureOn(moveTo.stepToDirection(back)) instanceof Pawn &&
-                getFigureOn(moveTo.stepToDirection(back)).getColor() == Color.getOpposite(activePlayerColor)
-        )
-        {
-           return true;
-        }
-        return false;
+                getFigureOn(moveTo.stepToDirection(back)).getColor() == Color.getOpposite(activePlayerColor);
     }
     //1. Nf3 Nf6 2. c4 g6 3. Nc3 Bg7 4. d4 O-O 5. Bf4 d5 6. Qb3 dxc4 7. Qxc4 c6 8. e4 Nbd7 9. Rd1 Nb6 10. Qc5 Bg4 11. Bg5 Na4 12. Qa3 Nxc3 13. bxc3 Nxe4 14. Bxe7 Qb6 15. Bc4 Nxc3 16. Bc5 Rfe8+ 17. Kf1 Be6 18. Bxb6 Bxc4+ 19. Kg1 Ne2+ 20. Kf1 Nxd4+ 21. Kg1 Ne2+ 22. Kf1 Nc3+ 23. Kg1 axb6 24. Qb4 Ra4 25. Qxb6 Nxd1 26. h3 Rxa2 27. Kh2 Nxf2 28. Re1 Rxe1 29. Qd8+ Bf8 30. Nxe1 Bd5 31. Nf3 Ne4 32. Qb8 b5 33. h4 h5 34. Ne5 Kg7 35. Kg1 Bc5+ 36. Kf1 Ng3+ 37. Ke1 Bb4+ 38. Kd1 Bb3+ 39. Kc1 Ne2+ 40. Kb1 Nc3+ 41. Kc1 Rc2# 0-1
 
@@ -273,22 +238,20 @@ public class Table {
 
     }
 
-    public boolean isPositionOccupied(Position position){
-        if(getFigureOn(position)==null){return false;}
-        return true;
+    public boolean isPositionNotOccupied(Position position){
+        return getFigureOn(position) == null;
     }
     public boolean isPositionOccupiedByEnemy(Position position, Color color){
-        if(!isPositionOccupied(position)){return false;}
+        if(isPositionNotOccupied(position)){return false;}
 
-        if(getFigureOn(position).getColor() == Color.getOpposite(color)){return true;}
-        return false;
+        return getFigureOn(position).getColor() == Color.getOpposite(color);
     }
 
     public void drawTable(){
         System.out.println(makeTableToString());
     }
     public String makeTableToString(Position position) {
-        String sol = new String();
+        String sol = "";
         String[][] table = new String[TABLE_SIZE][TABLE_SIZE];
         for (int i = 0; i < TABLE_SIZE; i++) {
             for (int j = 0; j < TABLE_SIZE; j++) {
@@ -317,7 +280,7 @@ public class Table {
         return sol;
     }
     public String makeTableToString() {
-        String sol = new String();
+        String sol = "";
         String[][] table = new String[TABLE_SIZE][TABLE_SIZE];
         for (int i = 0; i < TABLE_SIZE; i++) {
             for (int j = 0; j < TABLE_SIZE; j++) {

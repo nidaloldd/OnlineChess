@@ -1,6 +1,6 @@
-package Model.Figures;
+package model.figures;
 
-import Model.*;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.List;

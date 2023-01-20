@@ -1,9 +1,9 @@
-package Model.Figures;
+package model.figures;
 
-import Model.Color;
-import Model.Direction;
-import Model.Position;
-import Model.Table;
+import model.Color;
+import model.Direction;
+import model.Position;
+import model.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public abstract class Figure {
     public Color getColor() {
         return color;
     }
-    public Color getEnemyColor(){return Color.getOpposite(color);}
+
     public Position getPosition() {
         return position;
     }
@@ -29,7 +29,7 @@ public abstract class Figure {
         return isFigureNotMoved;
     }
 
-    public Figure(Table table,Color color, Position position){
+    protected Figure(Table table,Color color, Position position){
         this.color = color;
         this.position = position;
         this.table = table;
@@ -41,17 +41,18 @@ public abstract class Figure {
     }
 
     public abstract List<Position> getValidMoves(boolean handleKingInCheck);
+    // toDo make New Function dont use parameter step
     public List<Position> getValidMovesFromOneDirection(Direction direction, String step ){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;
         while (true){
             actualPosition = actualPosition.stepToDirection(direction);
-            if(!actualPosition.isPositionValid()){return validMoves;}
+            if(actualPosition.isPositionNotValid()){return validMoves;}
             if(table.isPositionOccupiedByEnemy(actualPosition,color)){
                 validMoves.add(actualPosition);
                 return validMoves;
             }
-            if(!table.isPositionOccupied(actualPosition)) {
+            if(table.isPositionNotOccupied(actualPosition)) {
                 validMoves.add(actualPosition);
             }
             if(step == ("onlyOneStep")){return validMoves;}
@@ -62,12 +63,12 @@ public abstract class Figure {
         Position actualPosition = position;
         while (true){
             actualPosition = actualPosition.stepToDirection(direction);
-            if(!actualPosition.isPositionValid()){return validMoves;}
+            if(actualPosition.isPositionNotValid()){return validMoves;}
             if(table.isPositionOccupiedByEnemy(actualPosition,color)){
                 validMoves.add(actualPosition);
                 return validMoves;
             }
-            if(!table.isPositionOccupied(actualPosition)) {
+            if(table.isPositionNotOccupied(actualPosition)) {
                 validMoves.add(actualPosition);
             }
             else {

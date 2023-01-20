@@ -1,6 +1,6 @@
-package Model;
+package model;
 
-import Model.Figures.Figure;
+import model.figures.Figure;
 
 public class Position {
     private int posX;
@@ -113,12 +113,9 @@ public class Position {
         return posX+" : "+posY;
     }
 
-    public boolean isPositionValid(){
-        if(posX < Table.TABLE_SIZE && posX >= 0 &&
-                posY < Table.TABLE_SIZE && posY >= 0){
-            return true;
-        }
-        return false;
+    public boolean isPositionNotValid(){
+        return posX >= Table.TABLE_SIZE || posX < 0 ||
+                posY >= Table.TABLE_SIZE || posY < 0;
     }
 
     public Position stepToDirection(final Direction direction) {
