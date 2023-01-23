@@ -41,8 +41,7 @@ public abstract class Figure {
     }
 
     public abstract List<Position> getValidMoves(boolean handleKingInCheck);
-    // toDo make New Function dont use parameter step
-    public List<Position> getValidMovesFromOneDirection(Direction direction, String step ){
+    public List<Position> getValidMovesFromOneDirectionOnlyOneStep(Direction direction){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;
         while (true){
@@ -55,10 +54,10 @@ public abstract class Figure {
             if(table.isPositionNotOccupied(actualPosition)) {
                 validMoves.add(actualPosition);
             }
-            if(step == ("onlyOneStep")){return validMoves;}
+            return validMoves;
         }
     }
-    public List<Position> getValidMovesFromOneDirection(Direction direction ){
+    public List<Position> getValidMovesFromOneDirectionManyStep(Direction direction ){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;
         while (true){

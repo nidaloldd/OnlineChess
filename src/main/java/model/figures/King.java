@@ -15,7 +15,7 @@ public class King extends Figure {
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction direction : Direction.getAllDirections()){
-           validMoves.addAll(getValidMovesFromOneDirection(direction,"onlyOneStep"));
+           validMoves.addAll(getValidMovesFromOneDirectionOnlyOneStep(direction));
         }
 
         validMoves.removeAll(table.getEnemyValidMoves(color));

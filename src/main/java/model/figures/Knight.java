@@ -24,7 +24,7 @@ public class Knight extends Figure {
 
         return validMoves;
     }
-    @Override
+
     public List<Position> getValidMovesFromOneDirection(Direction direction){
         List<Position> validMoves = new ArrayList<>();
         Position stepPosition = position;

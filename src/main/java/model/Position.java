@@ -2,14 +2,19 @@ package model;
 
 import model.figures.Figure;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Position {
     private int posX;
     private int posY;
-    private Figure figure;
-
-    public void setFigure(Figure figure) {
-        this.figure = figure;
-    }
+    public static Map<Character,Integer> ranksToPos = new HashMap<Character,Integer>();
+    public static Map<Character,Integer> filesToPos = new HashMap<Character,Integer>();
+    public static Map<Integer,Character> ranksToString = new HashMap<Integer,Character>();
+    public static Map<Integer,Character> filesToString = new HashMap<Integer,Character>();
 
     public int getPosX() {
         return posX;
@@ -48,57 +53,53 @@ public class Position {
         return true;
     }
     public static String toString(Position position){
-
-
-        String posString = "";
-        switch (position.posX){
-            case 0: posString+="A";break;
-            case 1: posString+="B";break;
-            case 2: posString+="C";break;
-            case 3: posString+="D";break;
-            case 4: posString+="E";break;
-            case 5: posString+="F";break;
-            case 6: posString+="G";break;
-            case 7: posString+="H";break;
+        if(position.isPositionNotValid()){
+            return " ";
         }
-        switch (position.posY){
-            case 0: posString+="8";break;
-            case 1: posString+="7";break;
-            case 2: posString+="6";break;
-            case 3: posString+="5";break;
-            case 4: posString+="4";break;
-            case 5: posString+="3";break;
-            case 6: posString+="2";break;
-            case 7: posString+="1";break;
-        }
-        return posString;
+
+        ranksToString.put(0,'A');
+        ranksToString.put(1,'B');
+        ranksToString.put(2,'C');
+        ranksToString.put(3,'D');
+        ranksToString.put(4,'E');
+        ranksToString.put(5,'F');
+        ranksToString.put(6,'G');
+        ranksToString.put(7,'H');
+        filesToString.put(0,'8');
+        filesToString.put(1,'7');
+        filesToString.put(2,'6');
+        filesToString.put(3,'5');
+        filesToString.put(4,'4');
+        filesToString.put(5,'3');
+        filesToString.put(6,'2');
+        filesToString.put(7,'1');
+        return ranksToString.getOrDefault(position.posX,' ').toString()+filesToString.getOrDefault(position.posY,' ').toString();
     }
 
     public static Position toPosition(String str){
-        String letter = str.substring(0,1);
-        String number = str.substring(1,2);
-        Position position = new Position();
-        switch (letter){
-            case "A": position.setPosX(0);break;
-            case "B": position.setPosX(1);break;
-            case "C": position.setPosX(2);break;
-            case "D": position.setPosX(3);break;
-            case "E": position.setPosX(4);break;
-            case "F": position.setPosX(5);break;
-            case "G": position.setPosX(6);break;
-            case "H": position.setPosX(7);break;
+        Pattern pattern = Pattern.compile("^([A-H][1-8])$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(str);
+        if(!matcher.find()) {
+            System.out.println("Match not found");
+            return new Position(-1,-1);
         }
-        switch (number){
-            case "8": position.setPosY(0);break;
-            case "7": position.setPosY(1);break;
-            case "6": position.setPosY(2);break;
-            case "5": position.setPosY(3);break;
-            case "4": position.setPosY(4);break;
-            case "3": position.setPosY(5);break;
-            case "2": position.setPosY(6);break;
-            case "1": position.setPosY(7);break;
-        }
-        return position;
+        ranksToPos.put('A',0);
+        ranksToPos.put('B',1);
+        ranksToPos.put('C',2);
+        ranksToPos.put('D',3);
+        ranksToPos.put('E',4);
+        ranksToPos.put('F',5);
+        ranksToPos.put('G',6);
+        ranksToPos.put('H',7);
+        filesToPos.put('8',0);
+        filesToPos.put('7',1);
+        filesToPos.put('6',2);
+        filesToPos.put('5',3);
+        filesToPos.put('4',4);
+        filesToPos.put('3',5);
+        filesToPos.put('2',6);
+        filesToPos.put('1',7);
+        return new Position(ranksToPos.get(Character.toUpperCase(str.charAt(0))),filesToPos.get(str.charAt(1)));
     }
 
     @Override

@@ -15,7 +15,7 @@ public class Rook extends Figure {
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction direction : Direction.getStraightDirections()){
-            validMoves.addAll(getValidMovesFromOneDirection(direction));
+            validMoves.addAll(getValidMovesFromOneDirectionManyStep(direction));
         }
 
         if(handleKingInCheck){

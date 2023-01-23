@@ -1,28 +1,25 @@
 package model;
 
 public class ChessParty {
-
-    Player whitePlayer;
-    Player blackPlayer;
     Table table;
-    Player activePlayer;
-
+    private final Player whitePlayer;
+    private final Player blackPlayer;
     public Table getTable() {
         return table;
     }
-    public void switchActivPlayer(){
-        if(activePlayer.equals(whitePlayer)){
-            activePlayer = blackPlayer;
-        }
-        else {
-            activePlayer = whitePlayer;
-        }
-    }
+
     public ChessParty(Player whitePlayer, Player blackPlayer) {
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
-        activePlayer = whitePlayer;
         this.table = new Table();
+    }
+    public Player getActivePlayer(){
+        if(table.getActivePlayerColor() == Color.WHITE){
+            return whitePlayer;
+        }
+        else {
+            return  blackPlayer;
+        }
     }
 
 }

@@ -3,7 +3,10 @@ package model;
 import model.figures.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Table {
     public static final int TABLE_SIZE = 8;
@@ -23,6 +26,9 @@ public class Table {
         else {
             return  blackKing;
         }
+    }
+    public Color getActivePlayerColor() {
+        return activePlayerColor;
     }
 
     public Figure getFigureOn(Position position){
@@ -120,7 +126,7 @@ public class Table {
             if(figure.getColor() == Color.getOpposite(color)){
                 if(figure instanceof King){
                     for(Direction direction : Direction.getAllDirections()){
-                        enemyMoves.addAll(figure.getValidMovesFromOneDirection(direction,"onlyOneStep"));
+                        enemyMoves.addAll(figure.getValidMovesFromOneDirectionOnlyOneStep(direction));
                     }
                 }
                 else if(figure instanceof Pawn){
@@ -148,40 +154,56 @@ public class Table {
         if(isPositionOccupiedByEnemy(moveTo,activePlayerColor)){
             takeFigure(getFigureOn(moveTo));
         }
-
         handleCastle(moveFrom,moveTo);
         handleEnPassant(moveFrom,moveTo);
         handlePawnPromotion(moveFrom,moveTo);
+
         getFigureOn(moveFrom).setPosition(moveTo);
 
         activePlayerColor = Color.getOpposite(activePlayerColor);
+    }
+    private String[] getSmallCastleMove(Color color){
+        if(color == Color.WHITE){
+            return new String[]{"E1", "G1"};
+        }else {
+            return new String[]{"E8", "G8"};
+        }
+    }
+    private String[] getBigCastleMove(Color color){
+        if(color == Color.WHITE){
+            return new String[]{"E1", "C1"};
+        }else {
+            return new String[]{"E8", "C8"};
+        }
+    }
+    private boolean isBigCastle(Position moveFrom,Position moveTo,Color color){
+
+        return moveFrom.equals(Position.toPosition(getBigCastleMove(color)[0])) &&
+                moveTo.equals(Position.toPosition(getBigCastleMove(color)[1]));
+    }
+
+    private boolean isSmallCastle(Position moveFrom,Position moveTo,Color color){
+
+        return moveFrom.equals(Position.toPosition(getSmallCastleMove(color)[0])) &&
+                moveTo.equals(Position.toPosition(getSmallCastleMove(color)[1]));
     }
 
     private void handleCastle(Position moveFrom, Position moveTo) {
         if(!(getFigureOn(moveFrom) instanceof King)){return;}
 
-        if(moveFrom.equals(Position.toPosition("E1"))){
-            if(moveTo.equals(Position.toPosition("G1"))){
-                //White Small Castle
-                getFigureOn(Position.toPosition("H1")).setPosition(Position.toPosition("F1"));
-            }
-            else if(moveTo.equals(Position.toPosition("C1"))){
-                //White Big Castle
-                getFigureOn(Position.toPosition("A1")).setPosition(Position.toPosition("D1"));
-            }
+        if(isSmallCastle(moveFrom,moveTo,Color.WHITE)){
+            getFigureOn(Position.toPosition("H1")).setPosition(Position.toPosition("F1"));
         }
-        else if(moveFrom.equals(Position.toPosition("E8"))){
-                if(moveTo.equals(Position.toPosition("G8"))){
-                    //Black Small Castle
-                    getFigureOn(Position.toPosition("H8")).setPosition(Position.toPosition("F8"));
-                }
-                else if(moveTo.equals(Position.toPosition("C8"))){
-                    //Black Big Castle
-                    getFigureOn(Position.toPosition("A8")).setPosition(Position.toPosition("D8"));
-                }
+        else if(isBigCastle(moveFrom,moveTo,Color.WHITE)){
+            getFigureOn(Position.toPosition("A1")).setPosition(Position.toPosition("D1"));
+        }
+        else if(isSmallCastle(moveFrom,moveTo,Color.BLACK)){
+            getFigureOn(Position.toPosition("H8")).setPosition(Position.toPosition("F8"));
+        }
+        else if(isBigCastle(moveFrom,moveTo,Color.BLACK)){
+            getFigureOn(Position.toPosition("A8")).setPosition(Position.toPosition("D8"));
         }
     }
-
     private void takeFigure(Figure figure){
         takenFigures.add(figure);
         figures.remove(figure);
@@ -230,12 +252,93 @@ public class Table {
                 getFigureOn(moveTo.stepToDirection(back)) instanceof Pawn &&
                 getFigureOn(moveTo.stepToDirection(back)).getColor() == Color.getOpposite(activePlayerColor);
     }
-    //1. Nf3 Nf6 2. c4 g6 3. Nc3 Bg7 4. d4 O-O 5. Bf4 d5 6. Qb3 dxc4 7. Qxc4 c6 8. e4 Nbd7 9. Rd1 Nb6 10. Qc5 Bg4 11. Bg5 Na4 12. Qa3 Nxc3 13. bxc3 Nxe4 14. Bxe7 Qb6 15. Bc4 Nxc3 16. Bc5 Rfe8+ 17. Kf1 Be6 18. Bxb6 Bxc4+ 19. Kg1 Ne2+ 20. Kf1 Nxd4+ 21. Kg1 Ne2+ 22. Kf1 Nc3+ 23. Kg1 axb6 24. Qb4 Ra4 25. Qxb6 Nxd1 26. h3 Rxa2 27. Kh2 Nxf2 28. Re1 Rxe1 29. Qd8+ Bf8 30. Nxe1 Bd5 31. Nf3 Ne4 32. Qb8 b5 33. h4 h5 34. Ne5 Kg7 35. Kg1 Bc5+ 36. Kf1 Ng3+ 37. Ke1 Bb4+ 38. Kd1 Bb3+ 39. Kc1 Ne2+ 40. Kb1 Nc3+ 41. Kc1 Rc2# 0-1
-
     public void  makeMove(String str){
-    //   Nf3
+        Pattern pattern = Pattern.compile("^O-O|O-O-O|[KQBNR][a-h][1-8]x?[a-h][1-8][\\+\\#]?|[a-h][1-8]x?[a-h][1-8][\\+\\#]?|[1-8]x?[a-h][1-8][\\+\\#]?|[a-h]x?[a-h][1-8][\\+\\#]?|[KQBNR][1-8]x?[a-h][1-8][\\+\\#]?|[KQBNR][a-h]x?[a-h][1-8][\\+\\#]?|[KQBNR]x?[a-h][1-8][\\+\\#]?|[a-h][1-8]x?[\\+\\#]?", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(str);
+        boolean isValidInput = matcher.find();
+        if(!isValidInput) {
+            System.out.println("Match not found: "+str);
+            return;
+        }
 
+        StringBuilder chessNotation = new StringBuilder(str);
+        Position moveFrom ;
+        Position moveTo;
 
+        System.out.println(chessNotation);
+        if(str.equals("O-O")){
+            moveFrom = Position.toPosition(getSmallCastleMove(activePlayerColor)[0]);
+            moveTo = Position.toPosition( getSmallCastleMove(activePlayerColor)[1] );
+            makeMove(moveFrom,moveTo);
+            return;
+        }
+        else if(str.equals("O-O-O")){
+            moveFrom = Position.toPosition( getBigCastleMove(activePlayerColor)[0] );
+            moveTo = Position.toPosition( getBigCastleMove(activePlayerColor)[1] );
+            makeMove(moveFrom,moveTo);
+            return;
+        }
+
+        HashMap<Character,  Class<?>> figureTypes = new HashMap<Character,  Class<?>>();
+        figureTypes.put('K', King.class);
+        figureTypes.put('Q', Queen.class);
+        figureTypes.put('B', Bishop.class);
+        figureTypes.put('N', Knight.class);
+        figureTypes.put('R', Rook.class);
+
+        Class<?> typeOfFigure = Object.class;
+        if(Character.isLowerCase(str.charAt(0))){
+            typeOfFigure = Pawn.class;
+        }
+        else {
+            typeOfFigure = figureTypes.getOrDefault(chessNotation.charAt(0), Object.class);
+            chessNotation.deleteCharAt(0);
+        }
+
+        if(chessNotation.indexOf("x")!=-1){
+            chessNotation.deleteCharAt(chessNotation.indexOf("x"));
+        }
+        if(chessNotation.indexOf("+")!=-1){
+            chessNotation.deleteCharAt(chessNotation.indexOf("+"));
+        }
+        if(chessNotation.indexOf("#")!=-1){
+            chessNotation.deleteCharAt(chessNotation.indexOf("#"));
+        }
+
+        String sub = chessNotation.substring(chessNotation.length()-2,chessNotation.length());
+
+        moveTo = Position.toPosition(sub);
+        chessNotation.delete(chessNotation.length()-2,chessNotation.length());
+
+        moveFrom = findTheCorrectFigurePosition(typeOfFigure,chessNotation.toString(),moveTo);
+
+        System.out.println("From: "+ Position.toString(moveFrom)+" To: "+Position.toString( moveTo) );
+        makeMove(moveFrom, moveTo);
+    }
+    private Position findTheCorrectFigurePosition(Class<?> typeOfFigure, String matchingAngle, Position moveTo){
+        for(Figure f : figures){
+            if( f.getClass().equals(typeOfFigure)&& f.getColor() == activePlayerColor && f.getValidMoves().contains(moveTo)){
+                switch (matchingAngle.length()){
+                    case 0: return f.getPosition();
+                    case 1:
+                        if(Character.isAlphabetic(matchingAngle.charAt(0))&&
+                                f.getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
+                            return  f.getPosition();
+                        }
+                        if(Character.isDigit(matchingAngle.charAt(0))&&
+                                f.getPosition().getPosY()==Position.filesToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
+                            return f.getPosition();
+
+                        }
+                    case 2:
+                        if(f.getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0))) &&
+                                f.getPosition().getPosY()==Position.filesToPos.get(matchingAngle.charAt(1))){
+                            return f.getPosition();
+                        }
+                }
+            }
+        }
+        return new Position(-1,-1);
     }
 
     public boolean isPositionNotOccupied(Position position){
@@ -246,61 +349,4 @@ public class Table {
 
         return getFigureOn(position).getColor() == Color.getOpposite(color);
     }
-
-    public void drawTable(){
-        System.out.println(makeTableToString());
-    }
-    public String makeTableToString(Position position) {
-        String sol = "";
-        String[][] table = new String[TABLE_SIZE][TABLE_SIZE];
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            for (int j = 0; j < TABLE_SIZE; j++) {
-                table[j][i] = " 00 ";
-
-                for (Figure figure : figures) {
-                    if (figure.getPosition().equals(new Position(j, i))) {
-                        table[j][i] = figure.toString();
-                    }
-                }
-
-                for (Position pos : getFigureOn(position).getValidMoves()){
-                    if(pos.equals(new Position(j,i))){
-                        table[j][i] = " VV ";
-                    }
-                }
-
-            }
-        }
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            for (int j = 0; j < TABLE_SIZE; j++) {
-                sol += table[j][i];
-            }
-            sol += "\n";
-        }
-        return sol;
-    }
-    public String makeTableToString() {
-        String sol = "";
-        String[][] table = new String[TABLE_SIZE][TABLE_SIZE];
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            for (int j = 0; j < TABLE_SIZE; j++) {
-                table[j][i] = " 00 ";
-
-                for (Figure figure : figures) {
-                    if (figure.getPosition().equals(new Position(j, i))) {
-                        table[j][i] = figure.toString();
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            for (int j = 0; j < TABLE_SIZE; j++) {
-                sol += table[j][i];
-            }
-            sol += "\n";
-        }
-        return sol;
-    }
-
-
 }

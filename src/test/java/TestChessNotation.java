@@ -4,11 +4,10 @@ import model.Player;
 import model.Position;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-public class ChessGameTest {
+public class TestChessNotation {
     ChessParty chessParty;
-
     @BeforeEach
     void init() {
         Player player1 = new Player("player1");
@@ -19,7 +18,7 @@ public class ChessGameTest {
     @Test
     void TestChessGame(){
 
-        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("F3"));
+        chessParty.getTable().makeMove("Nf3");
         assertEquals("""
                          BR  BN  BB  BQ  BK  BB  BN  BR\s
                          BP  BP  BP  BP  BP  BP  BP  BP\s
@@ -33,7 +32,7 @@ public class ChessGameTest {
                 , DrawTable.makeTableToString(chessParty.getTable())
         );
 
-        chessParty.getTable().makeMove(Position.toPosition("G8"),Position.toPosition("F6"));
+        chessParty.getTable().makeMove("Nf6");
         assertEquals("""
                          BR  BN  BB  BQ  BK  BB  00  BR\s
                          BP  BP  BP  BP  BP  BP  BP  BP\s
@@ -47,7 +46,7 @@ public class ChessGameTest {
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
-        chessParty.getTable().makeMove(Position.toPosition("C2"),Position.toPosition("C4"));
+        chessParty.getTable().makeMove("c4");
         assertEquals("""
                          BR  BN  BB  BQ  BK  BB  00  BR\s
                          BP  BP  BP  BP  BP  BP  BP  BP\s
@@ -61,7 +60,7 @@ public class ChessGameTest {
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
-        chessParty.getTable().makeMove(Position.toPosition("G7"),Position.toPosition("G6"));
+        chessParty.getTable().makeMove("g6");
         assertEquals("""
                          BR  BN  BB  BQ  BK  BB  00  BR\s
                          BP  BP  BP  BP  BP  BP  00  BP\s
@@ -75,7 +74,7 @@ public class ChessGameTest {
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
-        chessParty.getTable().makeMove(Position.toPosition("B1"),Position.toPosition("C3"));
+        chessParty.getTable().makeMove("Nc3");
         assertEquals("""
                          BR  BN  BB  BQ  BK  BB  00  BR\s
                          BP  BP  BP  BP  BP  BP  00  BP\s
@@ -89,7 +88,7 @@ public class ChessGameTest {
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
-        chessParty.getTable().makeMove(Position.toPosition("F8"),Position.toPosition("G7"));
+        chessParty.getTable().makeMove("Bg7");
         assertEquals("""
                          BR  BN  BB  BQ  BK  00  00  BR\s
                          BP  BP  BP  BP  BP  BP  BB  BP\s
@@ -103,7 +102,7 @@ public class ChessGameTest {
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
-        chessParty.getTable().makeMove(Position.toPosition("D2"),Position.toPosition("D4"));
+        chessParty.getTable().makeMove("d4");
         assertEquals("""
                          BR  BN  BB  BQ  BK  00  00  BR\s
                          BP  BP  BP  BP  BP  BP  BB  BP\s
@@ -116,7 +115,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E8"),Position.toPosition("G8"));
+        chessParty.getTable().makeMove("O-O");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  BP  BP  BP  BP  BB  BP\s
@@ -129,7 +128,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C1"),Position.toPosition("F4"));
+        chessParty.getTable().makeMove("Bf4");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  BP  BP  BP  BP  BB  BP\s
@@ -142,7 +141,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D7"),Position.toPosition("D5"));
+        chessParty.getTable().makeMove("d5");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  BP  00  BP  BP  BB  BP\s
@@ -155,7 +154,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D1"),Position.toPosition("B3"));
+        chessParty.getTable().makeMove("Qb3");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  BP  00  BP  BP  BB  BP\s
@@ -168,7 +167,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D5"),Position.toPosition("C4"));
+        chessParty.getTable().makeMove("dxc4");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  BP  00  BP  BP  BB  BP\s
@@ -181,7 +180,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B3"),Position.toPosition("C4"));
+        chessParty.getTable().makeMove("Qxc4");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  BP  00  BP  BP  BB  BP\s
@@ -194,7 +193,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C7"),Position.toPosition("C6"));
+        chessParty.getTable().makeMove("c6");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -207,7 +206,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("E4"));
+        chessParty.getTable().makeMove("e4");
         assertEquals("""
                          BR  BN  BB  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -220,7 +219,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B8"),Position.toPosition("D7"));
+        chessParty.getTable().makeMove("Nbd7");
         assertEquals("""
                          BR  00  BB  BQ  00  BR  BK  00\s
                          BP  BP  00  BN  BP  BP  BB  BP\s
@@ -233,7 +232,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("A1"),Position.toPosition("D1"));
+        chessParty.getTable().makeMove("Rd1");
         assertEquals("""
                          BR  00  BB  BQ  00  BR  BK  00\s
                          BP  BP  00  BN  BP  BP  BB  BP\s
@@ -246,7 +245,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D7"),Position.toPosition("B6"));
+        chessParty.getTable().makeMove("Nb6");
         assertEquals("""
                          BR  00  BB  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -259,7 +258,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C4"),Position.toPosition("C5"));
+        chessParty.getTable().makeMove("Qc5");
         assertEquals("""
                          BR  00  BB  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -272,7 +271,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C8"),Position.toPosition("G4"));
+        chessParty.getTable().makeMove("Bg4");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -285,7 +284,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F4"),Position.toPosition("G5"));
+        chessParty.getTable().makeMove("Bg5");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -298,7 +297,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B6"),Position.toPosition("A4"));
+        chessParty.getTable().makeMove("Na4");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -311,7 +310,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C5"),Position.toPosition("A3"));
+        chessParty.getTable().makeMove("Qa3");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -324,7 +323,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("A4"),Position.toPosition("C3"));
+        chessParty.getTable().makeMove("Nxc3");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -337,7 +336,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B2"),Position.toPosition("C3"));
+        chessParty.getTable().makeMove("bxc3");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -350,7 +349,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F6"),Position.toPosition("E4"));
+        chessParty.getTable().makeMove("Nxe4");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  BP  BP  BB  BP\s
@@ -363,7 +362,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G5"),Position.toPosition("E7"));
+        chessParty.getTable().makeMove("Bxe7");
         assertEquals("""
                          BR  00  00  BQ  00  BR  BK  00\s
                          BP  BP  00  00  WB  BP  BB  BP\s
@@ -376,7 +375,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D8"),Position.toPosition("B6"));
+        chessParty.getTable().makeMove("Qb6");
         assertEquals("""
                          BR  00  00  00  00  BR  BK  00\s
                          BP  BP  00  00  WB  BP  BB  BP\s
@@ -389,7 +388,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F1"),Position.toPosition("C4"));
+        chessParty.getTable().makeMove("Bc4");
         assertEquals("""
                          BR  00  00  00  00  BR  BK  00\s
                          BP  BP  00  00  WB  BP  BB  BP\s
@@ -402,7 +401,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E4"),Position.toPosition("C3"));
+        chessParty.getTable().makeMove("Nxc3");
         assertEquals("""
                          BR  00  00  00  00  BR  BK  00\s
                          BP  BP  00  00  WB  BP  BB  BP\s
@@ -415,7 +414,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E7"),Position.toPosition("C5"));
+        chessParty.getTable().makeMove("Bc5");
         assertEquals("""
                          BR  00  00  00  00  BR  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -428,7 +427,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F8"),Position.toPosition("E8"));
+        chessParty.getTable().makeMove("Rfe8+");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -441,7 +440,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E1"),Position.toPosition("F1"));
+        chessParty.getTable().makeMove("Kf1");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -454,7 +453,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G4"),Position.toPosition("E6"));
+        chessParty.getTable().makeMove("Be6");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -467,7 +466,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C5"),Position.toPosition("B6"));
+        chessParty.getTable().makeMove("Bxb6");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -480,7 +479,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E6"),Position.toPosition("C4"));
+        chessParty.getTable().makeMove("Bxc4+");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -493,7 +492,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F1"),Position.toPosition("G1"));
+        chessParty.getTable().makeMove("Kg1");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -506,7 +505,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C3"),Position.toPosition("E2"));
+        chessParty.getTable().makeMove("Ne2+");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -519,7 +518,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("F1"));
+        chessParty.getTable().makeMove("Kf1");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -533,7 +532,7 @@ public class ChessGameTest {
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
-        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("D4"));
+        chessParty.getTable().makeMove("Nxd4+");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -546,7 +545,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F1"),Position.toPosition("G1"));
+        chessParty.getTable().makeMove("Kg1");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -559,7 +558,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D4"),Position.toPosition("E2"));
+        chessParty.getTable().makeMove("Ne2+");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -572,7 +571,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("F1"));
+        chessParty.getTable().makeMove("Kf1");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -585,7 +584,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("C3"));
+        chessParty.getTable().makeMove("Nc3+");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -598,7 +597,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F1"),Position.toPosition("G1"));
+        chessParty.getTable().makeMove("Kg1");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          BP  BP  00  00  00  BP  BB  BP\s
@@ -611,7 +610,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("A7"),Position.toPosition("B6"));
+        chessParty.getTable().makeMove("axb6");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -624,7 +623,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("A3"),Position.toPosition("B4"));
+        chessParty.getTable().makeMove("Qb4");
         assertEquals("""
                          BR  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -637,7 +636,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("A8"),Position.toPosition("A4"));
+        chessParty.getTable().makeMove("Ra4");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -650,7 +649,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B4"),Position.toPosition("B6"));
+        chessParty.getTable().makeMove("Qxb6");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -663,7 +662,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C3"),Position.toPosition("D1"));
+        chessParty.getTable().makeMove("Nxd1");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -676,7 +675,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("H2"),Position.toPosition("H3"));
+        chessParty.getTable().makeMove("h3");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -689,7 +688,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("A4"),Position.toPosition("A2"));
+        chessParty.getTable().makeMove("Rxa2");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -702,7 +701,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("H2"));
+        chessParty.getTable().makeMove("Kh2");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -715,7 +714,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D1"),Position.toPosition("F2"));
+        chessParty.getTable().makeMove("Nxf2");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -728,7 +727,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("H1"),Position.toPosition("E1"));
+        chessParty.getTable().makeMove("Re1");
         assertEquals("""
                          00  00  00  00  BR  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -741,7 +740,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E8"),Position.toPosition("E1"));
+        chessParty.getTable().makeMove("Rxe1");
         assertEquals("""
                          00  00  00  00  00  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -754,7 +753,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B6"),Position.toPosition("D8"));
+        chessParty.getTable().makeMove("Qd8+");
         assertEquals("""
                          00  00  00  WQ  00  00  BK  00\s
                          00  BP  00  00  00  BP  BB  BP\s
@@ -767,7 +766,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G7"),Position.toPosition("F8"));
+        chessParty.getTable().makeMove("Bf8");
         assertEquals("""
                          00  00  00  WQ  00  BB  BK  00\s
                          00  BP  00  00  00  BP  00  BP\s
@@ -780,7 +779,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F3"),Position.toPosition("E1"));
+        chessParty.getTable().makeMove("Nxe1");
         assertEquals("""
                          00  00  00  WQ  00  BB  BK  00\s
                          00  BP  00  00  00  BP  00  BP\s
@@ -793,7 +792,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C4"),Position.toPosition("D5"));
+        chessParty.getTable().makeMove("Bd5");
         assertEquals("""
                          00  00  00  WQ  00  BB  BK  00\s
                          00  BP  00  00  00  BP  00  BP\s
@@ -806,7 +805,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E1"),Position.toPosition("F3"));
+        chessParty.getTable().makeMove("Nf3");
         assertEquals("""
                          00  00  00  WQ  00  BB  BK  00\s
                          00  BP  00  00  00  BP  00  BP\s
@@ -819,7 +818,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F2"),Position.toPosition("E4"));
+        chessParty.getTable().makeMove("Ne4");
         assertEquals("""
                          00  00  00  WQ  00  BB  BK  00\s
                          00  BP  00  00  00  BP  00  BP\s
@@ -832,7 +831,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D8"),Position.toPosition("B8"));
+        chessParty.getTable().makeMove("Qb8");
         assertEquals("""
                          00  WQ  00  00  00  BB  BK  00\s
                          00  BP  00  00  00  BP  00  BP\s
@@ -845,7 +844,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B7"),Position.toPosition("B5"));
+        chessParty.getTable().makeMove("b5");
         assertEquals("""
                          00  WQ  00  00  00  BB  BK  00\s
                          00  00  00  00  00  BP  00  BP\s
@@ -858,7 +857,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("H3"),Position.toPosition("H4"));
+        chessParty.getTable().makeMove("h4");
         assertEquals("""
                          00  WQ  00  00  00  BB  BK  00\s
                          00  00  00  00  00  BP  00  BP\s
@@ -871,7 +870,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("H7"),Position.toPosition("H5"));
+        chessParty.getTable().makeMove("h5");
         assertEquals("""
                          00  WQ  00  00  00  BB  BK  00\s
                          00  00  00  00  00  BP  00  00\s
@@ -884,7 +883,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F3"),Position.toPosition("E5"));
+        chessParty.getTable().makeMove("Ne5");
         assertEquals("""
                          00  WQ  00  00  00  BB  BK  00\s
                          00  00  00  00  00  BP  00  00\s
@@ -897,7 +896,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G8"),Position.toPosition("G7"));
+        chessParty.getTable().makeMove("Kg7");
         assertEquals("""
                          00  WQ  00  00  00  BB  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -910,7 +909,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("H2"),Position.toPosition("G1"));
+        chessParty.getTable().makeMove("Kg1");
         assertEquals("""
                          00  WQ  00  00  00  BB  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -923,7 +922,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F8"),Position.toPosition("C5"));
+        chessParty.getTable().makeMove("Bc5+");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -936,7 +935,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G1"),Position.toPosition("F1"));
+        chessParty.getTable().makeMove("Kf1");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -949,7 +948,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E4"),Position.toPosition("G3"));
+        chessParty.getTable().makeMove("Ng3+");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -962,7 +961,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("F1"),Position.toPosition("E1"));
+        chessParty.getTable().makeMove("Ke1");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -975,7 +974,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C5"),Position.toPosition("B4"));
+        chessParty.getTable().makeMove("Bb4+");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -988,7 +987,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E1"),Position.toPosition("D1"));
+        chessParty.getTable().makeMove("Kd1");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -1001,7 +1000,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D5"),Position.toPosition("B3"));
+        chessParty.getTable().makeMove("Bb3+");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -1014,7 +1013,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("D1"),Position.toPosition("C1"));
+        chessParty.getTable().makeMove("Kc1");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -1027,7 +1026,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("G3"),Position.toPosition("E2"));
+        chessParty.getTable().makeMove("Ne2+");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -1040,7 +1039,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("C1"),Position.toPosition("B1"));
+        chessParty.getTable().makeMove("Kb1");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -1053,7 +1052,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("E2"),Position.toPosition("C3"));
+        chessParty.getTable().makeMove("Nc3+");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -1066,7 +1065,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("B1"),Position.toPosition("C1"));
+        chessParty.getTable().makeMove("Kc1");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s
@@ -1079,7 +1078,7 @@ public class ChessGameTest {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable())
         );
-        chessParty.getTable().makeMove(Position.toPosition("A2"),Position.toPosition("C2"));
+        chessParty.getTable().makeMove("Rc2#");
         assertEquals("""
                          00  WQ  00  00  00  00  00  00\s
                          00  00  00  00  00  BP  BK  00\s

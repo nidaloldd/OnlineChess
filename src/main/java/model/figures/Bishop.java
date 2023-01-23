@@ -15,7 +15,7 @@ public class Bishop extends Figure {
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction direction : Direction.getDiagonalDirections()){
-            validMoves.addAll(getValidMovesFromOneDirection(direction));
+            validMoves.addAll(getValidMovesFromOneDirectionManyStep(direction));
         }
         if(handleKingInCheck){
             validMoves = handleKingInCheck(validMoves);

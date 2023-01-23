@@ -52,8 +52,7 @@ public class TestMoves {
                          WP  WP  00  WP  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """,
-                chessParty.getTable().makeTableToString(Position.toPosition("C4"))
-
+                DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("C4"))
         );
         chessParty.getTable().makeMove(Position.toPosition("C4"),Position.toPosition("C5"));
         chessParty.getTable().makeMove(Position.toPosition("E6"),Position.toPosition("E5"));
@@ -69,7 +68,7 @@ public class TestMoves {
                          WP  WP  00  WP  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("C6"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("C6"))
 
         );
 
@@ -84,7 +83,7 @@ public class TestMoves {
                          WP  WP  00  WP  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("C7"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("C7"))
 
         );
     }
@@ -101,7 +100,7 @@ public class TestMoves {
                          WP  WP  00  WP  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString()
+                ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
         assertEquals("""
@@ -114,7 +113,7 @@ public class TestMoves {
                          WP  WP  00  WP  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("E8"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("E8"))
         );
 
 
@@ -131,7 +130,7 @@ public class TestMoves {
                          WP  WP  00  00  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("E7"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("E7"))
         );
 
         chessParty.getTable().makeMove(Position.toPosition("E7"),Position.toPosition("D6"));
@@ -149,7 +148,7 @@ public class TestMoves {
                          WP  WP  00  00  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  00  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("D5"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("D5"))
         );
 
         chessParty.getTable().makeMove(Position.toPosition("C8"),Position.toPosition("F5"));
@@ -164,7 +163,7 @@ public class TestMoves {
                          WP  WP  00  VV  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  00  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("D3"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("D3"))
         );
 
         assertEquals("""
@@ -177,7 +176,7 @@ public class TestMoves {
                          WP  WP  00  00  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  00  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("B2"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("B2"))
         );
         assertEquals("""
                          BR  BN  00  BQ  00  BB  BN  BR\s
@@ -189,7 +188,7 @@ public class TestMoves {
                          WP  WP  00  00  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  00  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("D1"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("D1"))
         );
     }
     @Test
@@ -211,7 +210,7 @@ public class TestMoves {
                          WP  WP  WP  WP  VV  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  VV  VV  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("E1"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("E1"))
         );
         chessParty.getTable().makeMove(Position.toPosition("E1"),Position.toPosition("G1"));
 
@@ -225,7 +224,7 @@ public class TestMoves {
                          WP  WP  WP  WP  00  WP  WP  WP\s
                          WR  WN  WB  WQ  00  WR  WK  00\s
                         """
-                ,chessParty.getTable().makeTableToString()
+                ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
         chessParty.getTable().makeMove(Position.toPosition("D8"),Position.toPosition("D6"));
@@ -241,7 +240,7 @@ public class TestMoves {
                          WP  WP  00  WP  00  WP  WP  WP\s
                          WR  WN  WB  WQ  00  WR  WK  00\s
                         """
-                ,chessParty.getTable().makeTableToString()
+                ,DrawTable.makeTableToString(chessParty.getTable())
         );
 
         init();
@@ -265,7 +264,7 @@ public class TestMoves {
                          WP  WP  WP  WP  VV  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  VV  00  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("E1"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("E1"))
         );
 
     }
@@ -285,7 +284,7 @@ public class TestMoves {
                          WP  WP  WP  WP  00  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("E5"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("E5"))
         );
 
 
@@ -300,7 +299,7 @@ public class TestMoves {
                          WP  WP  WP  WP  00  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString(Position.toPosition("D6"))
+                ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("D6"))
         );
 
     }
@@ -327,7 +326,7 @@ public class TestMoves {
                          WP  WP  WP  WP  00  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString()
+                ,DrawTable.makeTableToString(chessParty.getTable())
         );
     }
     @Test
@@ -342,7 +341,7 @@ public class TestMoves {
                          WP  WP  WP  WP  WP  WP  WP  WP\s
                          WR  WN  WB  WQ  WK  WB  WN  WR\s
                         """
-                ,chessParty.getTable().makeTableToString()
+                ,DrawTable.makeTableToString(chessParty.getTable())
         );
     }
 }

@@ -15,7 +15,7 @@ public class Queen extends Figure {
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction direction : Direction.getAllDirections()){
-            validMoves.addAll(getValidMovesFromOneDirection(direction));
+            validMoves.addAll(getValidMovesFromOneDirectionManyStep(direction));
         }
 
         if(handleKingInCheck){
