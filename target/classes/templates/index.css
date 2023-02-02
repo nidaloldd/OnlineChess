@@ -1,0 +1,38 @@
+*{
+    background-color: blanchedalmond;
+    color: rgb(255, 0, 0);
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+}
+td,tr{
+    width: 1em;
+    height: 1em;
+}
+table{
+    border: solid rgb(0, 0, 0) 0.5em;
+    background-color: gray
+}
+
+tr:nth-child(odd) td:nth-child(odd){
+    background-color: black;
+}
+
+tr:nth-child(even) td:nth-child(even){
+    background-color: black;
+}
+
+tr:nth-child(even) td:nth-child(odd){
+    background-color: white
+}
+tr:nth-child(odd) td:nth-child(even){
+    background-color: white
+}
+
+
+
+
+
+
+
+
