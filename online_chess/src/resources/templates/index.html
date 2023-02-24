@@ -176,11 +176,13 @@ tr:nth-child(8) .whiteSquare, tr:nth-child(8) .blackSquare{
     let EmptyOrEnemySquares = []
     let Whitefigures = []
     let Blackfigures = []
+    let isGameOver = false
     getTableUpdate()
    
   
     
     function makeMove(from,to){
+            if(isGameOver){ return;}
            let xhr = new XMLHttpRequest()
            xhr.open('GET','http://localhost:8081/updateTable/'+from+'/'+to,true)
            xhr.onload = function(){
@@ -211,10 +213,16 @@ tr:nth-child(8) .whiteSquare, tr:nth-child(8) .blackSquare{
 
                 const table = JSON.parse(this.response)
 
-                console.log("Color",table["activePlayerColor"]);
+                isGameOver = table["isGameOver"]
                 activePlayerColor = table["activePlayerColor"]
-                document.getElementById("TurnsH1").innerText = activePlayerColor
                 
+                if(isGameOver){
+                    document.getElementById("TurnsH1").innerText = "CheckMate "+activePlayerColor+" Win"
+                }
+                else{
+                    document.getElementById("TurnsH1").innerText = activePlayerColor
+                }
+            
                 for (let figure in table["figures"]) {
 
                     const img = document.createElement("img");
@@ -225,7 +233,9 @@ tr:nth-child(8) .whiteSquare, tr:nth-child(8) .blackSquare{
                 
                     img.src = table["figures"][figure]["imageSource"]
                     document.getElementById(notation).appendChild(img)
-                    img.classList.add(table["figures"][figure]["color"])
+                    //img.classList.add(table["figures"][figure]["color"])
+                    document.getElementById(notation).classList.remove("BLACK")
+                    document.getElementById(notation).classList.remove("WHITE")
                     document.getElementById(notation).classList.add(table["figures"][figure]["color"])
 
                 }

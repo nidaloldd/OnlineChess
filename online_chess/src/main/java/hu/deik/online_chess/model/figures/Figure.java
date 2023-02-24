@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class Figure {
-    public String imageSource;
+
+public abstract class Figure implements Cloneable {
+    public final String imageSource;
     private boolean isFigureNotMoved;
     protected Color color;
     protected Position position;
@@ -45,21 +46,16 @@ public abstract class Figure {
     }
 
     public abstract List<Position> getValidMoves(boolean handleKingInCheck);
-    public List<Position> getValidMovesFromOneDirectionOnlyOneStep(Direction direction){
+    public List<Position> getValidMoveFromOneDirectionOnlyOneStep(Direction direction){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;
-        while (true){
-            actualPosition = actualPosition.stepToDirection(direction);
-            if(actualPosition.isPositionNotValid()){return validMoves;}
-            if(table.isPositionOccupiedByEnemy(actualPosition,color)){
-                validMoves.add(actualPosition);
-                return validMoves;
-            }
-            if(table.isPositionNotOccupied(actualPosition)) {
-                validMoves.add(actualPosition);
-            }
+
+        actualPosition = actualPosition.stepToDirection(direction);
+        if(actualPosition.isPositionNotValid() || table.isPositionOccupiedByAlly(actualPosition,color)){
             return validMoves;
         }
+        validMoves.add(actualPosition);
+        return validMoves;
     }
     public List<Position> getValidMovesFromOneDirectionManyStep(Direction direction ){
         List<Position> validMoves = new ArrayList<>();
@@ -82,23 +78,29 @@ public abstract class Figure {
 
     public List<Position> handleKingInCheck(List<Position> validMoves){
 
-        if(!table.isKingInCheck(color)){return validMoves;}
         Position startingPos = new Position(position.getPosX(), position.getPosY());
         List<Position>forRemove = new ArrayList<>();
+
+        List<Figure> originalFigures = new ArrayList<>(table.getFigures());
         for(Position p : validMoves){
+
+            if(table.getFigureOn(p) != null){
+                table.getFigures().remove(table.getFigureOn(p));
+            }
             position = p;
 
-            if(table.isKingInCheck(color)){
+            if(Boolean.TRUE.equals(table.isKingInCheck(color))){
                 forRemove.add(p);
             }
         }
         position = startingPos;
+        table.setFigures(originalFigures);
         validMoves.removeAll(forRemove);
         return validMoves;
     }
 
     public static Class<?> getFigureTypeBy(Character character){
-        HashMap<Character,  Class<?>> figureTypes = new HashMap<Character,  Class<?>>();
+        HashMap<Character,  Class<?>> figureTypes = new HashMap<>();
         figureTypes.put('K', King.class);
         figureTypes.put('Q', Queen.class);
         figureTypes.put('B', Bishop.class);

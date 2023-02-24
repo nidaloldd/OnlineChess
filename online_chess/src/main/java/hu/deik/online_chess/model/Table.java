@@ -9,13 +9,17 @@ import java.util.regex.Pattern;
 
 public class Table {
     public static final int TABLE_SIZE = 8;
+    public Boolean isGameOver;
     private Color activePlayerColor = Color.WHITE;
     private King whiteKing;
     private King blackKing;
-    private final List<Figure> figures = new ArrayList<>();
-    private final List<Figure> takenFigures = new ArrayList<>();
+    private List<Figure> figures = new ArrayList<>();
+    private List<Figure> takenFigures = new ArrayList<>();
     public List<Figure> getFigures() {
         return figures;
+    }
+    public void setFigures(List<Figure> figures) {
+         this.figures = figures;
     }
 
     public King getKing(Color color){
@@ -73,6 +77,7 @@ public class Table {
         this.figures.addAll(figures);
     }
     private void setUpStartingTable(){
+        isGameOver = false;
         figures.clear();
         whiteKing = (new King(this,Color.WHITE,"E1"));
         blackKing = (new King(this,Color.BLACK,"E8"));
@@ -117,7 +122,17 @@ public class Table {
     public Boolean isKingInCheck(Color color){
 
         return getEnemyValidMoves(color).contains(getKing(color).getPosition());
-
+    }
+    public void handleCheckMate(Color color){
+        List<Position> enemyMoves = new ArrayList<>();
+        for (int i = 0; i < figures.size(); i++) {
+            if(figures.get(i).getColor() == Color.getOpposite(color)){
+                if(!figures.get(i).getValidMoves().isEmpty()){
+                    return;
+                }
+            }
+        }
+        isGameOver = true;
     }
     public List<Position> getEnemyValidMoves(Color color){
         List<Position> enemyMoves = new ArrayList<>();
@@ -125,7 +140,7 @@ public class Table {
             if(figure.getColor() == Color.getOpposite(color)){
                 if(figure instanceof King){
                     for(Direction direction : Direction.getAllDirections()){
-                        enemyMoves.addAll(figure.getValidMovesFromOneDirectionOnlyOneStep(direction));
+                        enemyMoves.addAll(figure.getValidMoveFromOneDirectionOnlyOneStep(direction));
                     }
                 }
                 else if(figure instanceof Pawn){
@@ -148,7 +163,10 @@ public class Table {
     }
 
     public void  makeMove(Position moveFrom, Position moveTo){
-        if(!isMoveValid(moveFrom,moveTo)){return;}
+        if(!isMoveValid(moveFrom,moveTo) || isGameOver){
+            System.out.println("GameOver"+ isGameOver);
+            return;
+        }
 
         if(isPositionOccupiedByEnemy(moveTo,activePlayerColor)){
             takeFigure(getFigureOn(moveTo));
@@ -159,7 +177,12 @@ public class Table {
 
         getFigureOn(moveFrom).setPosition(moveTo);
 
-        activePlayerColor = Color.getOpposite(activePlayerColor);
+        handleCheckMate(activePlayerColor);
+        System.out.println("első isGameOver"+isGameOver);
+
+        if(!isGameOver){
+            activePlayerColor = Color.getOpposite(activePlayerColor);
+        }
 
         System.out.println( DrawTable.makeTableToString(this));
     }
@@ -229,11 +252,11 @@ public class Table {
             var rightNeighbor = getFigureOn(moveTo.stepToDirection(Direction.RIGHT));
             var leftNeighbor = getFigureOn(moveTo.stepToDirection(Direction.LEFT));
 
-                if( rightNeighbor instanceof Pawn && rightNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
+                if( rightNeighbor instanceof Pawn  && rightNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
                     ((Pawn) rightNeighbor).setCanDoEntPassantLeft(true);
                 }
 
-                if(leftNeighbor instanceof Pawn && leftNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
+                if(leftNeighbor instanceof Pawn  && leftNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
                     ((Pawn) leftNeighbor).setCanDoEntPassantRight(true);
 
                 }
@@ -280,7 +303,7 @@ public class Table {
             return;
         }
 
-        Class<?> typeOfFigure = Object.class;
+        Class<?> typeOfFigure;
         if(Character.isLowerCase(str.charAt(0))){
             typeOfFigure = Pawn.class;
         }
@@ -310,28 +333,32 @@ public class Table {
         makeMove(moveFrom, moveTo);
     }
     private Position findTheCorrectFigurePosition(Class<?> typeOfFigure, String matchingAngle, Position moveTo){
-        for(Figure f : figures){
-            if( f.getClass().equals(typeOfFigure)&& f.getColor() == activePlayerColor && f.getValidMoves().contains(moveTo)){
-                switch (matchingAngle.length()){
-                    case 0: return f.getPosition();
-                    case 1:
-                        if(Character.isAlphabetic(matchingAngle.charAt(0))&&
-                                f.getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
-                            return  f.getPosition();
-                        }
-                        if(Character.isDigit(matchingAngle.charAt(0))&&
-                                f.getPosition().getPosY()==Position.filesToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
-                            return f.getPosition();
+            for (int i = 0; i < figures.size() ; i++) {
 
-                        }
-                    case 2:
-                        if(f.getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0))) &&
-                                f.getPosition().getPosY()==Position.filesToPos.get(matchingAngle.charAt(1))){
-                            return f.getPosition();
-                        }
+                if( figures.get(i).getClass().equals(typeOfFigure)&& figures.get(i).getColor() == activePlayerColor && figures.get(i).getValidMoves().contains(moveTo)){
+                    switch (matchingAngle.length()){
+                        case 0: return figures.get(i).getPosition();
+                        case 1:
+                            if(Character.isAlphabetic(matchingAngle.charAt(0))&&
+                                    figures.get(i).getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
+                                return  figures.get(i).getPosition();
+                            }
+                            if(Character.isDigit(matchingAngle.charAt(0))&&
+                                    figures.get(i).getPosition().getPosY()==Position.filesToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
+                                return figures.get(i).getPosition();
+                            }
+                            break;
+                        case 2:
+                            if(figures.get(i).getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0))) &&
+                                    figures.get(i).getPosition().getPosY()==Position.filesToPos.get(matchingAngle.charAt(1))){
+                                return figures.get(i).getPosition();
+                            }
+                            break;
+                        default:
+                    }
                 }
             }
-        }
+
         return new Position(-1,-1);
     }
 
@@ -342,5 +369,10 @@ public class Table {
         if(isPositionNotOccupied(position)){return false;}
 
         return getFigureOn(position).getColor() == Color.getOpposite(color);
+    }
+    public boolean isPositionOccupiedByAlly(Position position, Color color){
+        if(isPositionNotOccupied(position)){return false;}
+
+        return getFigureOn(position).getColor() == color;
     }
 }

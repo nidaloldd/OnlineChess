@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestMoves {
+class TestMoves {
     ChessParty chessParty;
     @BeforeEach
     void init() {
@@ -265,6 +265,10 @@ public class TestMoves {
                         """
                 ,DrawTable.makeTableToString(chessParty.getTable(),Position.toPosition("E1"))
         );
+
+        init();
+
+
 
     }
     @Test
