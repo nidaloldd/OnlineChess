@@ -82,12 +82,6 @@ public class Pawn extends Figure implements ChessFigure {
         }
         return color == Color.WHITE && Position.toString(position).charAt(1) == '2';
     }
-    public boolean isLastRow(Position position){
-        if(color == Color.BLACK && Position.toString(position).charAt(1)=='1'){
-            return true;
-        }
-        return color == Color.WHITE && Position.toString(position).charAt(1) == '8';
-    }
     private void addPossibleEnPassant(List<Position> validMoves){
         Direction forwardRight = Direction.getDirectionForwardRight(color);
         Direction forwardLeft = Direction.getDirectionForwardLeft(color);

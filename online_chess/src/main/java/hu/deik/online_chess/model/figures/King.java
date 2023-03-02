@@ -33,7 +33,7 @@ public class King extends Figure implements ChessFigure {
         validMoves.addAll(addPossibleCastleForColor(validMoves,color));
     }
     private List<Position> addPossibleCastleForColor(List<Position> validMoves, Color color){
-        if(!table.getKing(color).getIfFigureNotMoved()){return validMoves;}
+        if(!table.getKing(color).getIfFigureNotMoved() || table.isKingInCheck(color)){return validMoves;}
 
         final String row;
         if(color == Color.WHITE){row = "1";}

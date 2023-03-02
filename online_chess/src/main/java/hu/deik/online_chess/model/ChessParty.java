@@ -1,47 +1,23 @@
 package hu.deik.online_chess.model;
 
+import lombok.Data;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-import hu.deik.online_chess.model.Draw.DrawFigure;
-import hu.deik.online_chess.model.figures.Figure;
-
+@Data
+@Component
 public class ChessParty {
+
+    private String id;
     private Table table;
-    private final Player whitePlayer;
-    private final Player blackPlayer;
-    public Table getTable() {
-        return table;
-    }
-    public String getTableAsJson(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        for (Figure figure: table.getFigures()) {
-            sb.append("\"");
-            sb.append(Position.toString(figure.getPosition()));
-            sb.append("\"");
-            sb.append(":");
-            sb.append("\"");
-            sb.append(DrawFigure.getPNG(figure));
-            sb.append("\"");
+    private  Player whitePlayer;
+    private  Player blackPlayer;
+    private  Player winner;
+    private GameStatus status;
 
-            sb.append(",");
-        }
-        sb.append("}");
-        sb.deleteCharAt(sb.lastIndexOf(","));
-        return sb.toString();
-    }
-
-    public ChessParty(Player whitePlayer, Player blackPlayer) {
-        this.whitePlayer = whitePlayer;
-        this.blackPlayer = blackPlayer;
+    public ChessParty() {
         this.table = new Table();
-    }
-    public Player getActivePlayer(){
-        if(table.getActivePlayerColor() == Color.WHITE){
-            return whitePlayer;
-        }
-        else {
-            return  blackPlayer;
-        }
     }
 
 }

@@ -1,54 +1,67 @@
 package hu.deik.online_chess.web;
 
-import hu.deik.online_chess.model.Draw.DrawFigure;
+import hu.deik.online_chess.exeption.InvalidGameException;
+import hu.deik.online_chess.exeption.InvalidParamException;
+import hu.deik.online_chess.exeption.NotFoundException;
+import hu.deik.online_chess.model.ChessParty;
+import hu.deik.online_chess.model.Player;
 import hu.deik.online_chess.model.Position;
 import hu.deik.online_chess.model.Table;
-import hu.deik.online_chess.model.figures.Figure;
-import hu.deik.online_chess.service.ChessService;
+import hu.deik.online_chess.service.ChessPartyService;
+import hu.deik.online_chess.service.dto.MoveRequest;
+import lombok.AllArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import hu.deik.online_chess.service.dto.ConnectRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-public class MyRestController {
+@Slf4j
+@AllArgsConstructor
+public class ChessRestController {
 
-    private final ChessService chessService;
-    public MyRestController(final ChessService chessService) {
-        this.chessService = chessService;
-    }
-    //private ChessParty chessParty = new ChessParty(new Player("player1"),new Player("player2"));;
+    private final ChessPartyService chessPartyService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @GetMapping("/validMoves/{pos}")
-    List<String> getValidMoves(final @PathVariable String pos) {
-        return chessService.getTable().getFigureOn(pos).getValidMoves().stream().map(n -> Position.toString(n)).collect(Collectors.toList());
+    @PostMapping("/start")
+    public ResponseEntity<ChessParty> start(@RequestBody String playerName) {
+        log.info("start game request: {}", playerName);
+        Player player1 = new Player(playerName);
+        return ResponseEntity.ok(chessPartyService.createGame(player1));
     }
-    @GetMapping("/{pos}")
-    List<String> getTable(final @PathVariable String pos) {
-        return chessService.getTable().getFigureOn(pos).getValidMoves().stream().map(n -> Position.toString(n)).collect(Collectors.toList());
+    @PostMapping("/connect")
+    public ResponseEntity<ChessParty> connect(@RequestBody ConnectRequest request) throws InvalidParamException, InvalidGameException {
+        log.info("connect request: {}", request);
+        return ResponseEntity.ok(chessPartyService.connectToGame(request.getPlayer(), request.getGameId()));
     }
-    @GetMapping("/table")
-    public String getTable() {
+    @PostMapping("/connect/random")
+    public ResponseEntity<ChessParty> connectRandom(@RequestBody String playerName) throws NotFoundException {
+        log.info("connect random {}", playerName);
+        Player player2 = new Player(playerName);
+        return ResponseEntity.ok(chessPartyService.connectToRandomGame(player2));
+    }
 
-        Table table = chessService.getTable();
-        return chessService.getTableAsJson();
-    }
-    @GetMapping("/fullTable")
-    public Table getFullTable() {
-        Table table = chessService.getTable();
-        return chessService.getTable();
-    }
-    @GetMapping("/getImageSource/{notation}")
-    public String getImageSource(final @PathVariable String notation) {
+    @GetMapping("/validMoves/{gameId}/{pos}")
 
-        Table table = chessService.getTable();
-        return DrawFigure.getPNG(table.getFigureOn(notation));
+    List<String> getValidMoves(final @PathVariable String gameId,final @PathVariable String pos) {
+        log.info("getValidMoves");
+        return chessPartyService.getTable(gameId).getFigureOn(pos).getValidMoves().stream().map(n -> Position.toString(n)).collect(Collectors.toList());
+    }
+
+
+    @PostMapping("/makeMove")
+    public ResponseEntity<ChessParty> makeMove(@RequestBody MoveRequest request) throws NotFoundException, InvalidGameException  {
+        log.info("makeMove");
+        ChessParty game = chessPartyService.makeMove(request);
+        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
+        return ResponseEntity.ok(game);
     }
 
 }

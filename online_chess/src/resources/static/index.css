@@ -1,17 +1,39 @@
 *{
     text-align: center;
     padding: 0px;
-    margin: auto;
     -webkit-user-drag: none;
-
 }
 body{
     background-color: rgb(54, 54, 54);
+
 }
 td,tr,img{
-    width: 6vmin;
-    height: 6vmin;
+    width: 7vmin;
+    height: 7vmin;
+}
+table{
+    margin: auto;
+}
 
+.grid{
+    display: grid;
+    grid-template-columns: 30vmin 70vmin;
+    margin: auto;
+
+}
+#gameNotation{
+    font-size: large;
+    font-weight: bold;
+    text-align: left;
+    margin: auto;
+    background: beige;
+    border: solid;
+    height: 15em;
+    width: 10em;
+    overflow: auto;
+}
+main{
+    margin: auto;
 }
 
 .whiteSquare{

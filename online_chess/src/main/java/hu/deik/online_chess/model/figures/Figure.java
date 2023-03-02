@@ -110,6 +110,17 @@ public abstract class Figure implements Cloneable {
         return figureTypes.getOrDefault(character, Object.class);
     }
 
+    public static Character getCharacterBy(Class<?> type){
+        HashMap<Class<?>,Character> figureTypes = new HashMap<>();
+        figureTypes.put(King.class,'K');
+        figureTypes.put(Queen.class,'Q');
+        figureTypes.put(Bishop.class,'B');
+        figureTypes.put(Knight.class,'N');
+        figureTypes.put(Rook.class,'R');
+
+        return figureTypes.getOrDefault(type, 'X');
+    }
+
 
 }
 

@@ -6,46 +6,42 @@ let EmptyOrEnemySquares = []
 let Whitefigures = []
 let Blackfigures = []
 let isGameOver = false
-getTableUpdate()
-
 
 
 function makeMove(from,to){
     if(isGameOver){ return;}
-   let xhr = new XMLHttpRequest()
-   xhr.open('GET','http://localhost:8081/updateTable/'+from+'/'+to,true)
-   xhr.onload = function(){
-        if(xhr.status == 200){
-            console.log("NEWPAGE success")
-            clickedFigure = null;
-            allSquare.forEach(square => {
-                document.getElementById(square.id).replaceChildren();
-                square.classList.remove("validMove")
-            })
-            getTableUpdate()
+
+   $.ajax({
+        url: url + "/api/makeMove",
+        type: 'POST',
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "from": from,
+            "to": to,
+            "id": gameId
+        }),
+        success: function (data) {
+            console.log("makeMove()");
+            console.log("data",data);          
+            getTableUpdate(data)
+        },
+        error: function (error) {
+            console.log(error);
         }
-    }
-    xhr.send()
-
+    })
 }
 
-function clearTable(){
+ function getTableUpdate(data){
+        console.log("getTableUpdate")
+        allSquare.forEach(square => {
+            square.replaceChildren();
+        })
+        Array.from(document.getElementsByClassName("validMove")).forEach(square => {
+            square.classList.remove("validMove")
+        })
 
-}
-
-
-
- function getTableUpdate(){
-    let xhr = new XMLHttpRequest()
-    xhr.open('GET','http://localhost:8081/api/fullTable',true)
-   xhr.onload  = function(){
-    if(xhr.status == 200){
-        console.log("api/fullTable success")
-
-        console.log(this.response)
-        const table = JSON.parse(this.response)
-
-
+        const table = data["table"];
         isGameOver = table["isGameOver"]
         activePlayerColor = table["activePlayerColor"]
 
@@ -62,7 +58,7 @@ function clearTable(){
         const takenFiguresDivBlack = document.getElementById('takenFiguresBlack')
         takenFiguresDivWhite.replaceChildren();
         takenFiguresDivBlack.replaceChildren();
-        /*
+
         for (let figure in table["takenFigures"]) {
             const img = document.createElement("img");
             img.src = table["takenFigures"][figure]["imageSource"]
@@ -75,7 +71,6 @@ function clearTable(){
             }
 
         }
-        */
 
         for (let figure in table["figures"]) {
 
@@ -105,10 +100,6 @@ function clearTable(){
         else{
             Blackfigures.forEach(figure => figure.addEventListener("click",ClickFigure))
         }
-    }
-}
-xhr.send()
-
 }
 
 
@@ -140,18 +131,16 @@ function PositionToNotation(posX,posY){
 
 function getValidMoves(pos){
    let xhr = new XMLHttpRequest()
-   xhr.open('GET','http://localhost:8081/api/validMoves/'+pos ,true)
+   xhr.open('GET',url+'/api/validMoves/'+gameId+'/'+pos ,true)
    xhr.onload = function(){
-
     if(xhr.status == 200){
         console.log("validMoves success")
 
         const validMovesResponse = Array.from(JSON.parse(this.response))
 
-        allSquare.forEach(square => {
-            Array.from(document.getElementsByClassName("validMove")).forEach(square => {
-                square.classList.remove("validMove")
-            })
+        console.log(validMovesResponse)
+        Array.from(document.getElementsByClassName("validMove")).forEach(square => {
+            square.classList.remove("validMove")
         })
 
         validMovesResponse.forEach(validMove => {
@@ -160,18 +149,24 @@ function getValidMoves(pos){
 
         })
     }
+    else {
+        console.log("Problem with getValidMoves request !!!")
+    }
    }
    xhr.send()
 }
 
 function newGame(){
     let xhr = new XMLHttpRequest()
-   xhr.open('GET','http://localhost:8081/updateTable/newGame',true)
+   xhr.open('GET',url+'/updateTable/newGame',true)
    xhr.onload = function(){
         if(xhr.status == 200){
             console.log("NEwGame")
             clearTable()
             getTableUpdate()
+        }
+        else {
+            console.log("Problem with newGame request !!!")
         }
    }
    xhr.send()
@@ -182,6 +177,9 @@ function ClickFigure(){
     if(isGameOver){ return;}
     const index = event.target.parentNode.getAttribute('id')
     clickedFigure = index;
+    allSquare.forEach(square => {
+       square.removeEventListener("click",ClickSquare,true)
+    })
     getValidMoves(clickedFigure)
 }
 
@@ -198,14 +196,12 @@ function ClickSquare(){
                  index = event.target.getAttribute('id')
             }
 
-            // Move the selected figure to the clicked square
             const figure = clickedFigure
             clickedFigure = undefined;
             selectedFigure = null;
             validMoves = null;
 
             makeMove(figure,index)
-
     }
 
 }

@@ -43,6 +43,10 @@ public class Position {
         this(Position.toPosition(str).posX,
                 Position.toPosition(str).posY);
     }
+    public Position(Position pos) {
+        this.posX = pos.posX;
+        this.posY = pos.posY;
+    }
     public boolean isEmpty(Table table){
         for (Figure f : table.getFigures() ) {
             if (this.equals(f.getPosition())) {
@@ -122,4 +126,11 @@ public class Position {
         return new Position(posX + direction.getXChange(),
                 posY + direction.getYChange());
     }
+    public boolean isLastRow(Color color){
+        if(color == Color.BLACK &&  posY == 7){
+            return true;
+        }
+        return color == Color.WHITE && posY == 0;
+    }
+
 }

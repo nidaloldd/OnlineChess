@@ -1,6 +1,7 @@
 package hu.deik.online_chess.model;
 
 import hu.deik.online_chess.model.Draw.DrawTable;
+import hu.deik.online_chess.service.impl.ChessPartyServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,12 +9,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ChessGameTest {
     ChessParty chessParty;
+    ChessPartyServiceImpl chessPartyPartyService;
 
     @BeforeEach
     void init() {
         Player player1 = new Player("player1");
         Player player2 = new Player("player2");
-        chessParty = new ChessParty(player1,player2);
     }
 
     @Test
