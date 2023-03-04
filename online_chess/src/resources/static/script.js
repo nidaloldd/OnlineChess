@@ -10,7 +10,6 @@ let isGameOver = false
 
 function makeMove(from,to){
     if(isGameOver){ return;}
-
    $.ajax({
         url: url + "/api/makeMove",
         type: 'POST',
@@ -205,4 +204,5 @@ function ClickSquare(){
     }
 
 }
+
 

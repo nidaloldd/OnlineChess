@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Table {
     public static final int TABLE_SIZE = 8;
     public int numberOfMoves;
@@ -167,10 +169,10 @@ public class Table {
         return enemyMoves;
     }
     private boolean isMoveValid(Position moveFrom, Position moveTo){
-        if(getFigureOn(moveFrom)==null){System.out.println("There is no Figure on Position "+ Position.toString(moveFrom)); return false; }
-        if(getFigureOn(moveFrom).getColor() != activePlayerColor){System.out.println("Other Player Turn");return false;}
+        if(getFigureOn(moveFrom)==null){log.info("There is no Figure on Position "+ Position.toString(moveFrom)); return false; }
+        if(getFigureOn(moveFrom).getColor() != activePlayerColor){log.info("Other Player Turn");return false;}
         List<Position> validMoves = getFigureOn(moveFrom).getValidMoves();
-        if(!validMoves.contains(moveTo)){System.out.println(moveTo.toString()+" is Not Valid move"); return false;}
+        if(!validMoves.contains(moveTo)){log.info(moveTo.toString()+" is Not Valid move"); return false;}
         return true;
     }
     private void addMoveToGameNotation(Position moveFrom, Position moveTo){
@@ -214,7 +216,7 @@ public class Table {
             gameNotation.append("#");
         }
 
-        System.out.println( DrawTable.makeTableToString(this));
+        log.info(DrawTable.makeTableToString(this));
     }
     private String[] getSmallCastleMove(Color color){
         if(color == Color.WHITE){
@@ -314,7 +316,7 @@ public class Table {
     String positionsToNotation(Position moveFrom, Position moveTo){
         if(moveFrom.isPositionNotValid() || moveTo.isPositionNotValid()){return " ";}
 
-        Boolean isCapture = getFigureOn(moveTo) != null;
+        boolean isCapture = getFigureOn(moveTo) != null;
         Figure moveFromFigure = getFigureOn(moveFrom);
         if(isSmallCastle(moveFrom,moveTo,moveFromFigure.getColor())){
             return "O-O";
@@ -330,30 +332,30 @@ public class Table {
 
         String xAngle = "";
         String yAngle = "";
-        String diagonalAngle = "";
         for(int i = 0;i<figures.size(); i++){
-            if(figures.get(i).getColor() == moveFromFigure.getColor() && figures.get(i).getClass().equals(moveFromFigure.getClass()) ){
-                System.out.println("Same Color Same Figure");
-                if( figures.get(i).getValidMoves(true).contains(moveTo) && !figures.get(i).equals(moveFromFigure)){
-                    System.out.println("Same Valid Move ");
-                    if(figures.get(i).getPosition().getPosX() == moveFromFigure.getPosition().getPosX() && yAngle.equals("")){
-                        System.out.println("Same  getPosX");
+            boolean sameColor = figures.get(i).getColor() == moveFromFigure.getColor();
+            boolean sameFigureType = figures.get(i).getClass().equals(moveFromFigure.getClass());
+            boolean haveSameValidMove = figures.get(i).getValidMoves(true).contains(moveTo) && !figures.get(i).equals(moveFromFigure);
+
+            boolean isKnight = result.equals("N");
+            boolean isPawn = xAngle.equals("");
+            if(sameColor && sameFigureType && haveSameValidMove){
+                boolean sameAngleX = figures.get(i).getPosition().getPosX() == moveFromFigure.getPosition().getPosX() && yAngle.equals("");
+                boolean sameAngleY = figures.get(i).getPosition().getPosY() == moveFromFigure.getPosition().getPosY() && xAngle.equals("");
+
+                    if(sameAngleX){
                         yAngle = Position.toString(moveFromFigure.getPosition()).substring(1,2);
                     }
-                    if((figures.get(i).getPosition().getPosY() == moveFromFigure.getPosition().getPosY() && xAngle.equals("")) ){
-                        System.out.println("Same  getPosY");
+                    if(sameAngleY){
                         xAngle = Position.toString(moveFromFigure.getPosition()).substring(0,1).toLowerCase();
                     }
-                    System.out.println("result "+result);
-                    if( result.equals("N") && xAngle.equals("") && yAngle.equals("")  ){
-                        System.out.println(" KNIGHT or Pawn");
+                    if(isKnight && isPawn && yAngle.equals("")  ){
                         xAngle = Position.toString(moveFromFigure.getPosition()).substring(0,1).toLowerCase();
                     }
                 }
-                if((result.equals("")&& isCapture)){
+                if(isPawn && isCapture){
                     xAngle = Position.toString(moveFromFigure.getPosition()).substring(0,1).toLowerCase();
                 }
-            }
         }
 
         result += xAngle+yAngle;
@@ -362,17 +364,13 @@ public class Table {
             result += "x";
         }
         result += Position.toString(moveTo).toLowerCase();
-
         Position originalPos = new Position(moveFromFigure.getPosition());
-
         moveFromFigure.setPosition(moveTo);
 
-        //handleCheckMate(moveFromFigure.getColor());
         if(isGameOver){
             result += "#";
         }
         else if(isKingInCheck(Color.getOpposite(moveFromFigure.getColor()))){
-                //moveFromFigure.getValidMoves(false).contains(getKing(Color.getOpposite(moveFromFigure.getColor())).getPosition())){
                 result += "+";
         }
 
@@ -385,7 +383,7 @@ public class Table {
         Matcher matcher = pattern.matcher(str);
         boolean isValidInput = matcher.find();
         if(!isValidInput) {
-            System.out.println("Match not found: "+str);
+            log.info("Match not found: "+str);
             return new Position[] {};
         }
 
@@ -393,7 +391,6 @@ public class Table {
         Position moveFrom ;
         Position moveTo;
 
-        System.out.println(chessNotation);
         if(str.equals("O-O")){
             moveFrom = Position.toPosition(getSmallCastleMove(activePlayerColor)[0]);
             moveTo = Position.toPosition( getSmallCastleMove(activePlayerColor)[1] );

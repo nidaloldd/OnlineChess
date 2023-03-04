@@ -11,11 +11,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
-
+import lombok.extern.slf4j.Slf4j;
 import static hu.deik.online_chess.model.GameStatus.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ChessPartyServiceImpl implements ChessPartyService {
 
     private ChessParty chessParty;
@@ -60,8 +61,6 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         if (!ChessGameManager.getInstance().getGames().containsKey(request.getId())) {
             throw new NotFoundException("Game not found");
         }
-        System.out.println(request.getId());
-        System.out.println(ChessGameManager.getInstance().getGames());
 
         ChessParty game = ChessGameManager.getInstance().getGames().get(request.getId());
         if (game.getStatus().equals(FINISHED)) {
@@ -69,7 +68,6 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         }
 
         game.getTable().makeMove(Position.toPosition(request.getFrom()),Position.toPosition(request.getTo()));
-        //chessParty.setTable(game.getTable());
 
         if (game.getTable().isGameOver) {
             game.setWinner(getActivePlayer(request.getId()));

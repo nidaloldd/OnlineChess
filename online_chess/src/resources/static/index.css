@@ -7,20 +7,17 @@ body{
     background-color: rgb(54, 54, 54);
 
 }
-td,tr,img{
-    width: 7vmin;
-    height: 7vmin;
+#gameInformation{
+    background-color: rgb(130, 130, 130);
+}
+td,img{
+    width: 4vw;
+    height: 4vw;
 }
 table{
     margin: auto;
 }
 
-.grid{
-    display: grid;
-    grid-template-columns: 30vmin 70vmin;
-    margin: auto;
-
-}
 #gameNotation{
     font-size: large;
     font-weight: bold;
@@ -28,12 +25,9 @@ table{
     margin: auto;
     background: beige;
     border: solid;
-    height: 15em;
-    width: 10em;
+    height: 30vw;
+    width: 20vw;
     overflow: auto;
-}
-main{
-    margin: auto;
 }
 
 .whiteSquare{
@@ -49,17 +43,43 @@ main{
 }
 
 .whiteSquare:nth-child(2), .blackSquare:nth-child(2){
-    border-left: rgb(0, 0, 0) solid 1em;
+    border-left: rgb(0, 0, 0) solid 0.5em;
 }
 .whiteSquare:nth-child(9), .blackSquare:nth-child(9){
-    border-right: rgb(0, 0, 0) solid 1em;
+    border-right: rgb(0, 0, 0) solid 0.5em;
 }
 tr:nth-child(1) .whiteSquare, tr:nth-child(1) .blackSquare{
-    border-top: rgb(0, 0, 0) solid 1em;
+    border-top: rgb(0, 0, 0) solid 0.5em;
 }
 tr:nth-child(8) .whiteSquare, tr:nth-child(8) .blackSquare{
-    border-bottom: rgb(0, 0, 0) solid 1em;
+    border-bottom: rgb(0, 0, 0) solid 0.5em;
 }
 .validMove{
     background-color: red;
+}
+
+.BlackPlayerTable,.BlackPlayerTable img,.BlackPlayerTable .mark td , .BlackPlayerTable td.mark{
+    rotate: 180deg;
+}
+
+@media only screen and (min-width: 750px) {
+    .grid{
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        margin: auto;
+    }
+}
+@media only screen and (max-width: 750px) {
+    .whiteSquare:nth-child(2), .blackSquare:nth-child(2){
+        border-left: rgb(0, 0, 0) solid 0.2em;
+    }
+    .whiteSquare:nth-child(9), .blackSquare:nth-child(9){
+        border-right: rgb(0, 0, 0) solid 0.2em;
+    }
+    tr:nth-child(1) .whiteSquare, tr:nth-child(1) .blackSquare{
+        border-top: rgb(0, 0, 0) solid 0.2em;
+    }
+    tr:nth-child(8) .whiteSquare, tr:nth-child(8) .blackSquare{
+        border-bottom: rgb(0, 0, 0) solid 0.2em;
+    }
 }

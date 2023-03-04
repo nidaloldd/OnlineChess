@@ -1,7 +1,18 @@
 const url = 'http://localhost:8081';
 let stompClient;
 let gameId;
+let loginName;
+let opponentName;
 
+
+function displayGameInformation(loginName,playingWith,GameId){
+    console.log(loginName)
+    console.log(playingWith)
+    console.log(GameId)
+    document.getElementById("loginName").innerHTML = loginName
+    document.getElementById("playingWith").innerHTML = playingWith
+    document.getElementById("GameID").innerHTML = GameId
+} 
 
 function connectToSocket(gameId) {
     console.log("connecting to the game");
@@ -14,12 +25,15 @@ function connectToSocket(gameId) {
             console.log("connectToSocket()");
             console.log("data",data);
             getTableUpdate(data)
+            if(login == data.whitePlayer.name){
+                displayGameInformation(login,data.blackPlayer.name,data.id)
+            }
         })
     })
 }
 
 function create_game() {
-    let login = document.getElementById("login").value;
+    login = document.getElementById("loginInput").value;
     if (login == null || login === '') {
         alert("Please enter login");
     } else {
@@ -31,10 +45,11 @@ function create_game() {
             data: login,
             success: function (data) {
                 console.log("create_game()");
-                console.log(data);
                 gameId = data.id;
                 connectToSocket(gameId);
                 getTableUpdate(data)
+                handleBlackPlayerTable(data.whitePlayer.name);
+                displayGameInformation(login," - ",data.id)
                 alert("Your created a game. Game id is: " + data.id);
             },
             error: function (error) {
@@ -45,10 +60,11 @@ function create_game() {
 }
 
 function connectToRandom() {
-    let login = document.getElementById("login").value;
+    let login = document.getElementById("loginInput").value;
     if (login == null || login === '') {
         alert("Please enter login");
     } else {
+        document.getElementById("loginName").innerHTML = login
         $.ajax({
             url: url + "/api/connect/random",
             type: 'POST',
@@ -57,10 +73,11 @@ function connectToRandom() {
             data: login,
             success: function (data) {
                 console.log("connectToRandom()");
-                console.log(data);
                 gameId = data.id;
                 connectToSocket(data.id);
                 getTableUpdate(data)
+                handleBlackPlayerTable(data.blackPlayer.name)
+                displayGameInformation(login,data.whitePlayer.name,data.id)
                 alert("and playing with: " + data.whitePlayer.name);
             },
             error: function (error) {
@@ -71,10 +88,11 @@ function connectToRandom() {
 }
 
 function connectToSpecificGame() {
-    let login = document.getElementById("login").value;
+    let login = document.getElementById("loginInput").value;
     if (login == null || login === '') {
         alert("Please enter login");
     } else {
+        document.getElementById("loginName").innerHTML = login
         let gameId = document.getElementById("game_id").value;
         if (gameId == null || gameId === '') {
             alert("Please enter game id");
@@ -92,10 +110,10 @@ function connectToSpecificGame() {
             }),
             success: function (data) {
                 console.log("connectToSpecificGame()");
-                console.log(data);
                 gameId = data.gameId;
-                playerType = 'O';
                 connectToSocket(gameId);
+                handleBlackPlayerTable(data.blackPlayer.name);
+                displayGameInformation(login,data.whitePlayer.name,data.id)
                 alert("Congrats you're playing with: " + data.player1.login);
             },
             error: function (error) {
@@ -103,4 +121,12 @@ function connectToSpecificGame() {
             }
         })
     }
+}
+function handleBlackPlayerTable(blackPlayerName){
+    const loginName = document.getElementById("loginName").innerHTML
+    if(blackPlayerName == loginName){
+        document.getElementById("chessTable").classList.add("BlackPlayerTable")
+
+    }
+
 }

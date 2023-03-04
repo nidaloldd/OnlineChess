@@ -1,5 +1,6 @@
 package hu.deik.online_chess.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
@@ -61,6 +62,17 @@ public class ChessRestController {
         log.info("makeMove");
         ChessParty game = chessPartyService.makeMove(request);
         simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            log.info("gameOBJEKT:{}",String.valueOf(objectMapper.writeValueAsString(game)));
+
+        }
+        catch (Exception e){
+            log.info(e.toString());
+        }
+        log.info("gameOBJEKT:{}",String.valueOf(game));
+
         return ResponseEntity.ok(game);
     }
 

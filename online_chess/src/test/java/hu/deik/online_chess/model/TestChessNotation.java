@@ -11,7 +11,7 @@ public class TestChessNotation {
     void init() {
         Player player1 = new Player("player1");
         Player player2 = new Player("player2");
-        chessParty = new ChessParty(player1,player2);
+        chessParty = new ChessParty();
     }
 
     @Test
