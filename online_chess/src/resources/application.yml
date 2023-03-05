@@ -2,6 +2,8 @@ server:
   port: ${PORT:8081}
 
 spring:
+  cache.type: caffeine
+  cache.caffeine.spec: maximumSize=1000,expireAfterAccess=5m
   thymeleaf.cache: false
   mvc.locale.resolver: fixed
   h2.console.enable: true
