@@ -1,17 +1,24 @@
-const allSquare = Array.from(document.getElementsByClassName('whiteSquare')).concat(Array.from(document.getElementsByClassName('blackSquare')));
 let clickedFigure = null;
-let validMoves = null;
 let activePlayerColor = null;
 let EmptyOrEnemySquares = []
 let Whitefigures = []
 let Blackfigures = []
 let isGameOver = false
 
+const allSquare = Array.from(document.getElementsByClassName('whiteSquare')).concat(Array.from(document.getElementsByClassName('blackSquare')));
+const url = 'http://localhost:8081'
+const makeMoveRoute = url+"/game/makeMove"
+const validMovesRoute = url+"/game/validMoves/"
+const newGameRoute = url+'/updateTable/newGame'
+const gameStartRoute = url+"/game/start"
+const connectRandomRoute = url+"/game/connect/random"
+const connectRoute = url+"/game/connect"
+
 
 function makeMove(from,to){
     if(isGameOver){ return;}
    $.ajax({
-        url: url + "/api/makeMove",
+        url: makeMoveRoute,
         type: 'POST',
         dataType: "json",
         contentType: "application/json",
@@ -130,7 +137,7 @@ function PositionToNotation(posX,posY){
 
 function getValidMoves(pos){
    let xhr = new XMLHttpRequest()
-   xhr.open('GET',url+'/api/validMoves/'+gameId+'/'+pos ,true)
+   xhr.open('GET',validMovesRoute+gameId+'/'+pos ,true)
    xhr.onload = function(){
     if(xhr.status == 200){
         console.log("validMoves success")
@@ -157,7 +164,7 @@ function getValidMoves(pos){
 
 function newGame(){
     let xhr = new XMLHttpRequest()
-   xhr.open('GET',url+'/updateTable/newGame',true)
+   xhr.open('GET',newGameRoute,true)
    xhr.onload = function(){
         if(xhr.status == 200){
             console.log("NEwGame")

@@ -1,13 +1,20 @@
 package hu.deik.online_chess.model;
 
+import jakarta.persistence.Entity;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
+@Entity
 public class Player {
-    private final String name;
-
-    public Player(String name) {
-        this.name = name;
-    }
-    public String getName() {
-        return name;
-    }
-
+    @Id
+    private Long id;
+    private String username;
+    private String password;
+    private String role;
 }
