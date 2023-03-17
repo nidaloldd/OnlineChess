@@ -15,4 +15,9 @@ spring:
     url: jdbc:mysql://localhost:3306/chessdb
     username: root
     password:
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: onlinechess66@gmail.com
+    password: L^31FaRFahiEoaq$iRaa8Qf131Ys7h
+    properties.mail.smtp.starttls.enable: true
