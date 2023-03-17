@@ -5,6 +5,7 @@ let Whitefigures = []
 let Blackfigures = []
 let isGameOver = false
 
+
 const allSquare = Array.from(document.getElementsByClassName('whiteSquare')).concat(Array.from(document.getElementsByClassName('blackSquare')));
 const url = 'http://localhost:8081'
 const makeMoveRoute = url+"/game/makeMove"
@@ -13,6 +14,9 @@ const newGameRoute = url+'/updateTable/newGame'
 const gameStartRoute = url+"/game/start"
 const connectRandomRoute = url+"/game/connect/random"
 const connectRoute = url+"/game/connect"
+const dashboardRoute = url+"/dashboard"
+const gameRoute = url+"/game"
+const getPlayerRoute = url+"/game/getPlayer"
 
 
 function makeMove(from,to){
@@ -25,7 +29,7 @@ function makeMove(from,to){
         data: JSON.stringify({
             "from": from,
             "to": to,
-            "id": gameId
+            "id": sessionStorage.getItem("gameID")
         }),
         success: function (data) {
             console.log("makeMove()");
@@ -40,6 +44,27 @@ function makeMove(from,to){
 
  function getTableUpdate(data){
         console.log("getTableUpdate")
+        console.log("sessionStorage",localStorage.getItem('username'))
+        console.log("isWhitePlayer",localStorage.getItem('isWhitePlayer'))
+
+        const username = localStorage.getItem('username')
+        const isWhitePlayer = localStorage.getItem('isWhitePlayer') == "true"
+        const table = data["table"];
+        console.log("isWhitePlayer",isWhitePlayer)
+        if(isWhitePlayer){
+            document.getElementById("chessTable").classList.remove("BlackPlayerTable")
+
+            console.log("blackPlayer",data["blackPlayer"]["username"])
+            document.getElementById("playingWith").innerText = data["blackPlayer"]["username"]
+            
+        }
+        else{
+            document.getElementById("chessTable").classList.add("BlackPlayerTable")
+            console.log("blackPlayer",data["whitePlayer"]["username"])
+            document.getElementById("playingWith").innerText = data["whitePlayer"]["username"]
+        }
+        document.getElementById("GameID").innerText = sessionStorage.getItem("gameID")
+
         allSquare.forEach(square => {
             square.replaceChildren();
         })
@@ -47,12 +72,12 @@ function makeMove(from,to){
             square.classList.remove("validMove")
         })
 
-        const table = data["table"];
         isGameOver = table["isGameOver"]
         activePlayerColor = table["activePlayerColor"]
 
         if(isGameOver){
             document.getElementById("TurnsH1").innerText = "CheckMate "+activePlayerColor+" Win"
+            sessionStorage.setItem("gameID",'undefined')
         }
         else{
             document.getElementById("TurnsH1").innerText = activePlayerColor
@@ -100,14 +125,24 @@ function makeMove(from,to){
         allSquare.forEach(square => {
             square.removeEventListener("click",ClickFigure)
         })
-        if(activePlayerColor == 'WHITE'){
+        console.log("activePlayerColor",activePlayerColor)
+        console.log("isWhitePlayer",isWhitePlayer)
+        if(activePlayerColor == 'WHITE' && isWhitePlayer){
             Whitefigures.forEach(figure => figure.addEventListener("click",ClickFigure))
         }
-        else{
+        else if(activePlayerColor == 'BLACK' && !isWhitePlayer){
             Blackfigures.forEach(figure => figure.addEventListener("click",ClickFigure))
         }
 }
 
+function handleBlackPlayerTable(){
+    console.log("handleBlackPlayerTable")
+    console.log("isWhitePlayer",(localStorage.getItem("isWhitePlayer")))
+    if(!(localStorage.getItem("isWhitePlayer"))){
+        alert("handleBlackPlayerTable")
+        document.getElementById("chessTable").classList.add("BlackPlayerTable")
+    }
+}
 
 function PositionToNotation(posX,posY){
     let notation = ''
@@ -137,7 +172,7 @@ function PositionToNotation(posX,posY){
 
 function getValidMoves(pos){
    let xhr = new XMLHttpRequest()
-   xhr.open('GET',validMovesRoute+gameId+'/'+pos ,true)
+   xhr.open('GET',validMovesRoute+sessionStorage.getItem("gameID")+'/'+pos ,true)
    xhr.onload = function(){
     if(xhr.status == 200){
         console.log("validMoves success")

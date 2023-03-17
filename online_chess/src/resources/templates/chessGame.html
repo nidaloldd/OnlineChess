@@ -1,7 +1,7 @@
-<!-- @format -->
-
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymleaf.org">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layouts/main">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -15,21 +15,19 @@
     <!--    end libs for stomp and sockjs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   </head>
-  <body>
+  <body  layout:fragment="content">
+    <!-- 
     <div>
       <input id="loginInput" placeholder="Place a login here" />
       <button onclick="create_game()">Create a new game</button>
       <button onclick="connectToRandom()">Connect to random game</button>
       <input id="game_id" placeholder="Paste game id" />
-      <button>Connect by game id</button>
+      <button onclick="connectToSpecificGame()">Connect by game id</button>
       <div id="message"></div>
     </div>
+    -->
     <main>
-
         <div id="gameInformation">
-            <label for="loginName">loginName</label>
-            <div id="loginName"></div>
-      
             <label for="playingWith">playingWith</label>
             <div id="playingWith"></div>
       
@@ -148,6 +146,7 @@
       </div>
     </main>
   </body>
-  <script src="/script.js"></script>
-  <script src="/socket.js"></script>
+
+  
+
 </html>

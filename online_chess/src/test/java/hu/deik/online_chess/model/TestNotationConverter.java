@@ -11,8 +11,8 @@ public class TestNotationConverter {
     ChessParty chessParty;
     @BeforeEach
     void init() {
-        Player player1 = new Player("player1");
-        Player player2 = new Player("player2");
+        Player player1 = new Player();
+        Player player2 = new Player();
         chessParty = new ChessParty();
     }
 

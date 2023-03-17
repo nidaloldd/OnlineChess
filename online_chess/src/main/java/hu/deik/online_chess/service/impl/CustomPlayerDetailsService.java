@@ -1,26 +1,28 @@
 package hu.deik.online_chess.service.impl;
 
-import hu.deik.online_chess.model.CustomUserDetails;
-import hu.deik.online_chess.model.UserRepository;
+import hu.deik.online_chess.model.CustomPlayerDetails;
+import hu.deik.online_chess.model.Player;
+import hu.deik.online_chess.repo.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CustomUserDetailsService implements UserDetailsService {
+@Service("userDetailsService")
+public class CustomPlayerDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private PlayerRepository playerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String playerName) throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username);
-        if(user ==null) {
+        Player player = playerRepository.findByUsername(playerName);
+        if(player ==null) {
             throw new UsernameNotFoundException("User Not Found");
         }
-        return new CustomUserDetails(user);
+        return new CustomPlayerDetails(player);
     }
+
 }

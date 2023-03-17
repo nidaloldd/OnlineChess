@@ -6,30 +6,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+public class CustomPlayerDetails implements UserDetails {
 
+    private Player player;
 
-public class CustomUserDetails implements UserDetails {
-
-    private User user;
-
-    public CustomUserDetails(User user) {
+    public CustomPlayerDetails(Player player) {
         super();
-        this.user = user;
+        this.player = player;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
+        return Collections.singleton(new SimpleGrantedAuthority(player.getRole()));
     }
 
+    public Player getPlayer(){return player;}
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return player.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return player.getUsername();
     }
 
     @Override

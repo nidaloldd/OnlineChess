@@ -4,49 +4,63 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
-import hu.deik.online_chess.model.ChessParty;
-import hu.deik.online_chess.model.Player;
-import hu.deik.online_chess.model.Position;
-import hu.deik.online_chess.model.Table;
+import hu.deik.online_chess.model.*;
+import hu.deik.online_chess.repo.PlayerRepository;
 import hu.deik.online_chess.service.ChessPartyService;
 import hu.deik.online_chess.service.dto.MoveRequest;
+import hu.deik.online_chess.service.impl.CustomPlayerDetailsService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import hu.deik.online_chess.service.dto.ConnectRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/game")
 @Slf4j
 @AllArgsConstructor
 public class ChessRestController {
+    @Autowired
+    private PlayerRepository playerRepository;
+    @Autowired
+    private CustomPlayerDetailsService playerDetailsService;
 
     private final ChessPartyService chessPartyService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     @PostMapping("/start")
-    public ResponseEntity<ChessParty> start(@RequestBody String playerName) {
-        log.info("start game request: {}", playerName);
-        Player player1 = new Player(playerName);
+    public ResponseEntity<ChessParty> start(Authentication authentication) {
+        Player player1 = getPlayer(authentication);
+        log.info("start game request: {}", player1.getUsername());
         return ResponseEntity.ok(chessPartyService.createGame(player1));
     }
     @PostMapping("/connect")
-    public ResponseEntity<ChessParty> connect(@RequestBody ConnectRequest request) throws InvalidParamException, InvalidGameException {
-        log.info("connect request: {}", request);
-        return ResponseEntity.ok(chessPartyService.connectToGame(request.getPlayer(), request.getGameId()));
+    public ResponseEntity<ChessParty> connect(@RequestBody String gameId,Authentication authentication) throws InvalidParamException, InvalidGameException {
+        log.info("connect request: {}");
+        return ResponseEntity.ok(chessPartyService.connectToGame(getPlayer(authentication), gameId));
     }
+
     @PostMapping("/connect/random")
-    public ResponseEntity<ChessParty> connectRandom(@RequestBody String playerName) throws NotFoundException {
-        log.info("connect random {}", playerName);
-        Player player2 = new Player(playerName);
+    public ResponseEntity<ChessParty> connectRandom(Authentication authentication) throws NotFoundException {
+        Player player2 = getPlayer(authentication);
+        log.info("connectRandom game request: {}", player2.getUsername());
         return ResponseEntity.ok(chessPartyService.connectToRandomGame(player2));
+    }
+    @PostMapping("/getPlayer")
+    public ResponseEntity<Player> getPlayerResponse(Authentication authentication) {
+        return ResponseEntity.ok(getPlayer(authentication));
+    }
+    public Player getPlayer(Authentication authentication){
+        String username = authentication.getName();
+        CustomPlayerDetails playerDetails = (CustomPlayerDetails) playerDetailsService.loadUserByUsername(username);
+        return playerDetails.getPlayer();
     }
 
     @GetMapping("/validMoves/{gameId}/{pos}")
@@ -66,7 +80,6 @@ public class ChessRestController {
 
         try {
             log.info("gameOBJEKT:{}",String.valueOf(objectMapper.writeValueAsString(game)));
-
         }
         catch (Exception e){
             log.info(e.toString());

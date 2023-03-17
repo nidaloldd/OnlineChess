@@ -1,9 +1,17 @@
-const url = 'http://localhost:8081';
 let stompClient;
 let gameId;
 let loginName;
-let opponentName;
 
+getUser()
+console.log(sessionStorage.getItem("gameID"))
+if(sessionStorage.getItem("gameID") == 'undefined' || sessionStorage.getItem("gameID") == undefined){
+    console.log("GameID is NUll connectToRandom")
+    connectToRandom();
+}
+else{
+    console.log("GameID NOT NUll connectToSpecificGame")
+    connectToSpecificGame(sessionStorage.getItem("gameID"));
+}
 
 function displayGameInformation(loginName,playingWith,GameId){
     console.log(loginName)
@@ -16,7 +24,7 @@ function displayGameInformation(loginName,playingWith,GameId){
 
 function connectToSocket(gameId) {
     console.log("connecting to the game");
-    let socket = new SockJS(url + "/makeMove");
+    let socket = new SockJS("/makeMove");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log("connected to the frame: " + frame);
@@ -24,109 +32,106 @@ function connectToSocket(gameId) {
             let data = JSON.parse(response.body);
             console.log("connectToSocket()");
             console.log("data",data);
+            console.log("isWhitePlayer",localStorage.getItem('isWhitePlayer'));
             getTableUpdate(data)
-            if(login == data.whitePlayer.name){
-                displayGameInformation(login,data.blackPlayer.name,data.id)
-            }
+           sessionStorage.setItem("gameID",data.id)
         })
     })
 }
 
 function create_game() {
-    login = document.getElementById("loginInput").value;
-    if (login == null || login === '') {
-        alert("Please enter login");
-    } else {
-        $.ajax({
-            url: url + "/api/start",
-            type: 'POST',
-            dataType: "json",
-            contentType: "application/json",
-            data: login,
-            success: function (data) {
-                console.log("create_game()");
-                gameId = data.id;
-                connectToSocket(gameId);
-                getTableUpdate(data)
-                handleBlackPlayerTable(data.whitePlayer.name);
-                displayGameInformation(login," - ",data.id)
-                alert("Your created a game. Game id is: " + data.id);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-    }
+    console.log("create_game()")
+    $.ajax({
+        url: gameStartRoute,
+        type: 'POST',
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+            console.log("create_game()");
+            sessionStorage.setItem("gameID",data.id)
+            connectToSocket(data.id);
+            getTableUpdate(data)
+            alert("You created a game. Game id is: " + data.id);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
 }
 
 function connectToRandom() {
-    let login = document.getElementById("loginInput").value;
-    if (login == null || login === '') {
-        alert("Please enter login");
-    } else {
-        document.getElementById("loginName").innerHTML = login
-        $.ajax({
-            url: url + "/api/connect/random",
-            type: 'POST',
-            dataType: "json",
-            contentType: "application/json",
-            data: login,
-            success: function (data) {
-                console.log("connectToRandom()");
-                gameId = data.id;
-                connectToSocket(data.id);
-                getTableUpdate(data)
-                handleBlackPlayerTable(data.blackPlayer.name)
-                displayGameInformation(login,data.whitePlayer.name,data.id)
-                alert("and playing with: " + data.whitePlayer.name);
-            },
-            error: function (error) {
-                console.log(error);
+    $.ajax({
+        url: connectRandomRoute,
+        type: 'POST',
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+            console.log("connectToRandom()");
+            
+            if(data.whitePlayer.username == localStorage.getItem('username')){
+                localStorage.setItem('isWhitePlayer',true);
             }
-        })
-    }
-}
+            else{
+                localStorage.setItem('isWhitePlayer',false);
+            }
+            
+            alert("and playing with: " + data.whitePlayer.name);
 
-function connectToSpecificGame() {
-    let login = document.getElementById("loginInput").value;
-    if (login == null || login === '') {
-        alert("Please enter login");
-    } else {
-        document.getElementById("loginName").innerHTML = login
-        let gameId = document.getElementById("game_id").value;
-        if (gameId == null || gameId === '') {
-            alert("Please enter game id");
+            sessionStorage.setItem("gameID",data.id)
+            connectToSocket(data.id);
+            getTableUpdate(data)
+        },
+        error: function (error) {
+            console.log(error);
         }
-        $.ajax({
-            url: url + "/api/connect",
-            type: 'POST',
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "player": {
-                    "login": login
-                },
-                "gameId": gameId
-            }),
-            success: function (data) {
-                console.log("connectToSpecificGame()");
-                gameId = data.gameId;
-                connectToSocket(gameId);
-                handleBlackPlayerTable(data.blackPlayer.name);
-                displayGameInformation(login,data.whitePlayer.name,data.id)
-                alert("Congrats you're playing with: " + data.player1.login);
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-    }
+    })
 }
-function handleBlackPlayerTable(blackPlayerName){
-    const loginName = document.getElementById("loginName").innerHTML
-    if(blackPlayerName == loginName){
-        document.getElementById("chessTable").classList.add("BlackPlayerTable")
 
+function connectToSpecificGame(gameId='') {
+
+    gameIdFromInput = gameId
+    if(gameId == null || gameId === '' ){
+        alert("No GameID to Connect")
     }
+    
+    $.ajax({
+        url: connectRoute,
+        type: 'POST',
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "gameId": gameIdFromInput
+        }),
+        success: function (data) {
+            console.log("connectToSpecificGame()");
+            gameId = gameIdFromInput;
 
+            connectToSocket(gameId);
+            getTableUpdate(data)
+            alert("Congrats you're playing with: " + data.player1.login);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+    
+}
+
+
+function getUser(){
+    $.ajax({
+        url: getPlayerRoute,
+        type: 'POST',
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+            console.log("getUser",data)
+
+            localStorage.setItem('username', data.username)
+            console.log("username ",localStorage.getItem('username') )
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
 }
