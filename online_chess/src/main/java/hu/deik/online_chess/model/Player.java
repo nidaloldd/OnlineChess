@@ -12,16 +12,10 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     @Column( unique=true, nullable=false )
     private String username;
-
-    @Column( unique=true, nullable=false )
-    private String email;
-
     @Column( nullable=false )
     private String password;
-
     private String role;
     private String activation;
     private Boolean enabled;

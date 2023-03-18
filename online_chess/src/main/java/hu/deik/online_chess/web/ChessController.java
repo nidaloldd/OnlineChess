@@ -5,9 +5,7 @@ import hu.deik.online_chess.service.ChessPartyService;
 
 import hu.deik.online_chess.service.PlayerService;
 import hu.deik.online_chess.service.impl.CustomPlayerDetailsService;
-import hu.deik.online_chess.service.impl.EmailService;
 import hu.deik.online_chess.service.impl.PlayerServiceImpl;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
@@ -24,11 +22,9 @@ import org.springframework.web.bind.annotation.*;
 public class ChessController {
     private final ChessPartyService chessPartyService;
     private PlayerService playerService;
-    private EmailService emailService;
-    public ChessController(final ChessPartyService chessPartyService,PlayerService playerService,EmailService emailService) {
+    public ChessController(final ChessPartyService chessPartyService,PlayerService playerService) {
         this.chessPartyService = chessPartyService;
         this.playerService = playerService;
-        this.emailService = emailService;
     }
     @GetMapping(path = "/userPage")
     public String userPage(Model model, Authentication authentication){
@@ -77,17 +73,10 @@ public class ChessController {
     @PostMapping("/reg")
     public String reg(@ModelAttribute Player player) {
         log.info("Uj user!");
-		emailService.sendMessage(player.getEmail());
+//		emailService.sendMessage(user.getEmail());
         log.info(player.getUsername());
         log.info(player.getPassword());
-        log.info(player.getEmail());
-
         playerService.registerUser(player);
-        return "auth/login";
-    }
-    @RequestMapping(path = "/activation/{code}", method = RequestMethod.GET)
-    public String activation(@PathVariable("code") String code, HttpServletResponse response) {
-        String result = playerService.userActivation(code);
         return "auth/login";
     }
 
