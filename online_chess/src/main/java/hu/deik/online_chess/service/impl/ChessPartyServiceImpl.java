@@ -42,11 +42,6 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         }
         ChessParty game = ChessGameManager.getInstance().getGames().get(gameId);
 
-
-        //game.setBlackPlayer(player2);
-
-        game.setStatus(IN_PROGRESS);
-
         ChessGameManager.getInstance().setGame(game);
         return game;
     }

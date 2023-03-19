@@ -1,3 +1,5 @@
+spring.config.import: optional:secrets.properties
+
 server:
   port: ${PORT:8081}
 
@@ -13,11 +15,15 @@ spring:
     show-sql: true
   datasource:
     url: jdbc:mysql://localhost:3306/chessdb
-    username: root
-    password:
   mail:
-    host: smtp.gmail.com
+    host: smtp.zoho.eu
     port: 587
-    username: onlinechess66@gmail.com
-    password: L^31FaRFahiEoaq$iRaa8Qf131Ys7h
-    properties.mail.smtp.starttls.enable: true
+    protocol: smtp
+    debug: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+

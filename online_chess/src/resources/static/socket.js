@@ -32,7 +32,7 @@ function connectToSocket(gameId) {
             let data = JSON.parse(response.body);
             console.log("connectToSocket()");
             console.log("data",data);
-            console.log("isWhitePlayer",localStorage.getItem('isWhitePlayer'));
+            console.log("isWhitePlayer",sessionStorage.getItem('isWhitePlayer'));
             getTableUpdate(data)
            sessionStorage.setItem("gameID",data.id)
         })
@@ -68,11 +68,11 @@ function connectToRandom() {
         success: function (data) {
             console.log("connectToRandom()");
             
-            if(data.whitePlayer.username == localStorage.getItem('username')){
-                localStorage.setItem('isWhitePlayer',true);
+            if(data.whitePlayer.username == sessionStorage.getItem('username')){
+                sessionStorage.setItem('isWhitePlayer',true);
             }
             else{
-                localStorage.setItem('isWhitePlayer',false);
+                sessionStorage.setItem('isWhitePlayer',false);
             }
             
             alert("and playing with: " + data.whitePlayer.name);
@@ -127,8 +127,8 @@ function getUser(){
         success: function (data) {
             console.log("getUser",data)
 
-            localStorage.setItem('username', data.username)
-            console.log("username ",localStorage.getItem('username') )
+            sessionStorage.setItem('username', data.username)
+            console.log("username ",sessionStorage.getItem('username') )
         },
         error: function (error) {
             console.log(error);

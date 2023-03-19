@@ -30,7 +30,7 @@
 						<div class="navbar-text navbar-right">
 							<p>Welcome, <span th:text="${getName}">Anonymous</span>!</p>
 						   <form id="frmlogout" th:action="@{/logout}" method="post" class="form-inline">
-								| <a href="javascript:{}" onclick="document.getElementById('frmlogout').submit(); return false;">Logout</a>
+								| <a href="javascript:{}" onclick="logout()" >Logout</a>
 						  </form>
 						</div>
 					</div>
@@ -48,7 +48,7 @@
 		</div>
 
 		<script src="/chessGame.js"></script>
-  <script src="/socket.js"></script>
+  		<script src="/socket.js"></script>
 
 	</body>
 </html>

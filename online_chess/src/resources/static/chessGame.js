@@ -44,24 +44,31 @@ function makeMove(from,to){
 
  function getTableUpdate(data){
         console.log("getTableUpdate")
-        console.log("sessionStorage",localStorage.getItem('username'))
-        console.log("isWhitePlayer",localStorage.getItem('isWhitePlayer'))
+        console.log("sessionStorage",sessionStorage.getItem('username'))
+        console.log("isWhitePlayer",sessionStorage.getItem('isWhitePlayer'))
 
-        const username = localStorage.getItem('username')
-        const isWhitePlayer = localStorage.getItem('isWhitePlayer') == "true"
+        const username = sessionStorage.getItem('username')
+        const isWhitePlayer = sessionStorage.getItem('isWhitePlayer') == "true"
         const table = data["table"];
         console.log("isWhitePlayer",isWhitePlayer)
         if(isWhitePlayer){
             document.getElementById("chessTable").classList.remove("BlackPlayerTable")
 
-            console.log("blackPlayer",data["blackPlayer"]["username"])
-            document.getElementById("playingWith").innerText = data["blackPlayer"]["username"]
+            if(data["blackPlayer"]!=null){
+
+                console.log("blackPlayer",data["blackPlayer"]["username"])
+                document.getElementById("playingWith").innerText = data["blackPlayer"]["username"]
+            }
             
         }
         else{
+
             document.getElementById("chessTable").classList.add("BlackPlayerTable")
-            console.log("blackPlayer",data["whitePlayer"]["username"])
-            document.getElementById("playingWith").innerText = data["whitePlayer"]["username"]
+            if(data["whitePlayer"] !=null){
+
+                console.log("blackPlayer",data["whitePlayer"]["username"])
+                document.getElementById("playingWith").innerText = data["whitePlayer"]["username"]
+            }
         }
         document.getElementById("GameID").innerText = sessionStorage.getItem("gameID")
 
@@ -137,8 +144,8 @@ function makeMove(from,to){
 
 function handleBlackPlayerTable(){
     console.log("handleBlackPlayerTable")
-    console.log("isWhitePlayer",(localStorage.getItem("isWhitePlayer")))
-    if(!(localStorage.getItem("isWhitePlayer"))){
+    console.log("isWhitePlayer",(sessionStorage.getItem("isWhitePlayer")))
+    if(!(sessionStorage.getItem("isWhitePlayer"))){
         alert("handleBlackPlayerTable")
         document.getElementById("chessTable").classList.add("BlackPlayerTable")
     }
@@ -245,6 +252,14 @@ function ClickSquare(){
             makeMove(figure,index)
     }
 
+}
+
+function logout(){
+    document.getElementById('frmlogout').submit(); 
+    sessionStorage.removeItem("gameID")
+    sessionStorage.removeItem("isWhitePlayer")
+    sessionStorage.removeItem("username")
+    return false;
 }
 
 
