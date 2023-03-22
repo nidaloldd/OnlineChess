@@ -12,24 +12,24 @@ import java.util.List;
 public class Knight extends Figure implements ChessFigure {
 
     public Knight(Table table, Color color, String strPos) {
-        super(table,color, Position.toPosition(strPos));
+        super(color, Position.toPosition(strPos));
     }
     @Override
-    public List<Position> getValidMoves(boolean handleKingInCheck){
+    public List<Position> getValidMoves(Table table, boolean handleKingInCheck){
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction diagonalDir : Direction.getDiagonalDirections()){
-            validMoves.addAll(getValidMovesFromOneDirection(diagonalDir));
+            validMoves.addAll(getValidMovesFromOneDirection(table,diagonalDir));
         }
 
         if(handleKingInCheck){
-            validMoves = handleKingInCheck(validMoves);
+            validMoves = handleKingInCheck(table,validMoves);
         }
 
         return validMoves;
     }
 
-    public List<Position> getValidMovesFromOneDirection(Direction direction){
+    public List<Position> getValidMovesFromOneDirection(Table table,Direction direction){
         List<Position> validMoves = new ArrayList<>();
         Position stepPosition = position;
 

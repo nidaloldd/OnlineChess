@@ -11,28 +11,28 @@ import java.util.List;
 
 public class King extends Figure implements ChessFigure {
     public King(Table table, Color color, String strPos) {
-        super(table,color, Position.toPosition(strPos));
+        super(color, Position.toPosition(strPos));
     }
 
     @Override
-    public List<Position> getValidMoves(boolean handleKingInCheck){
+    public List<Position> getValidMoves(Table table,boolean handleKingInCheck){
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction direction : Direction.getAllDirections()){
-           validMoves.addAll(getValidMoveFromOneDirectionOnlyOneStep(direction));
+           validMoves.addAll(getValidMoveFromOneDirectionOnlyOneStep(table,direction));
         }
         validMoves.removeAll(table.getEnemyValidMoves(color));
-        addPossibleCastle(validMoves);
+        addPossibleCastle(table,validMoves);
 
         if(handleKingInCheck){
-            validMoves = this.handleKingInCheck(validMoves);
+            validMoves = this.handleKingInCheck(table,validMoves);
         }
         return validMoves;
     }
-    private void addPossibleCastle(List<Position> validMoves){
-        validMoves.addAll(addPossibleCastleForColor(validMoves,color));
+    private void addPossibleCastle(Table table,List<Position> validMoves){
+        validMoves.addAll(addPossibleCastleForColor(table,validMoves,color));
     }
-    private List<Position> addPossibleCastleForColor(List<Position> validMoves, Color color){
+    private List<Position> addPossibleCastleForColor(Table table,List<Position> validMoves, Color color){
         if(!table.getKing(color).getIfFigureNotMoved() || table.isKingInCheck(color)){return validMoves;}
 
         final String row;
@@ -65,4 +65,5 @@ public class King extends Figure implements ChessFigure {
         }
         return " BK ";
     }
+
 }

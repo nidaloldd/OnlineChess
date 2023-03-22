@@ -16,7 +16,6 @@ public abstract class Figure implements Cloneable {
     private boolean isFigureNotMoved;
     protected Color color;
     protected Position position;
-    protected Table table;
 
     public Color getColor() {
         return color;
@@ -33,20 +32,19 @@ public abstract class Figure implements Cloneable {
         return isFigureNotMoved;
     }
 
-    protected Figure(Table table,Color color, Position position){
+    protected Figure(Color color, Position position){
         this.color = color;
         this.position = position;
-        this.table = table;
         isFigureNotMoved = true;
         imageSource = DrawFigure.getPNG(this);
     }
 
-    public List<Position> getValidMoves() {
-        return getValidMoves(true);
+    public List<Position> getValidMoves(Table table) {
+        return getValidMoves(table,true);
     }
 
-    public abstract List<Position> getValidMoves(boolean handleKingInCheck);
-    public List<Position> getValidMoveFromOneDirectionOnlyOneStep(Direction direction){
+    public abstract List<Position> getValidMoves(Table table,boolean handleKingInCheck);
+    public List<Position> getValidMoveFromOneDirectionOnlyOneStep(Table table,Direction direction){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;
 
@@ -57,7 +55,7 @@ public abstract class Figure implements Cloneable {
         validMoves.add(actualPosition);
         return validMoves;
     }
-    public List<Position> getValidMovesFromOneDirectionManyStep(Direction direction ){
+    public List<Position> getValidMovesFromOneDirectionManyStep(Table table,Direction direction ){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;
         while (true){
@@ -76,7 +74,7 @@ public abstract class Figure implements Cloneable {
         }
     }
 
-    public List<Position> handleKingInCheck(List<Position> validMoves){
+    public List<Position> handleKingInCheck(Table table,List<Position> validMoves){
 
         Position startingPos = new Position(position.getPosX(), position.getPosY());
         List<Position>forRemove = new ArrayList<>();

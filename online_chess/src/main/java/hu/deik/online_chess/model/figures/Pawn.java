@@ -11,7 +11,7 @@ import java.util.List;
 public class Pawn extends Figure implements ChessFigure {
 
     public Pawn(Table table, Color color, String strPos) {
-        super(table,color, Position.toPosition(strPos));
+        super(color, Position.toPosition(strPos));
     }
 
     private boolean canDoEntPassantRight = false;
@@ -33,7 +33,7 @@ public class Pawn extends Figure implements ChessFigure {
         this.canDoEntPassantLeft = canDoEntPassantLeft;
     }
     @Override
-    public List<Position> getValidMoves(boolean handleKingInCheck){
+    public List<Position> getValidMoves(Table table,boolean handleKingInCheck){
         List<Position> validMoves = new ArrayList<>();
 
         Direction forward = Direction.getDirectionForward(color);
@@ -60,7 +60,7 @@ public class Pawn extends Figure implements ChessFigure {
         addPossibleEnPassant(validMoves);
 
         if(handleKingInCheck){
-            validMoves = handleKingInCheck(validMoves);
+            validMoves = handleKingInCheck(table,validMoves);
         }
 
         return validMoves;

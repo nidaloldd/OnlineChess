@@ -43,6 +43,7 @@ function makeMove(from,to){
 }
 
  function getTableUpdate(data){
+    console.log("data",data)
         console.log("getTableUpdate")
         console.log("sessionStorage",sessionStorage.getItem('username'))
         console.log("isWhitePlayer",sessionStorage.getItem('isWhitePlayer'))
@@ -59,7 +60,7 @@ function makeMove(from,to){
                 console.log("blackPlayer",data["blackPlayer"]["username"])
                 document.getElementById("playingWith").innerText = data["blackPlayer"]["username"]
             }
-            
+
         }
         else{
 
@@ -110,6 +111,11 @@ function makeMove(from,to){
 
         }
 
+        allSquare.forEach(square => {
+            square.classList.remove("BLACK")
+            square.classList.remove("WHITE")
+        })
+
         for (let figure in table["figures"]) {
 
             const img = document.createElement("img");
@@ -120,9 +126,6 @@ function makeMove(from,to){
 
             img.src = table["figures"][figure]["imageSource"]
             document.getElementById(notation).appendChild(img)
-            //img.classList.add(table["figures"][figure]["color"])
-            document.getElementById(notation).classList.remove("BLACK")
-            document.getElementById(notation).classList.remove("WHITE")
             document.getElementById(notation).classList.add(table["figures"][figure]["color"])
 
         }
@@ -131,14 +134,15 @@ function makeMove(from,to){
 
         allSquare.forEach(square => {
             square.removeEventListener("click",ClickFigure)
+            square.removeEventListener("click",ClickSquare)
         })
         console.log("activePlayerColor",activePlayerColor)
         console.log("isWhitePlayer",isWhitePlayer)
         if(activePlayerColor == 'WHITE' && isWhitePlayer){
-            Whitefigures.forEach(figure => figure.addEventListener("click",ClickFigure))
+            Whitefigures.forEach(figure => figure.addEventListener("click",ClickFigure,false))
         }
         else if(activePlayerColor == 'BLACK' && !isWhitePlayer){
-            Blackfigures.forEach(figure => figure.addEventListener("click",ClickFigure))
+            Blackfigures.forEach(figure => figure.addEventListener("click",ClickFigure,false))
         }
 }
 
@@ -193,6 +197,7 @@ function getValidMoves(pos){
 
         validMovesResponse.forEach(validMove => {
             document.getElementById(validMove).classList.add("validMove")
+            document.getElementById(validMove).removeEventListener("click",ClickFigure)
             document.getElementById(validMove).addEventListener("click",ClickSquare,true)
 
         })
@@ -221,18 +226,20 @@ function newGame(){
 
 }
 
-function ClickFigure(){
+function ClickFigure(event){
     if(isGameOver){ return;}
     const index = event.target.parentNode.getAttribute('id')
     clickedFigure = index;
+    
     allSquare.forEach(square => {
        square.removeEventListener("click",ClickSquare,true)
     })
+    
     getValidMoves(clickedFigure)
 }
 
 
-function ClickSquare(){
+function ClickSquare(event){
     if(isGameOver){ return;}
     if (clickedFigure) {
 

@@ -29,7 +29,7 @@ public class DrawTable {
         }
     }
     private static void markValidMovesOnTable(Table table,String[][] tableMatrix,Position position){
-        for (Position pos : table.getFigureOn(position).getValidMoves()){
+        for (Position pos : table.getFigureOn(position).getValidMoves(table)){
             tableMatrix[pos.getPosX()][pos.getPosY()] = " VV ";
         }
     }

@@ -12,17 +12,17 @@ import java.util.List;
 public class Bishop extends Figure implements ChessFigure {
 
     public Bishop(Table table, Color color, String strPos) {
-        super(table,color, Position.toPosition(strPos));
+        super(color, Position.toPosition(strPos));
     }
     @Override
-    public List<Position> getValidMoves(boolean handleKingInCheck){
+    public List<Position> getValidMoves(Table table,boolean handleKingInCheck){
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction direction : Direction.getDiagonalDirections()){
-            validMoves.addAll(getValidMovesFromOneDirectionManyStep(direction));
+            validMoves.addAll(getValidMovesFromOneDirectionManyStep(table,direction));
         }
         if(handleKingInCheck){
-            validMoves = handleKingInCheck(validMoves);
+            validMoves = handleKingInCheck(table,validMoves);
         }
         return validMoves;
     }

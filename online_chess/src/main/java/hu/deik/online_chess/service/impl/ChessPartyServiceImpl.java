@@ -100,7 +100,8 @@ public class ChessPartyServiceImpl implements ChessPartyService {
 
     @Override
     public List<Position> getValidMoves(String gameId,Position position) {
-        return getTable(gameId).getFigureOn(position).getValidMoves();
+        var table = getTable(gameId);
+        return table.getFigureOn(position).getValidMoves(table);
     }
     @Override
     public Player getActivePlayer(String gameId){

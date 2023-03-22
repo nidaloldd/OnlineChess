@@ -67,7 +67,8 @@ public class ChessRestController {
 
     List<String> getValidMoves(final @PathVariable String gameId,final @PathVariable String pos) {
         log.info("getValidMoves");
-        return chessPartyService.getTable(gameId).getFigureOn(pos).getValidMoves().stream().map(n -> Position.toString(n)).collect(Collectors.toList());
+        var table = chessPartyService.getTable(gameId);
+        return table.getFigureOn(pos).getValidMoves(table).stream().map(n -> Position.toString(n)).collect(Collectors.toList());
     }
 
 

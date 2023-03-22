@@ -141,7 +141,7 @@ public class Table {
         List<Position> enemyMoves = new ArrayList<>();
         for (int i = 0; i < figures.size(); i++) {
             if(figures.get(i).getColor() == Color.getOpposite(color)){
-                if(!figures.get(i).getValidMoves().isEmpty()){
+                if(!figures.get(i).getValidMoves(this).isEmpty()){
                     return;
                 }
             }
@@ -154,14 +154,14 @@ public class Table {
             if(figure.getColor() == Color.getOpposite(color)){
                 if(figure instanceof King){
                     for(Direction direction : Direction.getAllDirections()){
-                        enemyMoves.addAll(figure.getValidMoveFromOneDirectionOnlyOneStep(direction));
+                        enemyMoves.addAll(figure.getValidMoveFromOneDirectionOnlyOneStep(this,direction));
                     }
                 }
                 else if(figure instanceof Pawn){
                     enemyMoves.addAll(((Pawn) figure).getPossibleAttackMoves());
                 }
                 else {
-                    enemyMoves.addAll(figure.getValidMoves(false));
+                    enemyMoves.addAll(figure.getValidMoves(this,false));
                 }
 
             }
@@ -171,7 +171,7 @@ public class Table {
     private boolean isMoveValid(Position moveFrom, Position moveTo){
         if(getFigureOn(moveFrom)==null){log.info("There is no Figure on Position "+ Position.toString(moveFrom)); return false; }
         if(getFigureOn(moveFrom).getColor() != activePlayerColor){log.info("Other Player Turn");return false;}
-        List<Position> validMoves = getFigureOn(moveFrom).getValidMoves();
+        List<Position> validMoves = getFigureOn(moveFrom).getValidMoves(this);
         if(!validMoves.contains(moveTo)){log.info(moveTo.toString()+" is Not Valid move"); return false;}
         return true;
     }
@@ -335,7 +335,7 @@ public class Table {
         for(int i = 0;i<figures.size(); i++){
             boolean sameColor = figures.get(i).getColor() == moveFromFigure.getColor();
             boolean sameFigureType = figures.get(i).getClass().equals(moveFromFigure.getClass());
-            boolean haveSameValidMove = figures.get(i).getValidMoves(true).contains(moveTo) && !figures.get(i).equals(moveFromFigure);
+            boolean haveSameValidMove = figures.get(i).getValidMoves(this,true).contains(moveTo) && !figures.get(i).equals(moveFromFigure);
 
             boolean isKnight = result.equals("N");
             boolean isPawn = xAngle.equals("");
@@ -433,7 +433,7 @@ public class Table {
     private Position findTheCorrectFigurePosition(Class<?> typeOfFigure, String matchingAngle, Position moveTo){
             for (int i = 0; i < figures.size() ; i++) {
 
-                if( figures.get(i).getClass().equals(typeOfFigure)&& figures.get(i).getColor() == activePlayerColor && figures.get(i).getValidMoves().contains(moveTo)){
+                if( figures.get(i).getClass().equals(typeOfFigure)&& figures.get(i).getColor() == activePlayerColor && figures.get(i).getValidMoves(this).contains(moveTo)){
                     switch (matchingAngle.length()){
                         case 0: return figures.get(i).getPosition();
                         case 1:
