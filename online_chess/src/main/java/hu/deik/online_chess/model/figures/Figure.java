@@ -39,10 +39,12 @@ public abstract class Figure implements Cloneable {
         imageSource = DrawFigure.getPNG(this);
     }
 
+    public List<Position> get(Table table) {
+        return getValidMoves(table,true);
+    }
     public List<Position> getValidMoves(Table table) {
         return getValidMoves(table,true);
     }
-
     public abstract List<Position> getValidMoves(Table table,boolean handleKingInCheck);
     public List<Position> getValidMoveFromOneDirectionOnlyOneStep(Table table,Direction direction){
         List<Position> validMoves = new ArrayList<>();
@@ -78,22 +80,32 @@ public abstract class Figure implements Cloneable {
 
         Position startingPos = new Position(position.getPosX(), position.getPosY());
         List<Position>forRemove = new ArrayList<>();
-
         List<Figure> originalFigures = new ArrayList<>(table.getFigures());
-        for(Position p : validMoves){
 
+        for(Position p : validMoves){
+            Figure takenFigure = null;
             if(table.getFigureOn(p) != null){
-                table.getFigures().remove(table.getFigureOn(p));
+                takenFigure = table.getFigureOn(p);
+                table.getFigures().remove(takenFigure);
             }
+
+            //table.getFigureOn(position).setPosition(p);
             position = p;
 
             if(Boolean.TRUE.equals(table.isKingInCheck(color))){
                 forRemove.add(p);
             }
+
+            if(takenFigure != null){
+                table.getFigures().add(takenFigure);
+            }
+            position = startingPos;
         }
-        position = startingPos;
-        table.setFigures(originalFigures);
+        //table.getFigureOn(position).setPosition(startingPos);
+        //position = startingPos;
+        //table.setFigures(originalFigures);
         validMoves.removeAll(forRemove);
+        table.setFigures(originalFigures);
         return validMoves;
     }
 

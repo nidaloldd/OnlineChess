@@ -15,18 +15,9 @@
     <!--    end libs for stomp and sockjs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   </head>
-  <body  layout:fragment="content">
-    <!-- 
-    <div>
-      <input id="loginInput" placeholder="Place a login here" />
-      <button onclick="create_game()">Create a new game</button>
-      <button onclick="connectToRandom()">Connect to random game</button>
-      <input id="game_id" placeholder="Paste game id" />
-      <button onclick="connectToSpecificGame()">Connect by game id</button>
-      <div id="message"></div>
-    </div>
-    -->
-    <main>
+  <body layout:fragment="content">
+    <div th:if="${not getEnabled}" class="alert alert-danger">Not Activated Account</div>
+    <main th:if="${getEnabled}">
         <div id="gameInformation">
             <label for="playingWith">playingWith</label>
             <div id="playingWith"></div>
@@ -144,9 +135,19 @@
           <div id="takenFiguresWhite"></div>
         </div>
       </div>
+      <script src="/chessGame.js"></script>
+      <script src="/socket.js"></script>
+      <script>
+        Start()
+      </script>
     </main>
   </body>
 
-  
-
 </html>
+
+<script>
+
+document.getElementById("gameNav").classList.add("active");
+  
+</script>
+

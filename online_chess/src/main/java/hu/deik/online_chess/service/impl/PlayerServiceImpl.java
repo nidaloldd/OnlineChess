@@ -36,7 +36,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         playerToRegister.setPassword(bCryptPasswordEncoder.encode(playerToRegister.getPassword()));
         playerToRegister.setRole(USER_ROLE);
-        playerToRegister.setEnabled(true);
+        playerToRegister.setEnabled(false);
         playerToRegister.setActivation(generateKey());
 
         log.info(playerToRegister.getPassword());
@@ -44,6 +44,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         return "ok";
     }
+    @Override
     public String generateKey()
     {
         String key = "";
@@ -60,8 +61,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public String userActivation(String code) {
         Player player = playerRepository.findByActivation(code);
-        if (player == null)
+        if (player == null){
             return "noresult";
+        }
 
         player.setEnabled(true);
         player.setActivation("");

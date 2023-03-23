@@ -16,6 +16,7 @@ public interface ChessPartyService {
     ChessParty connectToRandomGame(Player player2) throws NotFoundException;
 
     ChessParty makeMove(MoveRequest request) throws NotFoundException, InvalidGameException;
+    public ChessParty makeMove(String gameID,String from,String to) throws NotFoundException, InvalidGameException ;
     List<Position> getValidMoves(String gameId,Position position);
     Player getActivePlayer(String gameId);
     Table getTable(String gameId);

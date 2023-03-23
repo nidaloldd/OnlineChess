@@ -1,3 +1,5 @@
+console.log("CHESSGAME SCRIPT LOAD")
+
 let clickedFigure = null;
 let activePlayerColor = null;
 let EmptyOrEnemySquares = []
@@ -19,8 +21,37 @@ const gameRoute = url+"/game"
 const getPlayerRoute = url+"/game/getPlayer"
 
 
+function Start(){
+    console.log("START")
+    console.log(sessionStorage.getItem("gameID"))
+    if(sessionStorage.getItem("gameID") == 'undefined' || sessionStorage.getItem("gameID") == undefined){
+    console.log("GameID is NUll connectToRandom")
+    connectToRandom();
+    }
+    else{
+    console.log("GameID NOT NUll connectToSpecificGame")
+    connectToSpecificGame(sessionStorage.getItem("gameID"));
+    }
+}
+
 function makeMove(from,to){
     if(isGameOver){ return;}
+
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET',makeMoveRoute+"/"+sessionStorage.getItem("gameID")+"/"+from+"/"+to,true)
+    xhr.onload = function(){
+     if(xhr.status == 200){
+        console.log("makeMove()");
+            connectToSpecificGame(sessionStorage.getItem("gameID"))
+            getTableUpdate(JSON.parse(this.response))
+     }
+     else {
+         console.log("Problem with getValidMoves request !!!")
+     }
+    }
+    xhr.send()
+
+/*
    $.ajax({
         url: makeMoveRoute,
         type: 'POST',
@@ -32,18 +63,27 @@ function makeMove(from,to){
             "id": sessionStorage.getItem("gameID")
         }),
         success: function (data) {
-            console.log("makeMove()");
-            console.log("data",data);          
+            console.log("makeMove()");    
+
+            console.log("CLEAR ALL")
+            allSquare.forEach(square => {
+                square.replaceChildren();
+                square.classList.remove("BLACK")
+                square.classList.remove("WHITE")
+            })   
+
             getTableUpdate(data)
         },
         error: function (error) {
             console.log(error);
         }
     })
+    */
 }
 
  function getTableUpdate(data){
-    console.log("data",data)
+
+        console.log("data",data)
         console.log("getTableUpdate")
         console.log("sessionStorage",sessionStorage.getItem('username'))
         console.log("isWhitePlayer",sessionStorage.getItem('isWhitePlayer'))
@@ -52,6 +92,14 @@ function makeMove(from,to){
         const isWhitePlayer = sessionStorage.getItem('isWhitePlayer') == "true"
         const table = data["table"];
         console.log("isWhitePlayer",isWhitePlayer)
+
+        console.log("CLEAR ALL")
+        allSquare.forEach(square => {
+            square.replaceChildren();
+            square.classList.remove("BLACK")
+            square.classList.remove("WHITE")
+        })   
+
         if(isWhitePlayer){
             document.getElementById("chessTable").classList.remove("BlackPlayerTable")
 
@@ -73,9 +121,7 @@ function makeMove(from,to){
         }
         document.getElementById("GameID").innerText = sessionStorage.getItem("gameID")
 
-        allSquare.forEach(square => {
-            square.replaceChildren();
-        })
+
         Array.from(document.getElementsByClassName("validMove")).forEach(square => {
             square.classList.remove("validMove")
         })
@@ -111,11 +157,6 @@ function makeMove(from,to){
 
         }
 
-        allSquare.forEach(square => {
-            square.classList.remove("BLACK")
-            square.classList.remove("WHITE")
-        })
-
         for (let figure in table["figures"]) {
 
             const img = document.createElement("img");
@@ -125,7 +166,7 @@ function makeMove(from,to){
             const notation = PositionToNotation(posX,posY)
 
             img.src = table["figures"][figure]["imageSource"]
-            document.getElementById(notation).appendChild(img)
+            document.getElementById(notation).replaceChildren(img)
             document.getElementById(notation).classList.add(table["figures"][figure]["color"])
 
         }
@@ -136,8 +177,7 @@ function makeMove(from,to){
             square.removeEventListener("click",ClickFigure)
             square.removeEventListener("click",ClickSquare)
         })
-        console.log("activePlayerColor",activePlayerColor)
-        console.log("isWhitePlayer",isWhitePlayer)
+
         if(activePlayerColor == 'WHITE' && isWhitePlayer){
             Whitefigures.forEach(figure => figure.addEventListener("click",ClickFigure,false))
         }
@@ -150,7 +190,6 @@ function handleBlackPlayerTable(){
     console.log("handleBlackPlayerTable")
     console.log("isWhitePlayer",(sessionStorage.getItem("isWhitePlayer")))
     if(!(sessionStorage.getItem("isWhitePlayer"))){
-        alert("handleBlackPlayerTable")
         document.getElementById("chessTable").classList.add("BlackPlayerTable")
     }
 }
@@ -242,7 +281,6 @@ function ClickFigure(event){
 function ClickSquare(event){
     if(isGameOver){ return;}
     if (clickedFigure) {
-
             let index = undefined
             if (event.target.tagName === 'IMG') {
                  index = event.target.parentNode.getAttribute('id')

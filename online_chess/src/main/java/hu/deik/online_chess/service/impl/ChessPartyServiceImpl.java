@@ -97,6 +97,27 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         ChessGameManager.getInstance().setGame(game);
         return game;
     }
+    @Override
+    public ChessParty makeMove(String gameID,String from,String to) throws NotFoundException, InvalidGameException {
+
+        if (!ChessGameManager.getInstance().getGames().containsKey(gameID)) {
+            throw new NotFoundException("Game not found");
+        }
+
+        ChessParty game = ChessGameManager.getInstance().getGames().get(gameID);
+        if (game.getStatus().equals(FINISHED)) {
+            throw new InvalidGameException("Game is already finished");
+        }
+
+        game.getTable().makeMove(Position.toPosition(from),Position.toPosition(to));
+
+        if (game.getTable().isGameOver) {
+            game.setWinner(getActivePlayer(gameID));
+        }
+
+        ChessGameManager.getInstance().setGame(game);
+        return game;
+    }
 
     @Override
     public List<Position> getValidMoves(String gameId,Position position) {

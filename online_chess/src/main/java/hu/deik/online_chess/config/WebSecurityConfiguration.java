@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,7 +34,7 @@ public class WebSecurityConfiguration {
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/registration").permitAll()
                         .requestMatchers("/reg").permitAll()
-                        .requestMatchers("/activation/**").permitAll()
+                        .requestMatchers("/resendEmail/**").permitAll()
                         .anyRequest().authenticated()
         ).csrf().disable()
                 .formLogin().successForwardUrl("/")

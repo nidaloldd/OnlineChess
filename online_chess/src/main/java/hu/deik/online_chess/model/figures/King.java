@@ -41,6 +41,7 @@ public class King extends Figure implements ChessFigure {
 
         if( table.getFigureOn("F"+row)== null &&
                 table.getFigureOn("G"+row)== null &&
+                table.getFigureOn("H"+row)!= null &&
                 table.getFigureOn("H"+row).getIfFigureNotMoved() &&
                 validMoves.contains(Position.toPosition("F"+row)))
         {
@@ -49,6 +50,7 @@ public class King extends Figure implements ChessFigure {
         if( table.getFigureOn("D"+row)== null &&
                 table.getFigureOn("C"+row)== null &&
                 table.getFigureOn("B"+row)== null &&
+                table.getFigureOn("A"+row)!=null &&
                 table.getFigureOn("A"+row).getIfFigureNotMoved()&&
                 validMoves.contains(Position.toPosition("D"+row)))
         {

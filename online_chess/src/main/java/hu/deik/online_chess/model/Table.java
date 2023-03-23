@@ -151,20 +151,20 @@ public class Table {
     public List<Position> getEnemyValidMoves(Color color){
         List<Position> enemyMoves = new ArrayList<>();
         for(Figure figure : figures){
-            if(figure.getColor() == Color.getOpposite(color)){
-                if(figure instanceof King){
-                    for(Direction direction : Direction.getAllDirections()){
-                        enemyMoves.addAll(figure.getValidMoveFromOneDirectionOnlyOneStep(this,direction));
-                    }
-                }
-                else if(figure instanceof Pawn){
-                    enemyMoves.addAll(((Pawn) figure).getPossibleAttackMoves());
-                }
-                else {
-                    enemyMoves.addAll(figure.getValidMoves(this,false));
-                }
+            if(figure.getColor() == color){continue;}
 
+            if(figure instanceof King){
+                for(Direction direction : Direction.getAllDirections()){
+                    enemyMoves.addAll(figure.getValidMoveFromOneDirectionOnlyOneStep(this,direction));
+                }
             }
+            else if(figure instanceof Pawn){
+                enemyMoves.addAll(((Pawn) figure).getPossibleAttackMoves());
+            }
+            else {
+                enemyMoves.addAll(figure.getValidMoves(this,false));
+            }
+
         }
         return enemyMoves;
     }

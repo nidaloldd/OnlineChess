@@ -1,26 +1,16 @@
+console.log("SOCKET SCRIPT LOAD")
+
 let stompClient;
 let gameId;
 let loginName;
 
 getUser()
-console.log(sessionStorage.getItem("gameID"))
-if(sessionStorage.getItem("gameID") == 'undefined' || sessionStorage.getItem("gameID") == undefined){
-    console.log("GameID is NUll connectToRandom")
-    connectToRandom();
-}
-else{
-    console.log("GameID NOT NUll connectToSpecificGame")
-    connectToSpecificGame(sessionStorage.getItem("gameID"));
-}
 
 function displayGameInformation(loginName,playingWith,GameId){
-    console.log(loginName)
-    console.log(playingWith)
-    console.log(GameId)
     document.getElementById("loginName").innerHTML = loginName
     document.getElementById("playingWith").innerHTML = playingWith
     document.getElementById("GameID").innerHTML = GameId
-} 
+}
 
 function connectToSocket(gameId) {
     console.log("connecting to the game");
@@ -31,10 +21,8 @@ function connectToSocket(gameId) {
         stompClient.subscribe("/topic/game-progress/" + gameId, function (response) {
             let data = JSON.parse(response.body);
             console.log("connectToSocket()");
-            console.log("data",data);
-            console.log("isWhitePlayer",sessionStorage.getItem('isWhitePlayer'));
+            sessionStorage.setItem("gameID",data.id)
             getTableUpdate(data)
-           sessionStorage.setItem("gameID",data.id)
         })
     })
 }
@@ -47,11 +35,9 @@ function create_game() {
         dataType: "json",
         contentType: "application/json",
         success: function (data) {
-            console.log("create_game()");
             sessionStorage.setItem("gameID",data.id)
             connectToSocket(data.id);
             getTableUpdate(data)
-            alert("You created a game. Game id is: " + data.id);
         },
         error: function (error) {
             console.log(error);
@@ -75,8 +61,6 @@ function connectToRandom() {
                 sessionStorage.setItem('isWhitePlayer',false);
             }
             
-            alert("and playing with: " + data.whitePlayer.name);
-
             sessionStorage.setItem("gameID",data.id)
             connectToSocket(data.id);
             getTableUpdate(data)
@@ -91,7 +75,7 @@ function connectToSpecificGame(gameId='') {
 
     gameIdFromInput = gameId
     if(gameId == null || gameId === '' ){
-        alert("No GameID to Connect")
+        console.log("No GameID to Connect")
     }
     
     $.ajax({
@@ -108,7 +92,6 @@ function connectToSpecificGame(gameId='') {
 
             connectToSocket(gameId);
             getTableUpdate(data)
-            alert("Congrats you're playing with: " + data.player1.login);
         },
         error: function (error) {
             console.log(error);

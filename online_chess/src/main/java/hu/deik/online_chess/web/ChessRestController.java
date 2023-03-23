@@ -79,13 +79,16 @@ public class ChessRestController {
         simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
         ObjectMapper objectMapper = new ObjectMapper();
 
-        try {
-            log.info("gameOBJEKT:{}",String.valueOf(objectMapper.writeValueAsString(game)));
-        }
-        catch (Exception e){
-            log.info(e.toString());
-        }
-        log.info("gameOBJEKT:{}",String.valueOf(game));
+        return ResponseEntity.ok(game);
+    }
+
+    @GetMapping("/makeMove/{gameId}/{from}/{to}")
+    public ResponseEntity<ChessParty> makeMove(final @PathVariable String gameId,final @PathVariable String from,final @PathVariable String to) throws NotFoundException, InvalidGameException   {
+        log.info("makeMove");
+
+        ChessParty game = chessPartyService.makeMove(gameId,from,to);
+        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
+        ObjectMapper objectMapper = new ObjectMapper();
 
         return ResponseEntity.ok(game);
     }

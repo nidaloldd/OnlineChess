@@ -6,7 +6,9 @@ server:
 spring:
   cache.type: caffeine
   cache.caffeine.spec: maximumSize=1000,expireAfterAccess=5m
-  thymeleaf.cache: false
+  thymeleaf :
+    enabled: true
+    cache: false
   mvc.locale.resolver: fixed
   jpa:
     hibernate.ddl-auto=update:
