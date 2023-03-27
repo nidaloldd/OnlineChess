@@ -17,7 +17,7 @@ const gameStartRoute = url+"/game/start"
 const connectRandomRoute = url+"/game/connect/random"
 const connectRoute = url+"/game/connect"
 const dashboardRoute = url+"/dashboard"
-const gameRoute = url+"/game"
+const onlineGameRoute = url+"/onlineGame"
 const getPlayerRoute = url+"/game/getPlayer"
 
 
@@ -42,43 +42,14 @@ function makeMove(from,to){
     xhr.onload = function(){
      if(xhr.status == 200){
         console.log("makeMove()");
-            connectToSpecificGame(sessionStorage.getItem("gameID"))
-            getTableUpdate(JSON.parse(this.response))
+        connectToSpecificGame(sessionStorage.getItem("gameID"))
+        getTableUpdate(JSON.parse(this.response))
      }
      else {
          console.log("Problem with getValidMoves request !!!")
      }
     }
     xhr.send()
-
-/*
-   $.ajax({
-        url: makeMoveRoute,
-        type: 'POST',
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "from": from,
-            "to": to,
-            "id": sessionStorage.getItem("gameID")
-        }),
-        success: function (data) {
-            console.log("makeMove()");    
-
-            console.log("CLEAR ALL")
-            allSquare.forEach(square => {
-                square.replaceChildren();
-                square.classList.remove("BLACK")
-                square.classList.remove("WHITE")
-            })   
-
-            getTableUpdate(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-    */
 }
 
  function getTableUpdate(data){

@@ -1,4 +1,4 @@
-package hu.deik.online_chess.model;
+package hu.deik.online_chess.data;
 
 
 import jakarta.persistence.*;

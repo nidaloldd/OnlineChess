@@ -1,5 +1,7 @@
 package hu.deik.online_chess.service;
 
+import hu.deik.online_chess.data.ChessParty;
+import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
@@ -9,7 +11,7 @@ import hu.deik.online_chess.service.dto.MoveRequest;
 import java.util.List;
 
 public interface ChessPartyService {
-    ChessParty createGame(Player player1);
+    public ChessParty createGame(Player player1,GameStatus gameStatus) ;
 
     ChessParty connectToGame(Player player2, String gameId) throws InvalidParamException, InvalidGameException;
 

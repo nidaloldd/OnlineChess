@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Knight extends Figure implements ChessFigure {
 
-    public Knight(Table table, Color color, String strPos) {
+    public Knight(Color color, String strPos) {
         super(color, Position.toPosition(strPos));
     }
     @Override

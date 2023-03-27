@@ -1,7 +1,6 @@
 package hu.deik.online_chess.service;
 
-import hu.deik.online_chess.model.Player;
-import org.springframework.stereotype.Service;
+import hu.deik.online_chess.data.Player;
 
 
 public interface PlayerService {

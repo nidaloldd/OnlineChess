@@ -1,6 +1,6 @@
 package hu.deik.online_chess.repo;
 
-import hu.deik.online_chess.model.Player;
+import hu.deik.online_chess.data.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

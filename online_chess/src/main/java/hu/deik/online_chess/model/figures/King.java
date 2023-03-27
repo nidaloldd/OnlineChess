@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class King extends Figure implements ChessFigure {
-    public King(Table table, Color color, String strPos) {
+    public King(Color color, String strPos) {
         super(color, Position.toPosition(strPos));
     }
 

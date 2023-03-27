@@ -1,0 +1,25 @@
+body{
+    background-color: #43617c;
+
+}
+#content{
+	height: 75vh;
+}
+
+a{
+	color: black;
+	text-decoration: none;
+}
+.nav-item,footer{
+	margin: 1em;
+}
+
+nav{
+	background-color: #468491;
+}
+.navbarIcon{
+	color: aqua;
+}
+.activeNav{
+	background-color: #226857;
+};

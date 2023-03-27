@@ -1,5 +1,6 @@
 package hu.deik.online_chess.model;
 
+import hu.deik.online_chess.data.Player;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -82,10 +82,25 @@ public class Table {
         }
         return whiteKingNumber != 0 && blackKingNumber != 0;
     }
-    public Table(List<Figure> figures){
+    public Table(List<Figure> figures, Color activePlayerColor){
         if(!isContainsTheTwoKing(figures)){return;}
-        figures.clear();
+        this.isGameOver = false;
+        this.gameNotation = new StringBuilder("");
+        this.numberOfMoves = 0;
+        this.takenFigures.clear();
+        this.figures.clear();
         this.figures.addAll(figures);
+        this.activePlayerColor = activePlayerColor;
+
+        for (Figure figure:figures) {
+            if(!(figure instanceof King)){continue;}
+
+            if(figure.getColor() == Color.WHITE){
+                this.whiteKing = (King) figure;
+            } else {
+                this.blackKing = (King) figure;
+            }
+        }
     }
     public void setUpStartingTable(){
         isGameOver = false;
@@ -94,44 +109,44 @@ public class Table {
         takenFigures.clear();
         numberOfMoves = 0;
         activePlayerColor = Color.WHITE;
-        whiteKing = (new King(this,Color.WHITE,"E1"));
-        blackKing = (new King(this,Color.BLACK,"E8"));
+        whiteKing = (new King(Color.WHITE,"E1"));
+        blackKing = (new King(Color.BLACK,"E8"));
 
-        figures.add((new Rook(this, Color.WHITE,"A1")));
-        figures.add((new Knight(this,Color.WHITE,"B1")));
-        figures.add((new Bishop(this,Color.WHITE,"C1")));
-        figures.add((new Queen(this,Color.WHITE,"D1")));
+        figures.add((new Rook(Color.WHITE,"A1")));
+        figures.add((new Knight(Color.WHITE,"B1")));
+        figures.add((new Bishop(Color.WHITE,"C1")));
+        figures.add((new Queen(Color.WHITE,"D1")));
         figures.add(whiteKing);
-        figures.add((new Bishop(this,Color.WHITE,"F1")));
-        figures.add((new Knight(this,Color.WHITE,"G1")));
-        figures.add((new Rook(this,Color.WHITE,"H1")));
+        figures.add((new Bishop(Color.WHITE,"F1")));
+        figures.add((new Knight(Color.WHITE,"G1")));
+        figures.add((new Rook(Color.WHITE,"H1")));
 
-        figures.add((new Pawn(this,Color.WHITE,"A2")));
-        figures.add((new Pawn(this,Color.WHITE,"B2")));
-        figures.add((new Pawn(this,Color.WHITE,"C2")));
-        figures.add((new Pawn(this,Color.WHITE,"D2")));
-        figures.add((new Pawn(this,Color.WHITE,"E2")));
-        figures.add((new Pawn(this,Color.WHITE,"F2")));
-        figures.add((new Pawn(this,Color.WHITE,"G2")));
-        figures.add((new Pawn(this,Color.WHITE,"H2")));
+        figures.add((new Pawn(Color.WHITE,"A2")));
+        figures.add((new Pawn(Color.WHITE,"B2")));
+        figures.add((new Pawn(Color.WHITE,"C2")));
+        figures.add((new Pawn(Color.WHITE,"D2")));
+        figures.add((new Pawn(Color.WHITE,"E2")));
+        figures.add((new Pawn(Color.WHITE,"F2")));
+        figures.add((new Pawn(Color.WHITE,"G2")));
+        figures.add((new Pawn(Color.WHITE,"H2")));
 
-        figures.add((new Rook(this,Color.BLACK,"A8")));
-        figures.add((new Knight(this,Color.BLACK,"B8")));
-        figures.add((new Bishop(this,Color.BLACK,"C8")));
-        figures.add((new Queen(this,Color.BLACK,"D8")));
+        figures.add((new Rook(Color.BLACK,"A8")));
+        figures.add((new Knight(Color.BLACK,"B8")));
+        figures.add((new Bishop(Color.BLACK,"C8")));
+        figures.add((new Queen(Color.BLACK,"D8")));
         figures.add(blackKing);
-        figures.add((new Bishop(this,Color.BLACK,"F8")));
-        figures.add((new Knight(this,Color.BLACK,"G8")));
-        figures.add((new Rook(this,Color.BLACK,"H8")));
+        figures.add((new Bishop(Color.BLACK,"F8")));
+        figures.add((new Knight(Color.BLACK,"G8")));
+        figures.add((new Rook(Color.BLACK,"H8")));
 
-        figures.add((new Pawn(this,Color.BLACK,"A7")));
-        figures.add((new Pawn(this,Color.BLACK,"B7")));
-        figures.add((new Pawn(this,Color.BLACK,"C7")));
-        figures.add((new Pawn(this,Color.BLACK,"D7")));
-        figures.add((new Pawn(this,Color.BLACK,"E7")));
-        figures.add((new Pawn(this,Color.BLACK,"F7")));
-        figures.add((new Pawn(this,Color.BLACK,"G7")));
-        figures.add((new Pawn(this,Color.BLACK,"H7")));
+        figures.add((new Pawn(Color.BLACK,"A7")));
+        figures.add((new Pawn(Color.BLACK,"B7")));
+        figures.add((new Pawn(Color.BLACK,"C7")));
+        figures.add((new Pawn(Color.BLACK,"D7")));
+        figures.add((new Pawn(Color.BLACK,"E7")));
+        figures.add((new Pawn(Color.BLACK,"F7")));
+        figures.add((new Pawn(Color.BLACK,"G7")));
+        figures.add((new Pawn(Color.BLACK,"H7")));
     }
 
     public Boolean isKingInCheck(Color color){
@@ -269,7 +284,7 @@ public class Table {
         if(!(getFigureOn(moveFrom) instanceof Pawn)){return;}
 
         if(moveTo.isLastRow(getFigureOn(moveFrom).getColor())){
-            setFigureOn(moveFrom,new Queen(this,activePlayerColor,Position.toString(moveFrom)));
+            setFigureOn(moveFrom,new Queen(activePlayerColor,Position.toString(moveFrom)));
         }
     }
     private void handleEnPassant(Position moveFrom, Position moveTo){
@@ -473,4 +488,5 @@ public class Table {
 
         return getFigureOn(position).getColor() == color;
     }
+
 }

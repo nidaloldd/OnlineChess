@@ -1,5 +1,7 @@
 package hu.deik.online_chess.service.impl;
 
+import hu.deik.online_chess.data.ChessParty;
+import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
@@ -21,11 +23,11 @@ public class ChessPartyServiceImpl implements ChessPartyService {
 
     private ChessParty chessParty;
     @Override
-    public ChessParty createGame(Player player1) {
+    public ChessParty createGame(Player player1,GameStatus gameStatus) {
         chessParty = new ChessParty();
         chessParty.setId(UUID.randomUUID().toString());
         chessParty.setWhitePlayer(player1);
-        chessParty.setStatus(NEW);
+        chessParty.setStatus(gameStatus);
         ChessGameManager.getInstance().setGame(chessParty);
         return chessParty;
     }
@@ -54,7 +56,7 @@ public class ChessPartyServiceImpl implements ChessPartyService {
             log.info("createGame");
             var size = ChessGameManager.getInstance().getGames().size();
             log.info("ChessGameManager size :{}", size);
-           return createGame(player2);
+           return createGame(player2,GameStatus.NEW);
         }
         else {
             var game = newGame.get();

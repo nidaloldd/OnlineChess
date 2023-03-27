@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Pawn extends Figure implements ChessFigure {
 
-    public Pawn(Table table, Color color, String strPos) {
+    public Pawn(Color color, String strPos) {
         super(color, Position.toPosition(strPos));
     }
 

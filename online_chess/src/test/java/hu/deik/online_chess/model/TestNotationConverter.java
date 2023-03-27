@@ -1,6 +1,7 @@
 package hu.deik.online_chess.model;
 
-import hu.deik.online_chess.model.Draw.DrawTable;
+import hu.deik.online_chess.data.ChessParty;
+import hu.deik.online_chess.data.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

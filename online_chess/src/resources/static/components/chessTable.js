@@ -1,37 +1,6 @@
-<!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layouts/main">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Online Chess</title>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <link rel="stylesheet" href="../static/css/chessTable.css" th:href="@{/css/chessTable.css}"/>
-  </head>
-  <body layout:fragment="content">
-    <div th:if="${not getEnabled}" class="alert alert-danger">Not Activated Account</div>
-    <main th:if="${getEnabled}">
-        <div id="gameInformation">
-            <label for="playingWith">playingWith</label>
-            <div id="playingWith"></div>
-      
-            <label for="GameID">GameID</label>
-            <div id="GameID"></div>
-        </div>
-
-      <div class="grid">
-        <div id="gameNotation"></div>
-        <div>
-          <div id="takenFiguresBlack"></div>
-          <h1 id="TurnsH1"></h1>
-          <table id="chessTable">
+const template = document.createElement('template');
+template.innerHTML = `
+<table id="chessTable">
             <tr>
               <td class="mark">8</td>
               <td id="A8" class="blackSquare"></td>
@@ -131,23 +100,21 @@
               <td>G</td>
               <td>H</td>
             </tr>
-          </table>
-          <div id="takenFiguresWhite"></div>
-        </div>
-      </div>
-      <script src="/chessGame.js"></script>
-      <script src="/socket.js"></script>
-      <script>
-        Start()
-      </script>
-    </main>
-  </body>
+          </table>`;
 
-</html>
+class ChessTable extends HTMLElement{
+ constructor(){
+     super();
+     this.attachShadow({ mode: 'open'});
+     this.shadowRoot.appendChild(template.content.cloneNode(true));
+ } 
+ connectedCallback(){
+  this.h3 = this.getAttribute("name")
+  this.render();
+}
 
-<script>
-
-  document.getElementById("gameNav").classList.add("activeNav");
-  
-</script>
-
+render(){
+  this.h3;
+}
+}
+window.customElements.define('chessTable', ChessTable);

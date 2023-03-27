@@ -1,10 +1,8 @@
 package hu.deik.online_chess.service.impl;
 
-import hu.deik.online_chess.model.Player;
+import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.repo.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

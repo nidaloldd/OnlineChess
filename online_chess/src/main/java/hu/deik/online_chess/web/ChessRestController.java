@@ -1,16 +1,26 @@
 package hu.deik.online_chess.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hu.deik.online_chess.data.ChessParty;
+import hu.deik.online_chess.data.ChessPuzzle;
+import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
+import hu.deik.online_chess.manager.PuzzleManager;
 import hu.deik.online_chess.model.*;
+import hu.deik.online_chess.model.Draw.DrawFigure;
+import hu.deik.online_chess.model.Draw.DrawTable;
 import hu.deik.online_chess.repo.PlayerRepository;
+import hu.deik.online_chess.repo.PuzzleRepository;
 import hu.deik.online_chess.service.ChessPartyService;
 import hu.deik.online_chess.service.dto.MoveRequest;
+import hu.deik.online_chess.service.dto.PuzzleRequest;
 import hu.deik.online_chess.service.impl.CustomPlayerDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,6 +41,8 @@ public class ChessRestController {
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
+    private PuzzleRepository puzzleRepository;
+    @Autowired
     private CustomPlayerDetailsService playerDetailsService;
 
     private final ChessPartyService chessPartyService;
@@ -39,7 +52,7 @@ public class ChessRestController {
     public ResponseEntity<ChessParty> start(Authentication authentication) {
         Player player1 = getPlayer(authentication);
         log.info("start game request: {}", player1.getUsername());
-        return ResponseEntity.ok(chessPartyService.createGame(player1));
+        return ResponseEntity.ok(chessPartyService.createGame(player1,GameStatus.NEW));
     }
     @PostMapping("/connect")
     public ResponseEntity<ChessParty> connect(@RequestBody String gameId,Authentication authentication) throws InvalidParamException, InvalidGameException {
@@ -71,13 +84,42 @@ public class ChessRestController {
         return table.getFigureOn(pos).getValidMoves(table).stream().map(n -> Position.toString(n)).collect(Collectors.toList());
     }
 
+    @GetMapping("/getPuzzle")
+    public ResponseEntity<PuzzleRequest> getPuzzle(Authentication authentication)  {
+        log.info("getPuzzle");
+        Random random = new Random();
+        int count = (int) puzzleRepository.count();
+        int randomIndex = random.nextInt(count);
+        Pageable pageable = PageRequest.of(randomIndex, 1);
+
+        Player player = playerRepository.findByUsername(authentication.getName());
+        ChessParty game = chessPartyService.createGame(player,GameStatus.IN_PROGRESS);
+
+        ChessPuzzle puzzle =  puzzleRepository.findAll(pageable).getContent().get(0);
+
+        log.info("puzzle.getId() {}",puzzle.getId());
+        Table table = new Table(DrawTable.makeStringToFigureList(puzzle.getTableString()),puzzle.getColor());
+        game.setTable(table);
+
+        log.info(puzzle.getTableString());
+
+
+        return ResponseEntity.ok(new PuzzleRequest(game,puzzle));
+    }
+
+    @GetMapping("/getLocalGame")
+    public ResponseEntity<ChessParty> getLocalGame(Authentication authentication)  {
+        log.info("getLocalGame");
+        Player player = playerRepository.findByUsername(authentication.getName());
+        ChessParty game = chessPartyService.createGame(player,GameStatus.IN_PROGRESS);
+        return ResponseEntity.ok(game);
+    }
 
     @PostMapping("/makeMove")
     public ResponseEntity<ChessParty> makeMove(@RequestBody MoveRequest request) throws NotFoundException, InvalidGameException  {
         log.info("makeMove");
         ChessParty game = chessPartyService.makeMove(request);
         simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
-        ObjectMapper objectMapper = new ObjectMapper();
 
         return ResponseEntity.ok(game);
     }
@@ -88,7 +130,6 @@ public class ChessRestController {
 
         ChessParty game = chessPartyService.makeMove(gameId,from,to);
         simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
-        ObjectMapper objectMapper = new ObjectMapper();
 
         return ResponseEntity.ok(game);
     }

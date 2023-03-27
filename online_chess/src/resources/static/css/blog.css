@@ -1,6 +1,10 @@
 .navbar {
 	margin-top:20px;
 }
+footer{
+  display:flex;
+  justify-content: space-around;
+}
 
 header h1 {
 	font-family: 'Calibri', sans-serif;

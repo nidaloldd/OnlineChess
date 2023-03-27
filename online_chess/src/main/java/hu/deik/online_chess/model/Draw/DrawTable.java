@@ -1,8 +1,12 @@
 package hu.deik.online_chess.model.Draw;
 
+import hu.deik.online_chess.model.Color;
 import hu.deik.online_chess.model.Table;
 import hu.deik.online_chess.model.Position;
-import hu.deik.online_chess.model.figures.Figure;
+import hu.deik.online_chess.model.figures.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DrawTable {
 
@@ -55,5 +59,58 @@ public class DrawTable {
         String[][] tableMatrix = createEmptyTable();
         FillTableWithFigures(table,tableMatrix);
         return convertMatrixToString(tableMatrix);
+    }
+    public static List<Figure> makeStringToFigureList(String tableString) {
+        List<Figure> figures = new ArrayList<>();
+        String[][] board = new String[8][8];
+        String[] rows = tableString.split("\n");
+
+        for (int i = 0; i < rows.length; i++) {
+            String[] cells = rows[i].split("  ");
+            for (int j = 0; j < cells.length; j++) {
+                board[j][i] = cells[j];
+            }
+        }
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++){
+                if(board[j][i].equals("00")){continue;}
+
+                Color color;
+                if(board[j][i].charAt(0) == 'W'){color = Color.WHITE;}
+                else {color = Color.BLACK;}
+
+                Figure figure = switch (board[j][i].charAt(1)) {
+                    case 'P' -> new Pawn(color, Position.toString(new Position(j, i)));
+                    case 'R' -> new Rook(color, Position.toString(new Position(j, i)));
+                    case 'N' -> new Knight(color, Position.toString(new Position(j, i)));
+                    case 'B' -> new Bishop(color, Position.toString(new Position(j, i)));
+                    case 'K' -> new King(color, Position.toString(new Position(j, i)));
+                    case 'Q' -> new Queen(color, Position.toString(new Position(j, i)));
+                    default -> null;
+                };
+                if(figure != null){
+                    figures.add(figure);
+                }
+            }
+        }
+        return figures;
+    }
+
+    public static void main(String[] args) {
+        List<Figure> figures = makeStringToFigureList( "00  00  BB  00  00  00  00  00\n" +
+                                                                "00  00  BP  00  BB  WQ  00  00\n" +
+                                                                "00  00  BK  00  BP  00  00  00\n" +
+                                                                "00  00  00  BP  00  00  00  00\n" +
+                                                                "00  00  00  00  00  WP  00  00\n" +
+                                                                "00  00  00  00  BQ  00  00  00\n" +
+                                                                "00  00  00  00  00  00  WP  WP\n" +
+                                                                "00  00  00  00  00  WR  00  WK"
+        );
+
+        Table table = new Table(figures,Color.WHITE);
+
+        System.out.println( makeTableToString(table));
+
     }
 }

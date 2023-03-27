@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Bishop extends Figure implements ChessFigure {
 
-    public Bishop(Table table, Color color, String strPos) {
+    public Bishop(Color color, String strPos) {
         super(color, Position.toPosition(strPos));
     }
     @Override

@@ -1,7 +1,7 @@
 package hu.deik.online_chess.service.impl;
 
 import hu.deik.online_chess.model.CustomPlayerDetails;
-import hu.deik.online_chess.model.Player;
+import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.repo.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,14 +1,10 @@
 *{
     text-align: center;
     padding: 0px;
-    -webkit-user-drag: none;
 }
-body{
-    background-color: rgb(54, 54, 54);
 
-}
 #gameInformation{
-    background-color: rgb(130, 130, 130);
+    background: #b3b38f;
 }
 td,img{
     width: 4vw;
@@ -26,8 +22,12 @@ table{
     background: beige;
     border: solid;
     height: 30vw;
-    width: 20vw;
+    width: 42mm;
     overflow: auto;
+}
+.mark{
+    background-color:inherit;
+    color: white;
 }
 
 .whiteSquare{
@@ -70,6 +70,9 @@ tr:nth-child(8) .whiteSquare, tr:nth-child(8) .blackSquare{
     }
 }
 @media only screen and (max-width: 750px) {
+    #gameNotation,#chessTable{
+		font-size: small;
+	}
     .whiteSquare:nth-child(2), .blackSquare:nth-child(2){
         border-left: rgb(0, 0, 0) solid 0.2em;
     }

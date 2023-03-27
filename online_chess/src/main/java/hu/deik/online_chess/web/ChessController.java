@@ -1,20 +1,14 @@
 package hu.deik.online_chess.web;
 
-import hu.deik.online_chess.model.*;
+import hu.deik.online_chess.data.ChessPuzzle;
+import hu.deik.online_chess.data.Player;
+import hu.deik.online_chess.manager.PuzzleManager;
 import hu.deik.online_chess.repo.PlayerRepository;
 import hu.deik.online_chess.service.ChessPartyService;
 
 import hu.deik.online_chess.service.PlayerService;
-import hu.deik.online_chess.service.impl.CustomPlayerDetailsService;
-import hu.deik.online_chess.service.impl.PlayerServiceImpl;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import hu.deik.online_chess.service.impl.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,8 +58,8 @@ public class ChessController {
         model.addAttribute("sendEmailSuccess",false);
         model.addAttribute("activationSuccess",false);
     }
-    @RequestMapping("/game")
-    public String game(Model model, Authentication authentication){
+    @RequestMapping("/onlineGame")
+    public String onlineGame(Model model, Authentication authentication){
         Player player = playerRepository.findByUsername(authentication.getName());
         log.info("game page.");
         model.addAttribute("getName",authentication.getName());
@@ -73,18 +67,31 @@ public class ChessController {
         model.addAttribute("getEnabled",player.getEnabled());
         return "chessGame";
     }
+    @RequestMapping("/localGame")
+    public String localGame(Model model, Authentication authentication){
+        Player player = playerRepository.findByUsername(authentication.getName());
+        log.info("localGame");
+        model.addAttribute("getName",authentication.getName());
+        model.addAttribute("isAuthenticated",authentication.isAuthenticated());
+        model.addAttribute("getEnabled",player.getEnabled());
+        return "localGame";
+    }
 
-    @RequestMapping("/stories")
+    @RequestMapping("/news")
     public String stories(Model model, Authentication authentication){
         model.addAttribute("getName",authentication.getName());
         model.addAttribute("isAuthenticated",authentication.isAuthenticated());
-        return "stories";
+        return "news";
     }
 
     @RequestMapping("/puzzle")
     public String puzzle(Model model, Authentication authentication){
+        Player player = playerRepository.findByUsername(authentication.getName());
+        log.info("puzzle page.");
         model.addAttribute("getName",authentication.getName());
         model.addAttribute("isAuthenticated",authentication.isAuthenticated());
+        model.addAttribute("getEnabled",player.getEnabled());
+
         return "puzzle";
     }
     @RequestMapping("/registration")

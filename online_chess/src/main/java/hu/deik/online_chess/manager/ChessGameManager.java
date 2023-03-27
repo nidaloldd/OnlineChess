@@ -1,11 +1,9 @@
 package hu.deik.online_chess.manager;
 
-import hu.deik.online_chess.model.ChessParty;
-import hu.deik.online_chess.model.Player;
+import hu.deik.online_chess.data.ChessParty;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ChessGameManager {
 

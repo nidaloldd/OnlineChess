@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Rook extends Figure implements ChessFigure {
 
-    public Rook(Table table, Color color, String strPos) {
+    public Rook(Color color, String strPos) {
         super(color, Position.toPosition(strPos));
     }
     @Override
