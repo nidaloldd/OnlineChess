@@ -2,6 +2,8 @@ package hu.deik.online_chess.model;
 
 import hu.deik.online_chess.data.ChessParty;
 import hu.deik.online_chess.data.Player;
+import hu.deik.online_chess.model.Position;
+import hu.deik.online_chess.model.Table;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

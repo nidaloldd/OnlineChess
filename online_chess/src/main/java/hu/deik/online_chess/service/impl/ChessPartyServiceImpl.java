@@ -7,9 +7,13 @@ import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
 import hu.deik.online_chess.manager.ChessGameManager;
 import hu.deik.online_chess.model.*;
+import hu.deik.online_chess.repo.PlayerRepository;
 import hu.deik.online_chess.service.ChessPartyService;
+import hu.deik.online_chess.service.PlayerService;
 import hu.deik.online_chess.service.dto.MoveRequest;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +26,14 @@ import static hu.deik.online_chess.model.GameStatus.*;
 public class ChessPartyServiceImpl implements ChessPartyService {
 
     private ChessParty chessParty;
+    private PlayerService playerService;
+    private PlayerRepository playerRepository;
+    @Autowired
+    public ChessPartyServiceImpl(PlayerService playerService,PlayerRepository playerRepository){
+        this.playerService = playerService;
+        this.playerRepository = playerRepository;
+    }
+
     @Override
     public ChessParty createGame(Player player1,GameStatus gameStatus) {
         chessParty = new ChessParty();
@@ -75,31 +87,6 @@ public class ChessPartyServiceImpl implements ChessPartyService {
 
 
     @Override
-    public ChessParty makeMove(MoveRequest request) throws NotFoundException, InvalidGameException {
-        log.info("request:{}",request.getId());
-
-        String id = request.getId();
-        //id = id.substring(id.lastIndexOf(':')+2,id.length()-2);
-        log.info("request:{}",id);
-        if (!ChessGameManager.getInstance().getGames().containsKey(id)) {
-            throw new NotFoundException("Game not found");
-        }
-
-        ChessParty game = ChessGameManager.getInstance().getGames().get(id);
-        if (game.getStatus().equals(FINISHED)) {
-            throw new InvalidGameException("Game is already finished");
-        }
-
-        game.getTable().makeMove(Position.toPosition(request.getFrom()),Position.toPosition(request.getTo()));
-
-        if (game.getTable().isGameOver) {
-            game.setWinner(getActivePlayer(request.getId()));
-        }
-
-        ChessGameManager.getInstance().setGame(game);
-        return game;
-    }
-    @Override
     public ChessParty makeMove(String gameID,String from,String to) throws NotFoundException, InvalidGameException {
 
         if (!ChessGameManager.getInstance().getGames().containsKey(gameID)) {
@@ -115,10 +102,41 @@ public class ChessPartyServiceImpl implements ChessPartyService {
 
         if (game.getTable().isGameOver) {
             game.setWinner(getActivePlayer(gameID));
+
+            handleScore(game.getWhitePlayer(),game.getBlackPlayer(), game.getWinner());
         }
+
 
         ChessGameManager.getInstance().setGame(game);
         return game;
+    }
+
+    private void handleScore(Player white,Player black, Player winner){
+        if(white == null || black == null || winner==null){return;}
+
+        System.out.println("white.getScore() "+white.getScore());
+        System.out.println("black.getScore() "+black.getScore());
+        if(white.getUsername().equals(winner.getUsername())){
+
+            double ratingChange = playerService.absoluteRatingChange(white.getScore(),black.getScore(),GameResult.WIN);
+            System.out.println("ratingChange "+ratingChange);
+            white.setScore(white.getScore()+ratingChange);
+            black.setScore(black.getScore()-ratingChange);
+
+        }
+        else if(black.getUsername().equals(winner.getUsername())){
+            double ratingChange = playerService.absoluteRatingChange(white.getScore(),black.getScore(),GameResult.LOSE);
+            System.out.println("ratingChange "+ratingChange);
+            white.setScore(white.getScore()-ratingChange);
+            black.setScore(black.getScore()+ratingChange);
+        }
+        System.out.println("white.getScore() "+white.getScore());
+        System.out.println("black.getScore() "+black.getScore());
+
+        playerRepository.save(white);
+        playerRepository.save(black);
+        //playerRepository.updatePlayerScore(white.getId(), white.getScore());
+        //playerRepository.updatePlayerScore(black.getId(), black.getScore());
     }
 
     @Override

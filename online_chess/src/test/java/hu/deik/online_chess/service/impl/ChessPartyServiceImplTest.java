@@ -1,4 +1,4 @@
-package hu.deik.online_chess.service.impl;
+package java.hu.deik.online_chess.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 

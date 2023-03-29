@@ -16,6 +16,7 @@ import hu.deik.online_chess.repo.PuzzleRepository;
 import hu.deik.online_chess.service.ChessPartyService;
 import hu.deik.online_chess.service.dto.MoveRequest;
 import hu.deik.online_chess.service.dto.PuzzleRequest;
+import hu.deik.online_chess.service.dto.ScoreRowRequest;
 import hu.deik.online_chess.service.impl.CustomPlayerDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -115,15 +117,6 @@ public class ChessRestController {
         return ResponseEntity.ok(game);
     }
 
-    @PostMapping("/makeMove")
-    public ResponseEntity<ChessParty> makeMove(@RequestBody MoveRequest request) throws NotFoundException, InvalidGameException  {
-        log.info("makeMove");
-        ChessParty game = chessPartyService.makeMove(request);
-        simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
-
-        return ResponseEntity.ok(game);
-    }
-
     @GetMapping("/makeMove/{gameId}/{from}/{to}")
     public ResponseEntity<ChessParty> makeMove(final @PathVariable String gameId,final @PathVariable String from,final @PathVariable String to) throws NotFoundException, InvalidGameException   {
         log.info("makeMove");
@@ -134,4 +127,15 @@ public class ChessRestController {
         return ResponseEntity.ok(game);
     }
 
+    @PostMapping("/scoreTable")
+    public ResponseEntity<List<ScoreRowRequest>> makeMove() {
+        List<ScoreRowRequest> scoreTable = new ArrayList<>();
+        var players = playerRepository.findAll();
+
+        for(Player player : players){
+            scoreTable.add(new ScoreRowRequest(player.getUsername(), player.getEmail(),player.getScore()));
+        }
+
+        return ResponseEntity.ok(scoreTable);
+    }
 }

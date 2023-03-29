@@ -1,6 +1,7 @@
 package hu.deik.online_chess.service.impl;
 
 import hu.deik.online_chess.data.Player;
+import hu.deik.online_chess.model.GameResult;
 import hu.deik.online_chess.repo.PlayerRepository;
 import hu.deik.online_chess.service.PlayerService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 @Slf4j
 @Service
@@ -37,6 +39,7 @@ public class PlayerServiceImpl implements PlayerService {
         playerToRegister.setRole(USER_ROLE);
         playerToRegister.setEnabled(false);
         playerToRegister.setActivation(generateKey());
+        playerToRegister.setScore(400);
 
         log.info(playerToRegister.getPassword());
         playerRepository.save(playerToRegister);
@@ -69,4 +72,22 @@ public class PlayerServiceImpl implements PlayerService {
         playerRepository.save(player);
         return "ok";
     }
+    @Override
+    public double absoluteRatingChange(double Ra , double Rb, GameResult result) {
+
+        double kFactor = 20;
+        double expectedScore = 1/(1+Math.pow(10,(double) (Rb-Ra)/400));
+
+        double resultVal =0;
+        switch (result){
+            case WIN -> resultVal = 1;
+            case DRAW -> resultVal =0.5;
+            case LOSE -> resultVal =0;
+        }
+        double res = kFactor*(Math.abs(resultVal-expectedScore));
+
+        return (double) Math.round(res*10)/10;
+    }
+
 }
+

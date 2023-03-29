@@ -5,6 +5,13 @@
 <head>
   <title>Online Chess</title>
 </head>
+
+<style>
+  .table{
+    overflow: auto;
+    height: 50vh;
+  } 
+</style>
 <body>
 
 <div layout:fragment="content">
@@ -16,28 +23,41 @@
   <div th:text="${getActivation}"></div>
 
   <div th:if="${activationSuccess}" class="alert alert-success">Activation success</div>
-  <div th:if="${not getEnabled} ?: true">
+    <div th:if="${not getEnabled} ?: true">
+      <form name="activation" th:action="@{/activation}" method="post" class="form-signin">
+        <h2 class="form-signin-heading">Please Activate your Account</h2>
+        <div th:if="${activationError}" class="alert alert-danger">Activation Failed</div>
+        <input type="text" id="activationCode" name="activationCode" class="form-control" placeholder="activation Code"  />
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Activate</button>
+      </form>
+      <form  name="resendEmail" th:action="@{/resendEmail/}+${getName}" method="post" class="form-signin">
+        <div th:if="${sendEmailError}" class="alert alert-danger">resend Failed</div>
+        <div th:if="${sendEmailSuccess}" class="alert alert-success">Email send success</div>
+        <button class="btn btn-lg btn-block" type="submit">Resend Activation Code</Button>
+      </form>
+    </div>
 
-    <form name="activation" th:action="@{/activation}" method="post" class="form-signin">
-      <h2 class="form-signin-heading">Please Activate your Account</h2>
-      <div th:if="${activationError}" class="alert alert-danger">Activation Failed</div>
-      <input type="text" id="activationCode" name="activationCode" class="form-control" placeholder="activation Code"  />
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Activate</button>
-    </form>
-
-    <form  name="resendEmail" th:action="@{/resendEmail/}+${getName}" method="post" class="form-signin">
-
-      <div th:if="${sendEmailError}" class="alert alert-danger">resend Failed</div>
-      <div th:if="${sendEmailSuccess}" class="alert alert-success">Email send success</div>
-      <button class="btn btn-lg btn-block" type="submit">Resend Activation Code</Button>
-    </form>
-    
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Score</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody" >
+      </tbody>
+  
+    </table>
 
   </div>
-</div>
+
+
 
 </body>
 </html>
 <script>
 	document.getElementById("userPageNav").classList.add("activeNav");
 </script>
+<script src="/userPage.js"></script>

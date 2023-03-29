@@ -328,7 +328,7 @@ public class Table {
         makeMove(pos[0], pos[1]);
     }
 
-    String positionsToNotation(Position moveFrom, Position moveTo){
+    public String positionsToNotation(Position moveFrom, Position moveTo){
         if(moveFrom.isPositionNotValid() || moveTo.isPositionNotValid()){return " ";}
 
         boolean isCapture = getFigureOn(moveTo) != null;
@@ -393,7 +393,7 @@ public class Table {
         return result;
     }
 
-    Position[] notationToPositions(String str){
+    public Position[] notationToPositions(String str){
         Pattern pattern = Pattern.compile("^O-O|O-O-O|[KQBNR][a-h][1-8]x?[a-h][1-8][\\+\\#]?|[a-h][1-8]x?[a-h][1-8][\\+\\#]?|[1-8]x?[a-h][1-8][\\+\\#]?|[a-h]x?[a-h][1-8][\\+\\#]?|[KQBNR][1-8]x?[a-h][1-8][\\+\\#]?|[KQBNR][a-h]x?[a-h][1-8][\\+\\#]?|[KQBNR]x?[a-h][1-8][\\+\\#]?|[a-h][1-8]x?[\\+\\#]?", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(str);
         boolean isValidInput = matcher.find();

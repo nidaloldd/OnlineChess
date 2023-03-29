@@ -22,6 +22,7 @@ public class Player {
     @Column( nullable=false )
     private String password;
 
+    private double score;
     private String role;
     private String activation;
     private Boolean enabled;
