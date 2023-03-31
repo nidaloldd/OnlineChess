@@ -21,7 +21,9 @@ const onlineGameRoute = url+"/onlineGame"
 const getPlayerRoute = url+"/game/getPlayer"
 
 
+
 function Start(){
+    
     console.log("START")
     console.log(sessionStorage.getItem("gameID"))
     if(sessionStorage.getItem("gameID") == 'undefined' || sessionStorage.getItem("gameID") == undefined){

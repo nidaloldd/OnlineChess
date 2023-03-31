@@ -9,11 +9,14 @@
     <title>Online Chess</title>
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="../static/css/chessTable.css" th:href="@{/css/chessTable.css}"/>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/chat.css" />
   </head>
   <body layout:fragment="content">
     <div th:if="${not getEnabled}" class="alert alert-danger">Not Activated Account</div>
@@ -134,11 +137,39 @@
           </table>
           <div id="takenFiguresWhite"></div>
         </div>
+        
+        
       </div>
-      <script src="/chessGame.js"></script>
-      <script src="/socket.js"></script>
+      <div id="chat-page" class="">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Chat</h2>
+            </div>
+            <div class="connecting">
+                Connecting...
+            </div>
+            <ul id="messageArea">
+
+            </ul>
+            <form id="messageForm" name="messageForm" nameForm="messageForm">
+                <div class="form-group">
+                    <div class="input-group clearfix">
+                        <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                        <button type="submit" class="primary">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="/chat.js"></script>
+    <script src="/socket.js"></script>
+    <script src="/chessGame.js"></script>
+      
       <script>
         Start()
+        
       </script>
     </main>
   </body>

@@ -1,10 +1,6 @@
 console.log("SOCKET SCRIPT LOAD")
 
-let stompClient;
 let gameId;
-let loginName;
-
-getUser()
 
 function displayGameInformation(loginName,playingWith,GameId){
     document.getElementById("loginName").innerHTML = loginName
@@ -13,18 +9,27 @@ function displayGameInformation(loginName,playingWith,GameId){
 }
 
 function connectToSocket(gameId) {
+    getUser()
+
     console.log("connecting to the game");
     let socket = new SockJS("/makeMove");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log("connected to the frame: " + frame);
         stompClient.subscribe("/topic/game-progress/" + gameId, function (response) {
+            
             let data = JSON.parse(response.body);
             console.log("connectToSocket()");
             sessionStorage.setItem("gameID",data.id)
             getTableUpdate(data)
+            
         })
     })
+
+    console.log("connecting to the CHAT")
+    socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, onConnected, onError);
 }
 
 function create_game() {
@@ -99,7 +104,6 @@ function connectToSpecificGame(gameId='') {
     })
     
 }
-
 
 function getUser(){
     $.ajax({
