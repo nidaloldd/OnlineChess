@@ -43,6 +43,7 @@ function sendMessage(event) {
         var chatMessage = {
             sender: sessionStorage.getItem('username'),
             content: messageInput.value,
+            gameId: sessionStorage.getItem('gameID'),
             type: 'CHAT'
         };
 

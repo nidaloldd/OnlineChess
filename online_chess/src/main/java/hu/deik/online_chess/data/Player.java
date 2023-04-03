@@ -26,4 +26,13 @@ public class Player {
     private String role;
     private String activation;
     private Boolean enabled;
+
+    public Player(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+    public Player() {
+
+    }
 }

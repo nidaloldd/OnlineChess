@@ -94,15 +94,19 @@ public class ChessController {
 
         return "puzzle";
     }
+
     @RequestMapping("/registration")
     public String registration(Model model){
-        model.addAttribute("player", new Player());
+
         return "registration";
     }
     @PostMapping("/reg")
-    public String reg(@ModelAttribute Player player) {
+    public String reg(@RequestParam("usernameReg") String usernameReg,
+                      @RequestParam("emailReg") String emailReg,
+                      @RequestParam("passwordReg") String passwordReg) {
 
         log.info("new user!");
+        Player player = new Player(usernameReg,emailReg,passwordReg);
 
         log.info(player.getUsername());
         log.info(player.getPassword());

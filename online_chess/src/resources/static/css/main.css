@@ -1,5 +1,108 @@
+
+#content{
+    overflow: auto;
+
+}
+
+  nav ul {
+    list-style: none;
+    display: flex;
+  }
+
+  nav li {
+    margin-right: 20px;
+  }
+
+  nav a {
+    color: #333;
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  nav a:hover {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .hero-image {
+    background-image: url(https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PedroPinhata/phpMEPMs7.png);
+    background-size: cover;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-image h2 {
+    font-size: 4rem;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    padding: 50px;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .content h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+
+  }
+
+  .button {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text
+  }
+
+//----------
+
+*{
+	font-family: 'Ubuntu', sans-serif;
+}
+.container{
+	background-color: #a3b18a;
+	padding-bottom: 2em;
+}
+
+footer{
+	padding: 0.2em;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+    background-color: rgba(88, 129, 87, 0.9);
+	color: white;
+	text-align: center;
+}
+
 body{
-    background-color: #43617c;
+    font-family: 'Mukta', sans-serif;
+	min-height:550px;
+	background-image: url(https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PedroPinhata/phpm9PJli.png);
+	background-repeat: no-repeat;
+	background-size:cover;
+	background-position:inherit;
+	position:relative;
+    color: #333;
+}
+.card {
+	background-color: #a9b7c2;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-left: 2px solid rgb(0, 0, 0);
 
 }
 #content{
@@ -10,16 +113,23 @@ a{
 	color: black;
 	text-decoration: none;
 }
-.nav-item,footer{
+.nav-item{
 	margin: 1em;
 }
 
 nav{
-	background-color: #468491;
+    background-color: rgba(88, 129, 87, 0.9);
+	border-bottom: 2px solid rgb(0, 0, 0);
+  	border-radius: 20px;
 }
 .navbarIcon{
-	color: aqua;
+	color: rgb(255, 255, 255);
 }
 .activeNav{
 	background-color: #226857;
 };
+
+
+
+
+
