@@ -77,13 +77,6 @@ public class ChessController {
         return "localGame";
     }
 
-    @RequestMapping("/news")
-    public String stories(Model model, Authentication authentication){
-        model.addAttribute("getName",authentication.getName());
-        model.addAttribute("isAuthenticated",authentication.isAuthenticated());
-        return "news";
-    }
-
     @RequestMapping("/puzzle")
     public String puzzle(Model model, Authentication authentication){
         Player player = playerRepository.findByUsername(authentication.getName());

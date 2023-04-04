@@ -25,6 +25,7 @@ const getPlayerRoute = url+"/game/getPlayer"
 function Start(){
     
     console.log("START")
+    getUser()
     console.log(sessionStorage.getItem("gameID"))
     if(sessionStorage.getItem("gameID") == 'undefined' || sessionStorage.getItem("gameID") == undefined){
     console.log("GameID is NUll connectToRandom")
@@ -44,7 +45,7 @@ function makeMove(from,to){
     xhr.onload = function(){
      if(xhr.status == 200){
         console.log("makeMove()");
-        connectToSpecificGame(sessionStorage.getItem("gameID"))
+        //connectToSpecificGame(sessionStorage.getItem("gameID"))
         getTableUpdate(JSON.parse(this.response))
      }
      else {
@@ -60,6 +61,9 @@ function makeMove(from,to){
         console.log("getTableUpdate")
         console.log("sessionStorage",sessionStorage.getItem('username'))
         console.log("isWhitePlayer",sessionStorage.getItem('isWhitePlayer'))
+
+        console.log("data.status",data.status);
+        document.getElementById("gameStatusDiv").innerText = data.status
 
         const username = sessionStorage.getItem('username')
         const isWhitePlayer = sessionStorage.getItem('isWhitePlayer') == "true"
@@ -271,13 +275,4 @@ function ClickSquare(event){
     }
 
 }
-
-function logout(){
-    document.getElementById('frmlogout').submit(); 
-    sessionStorage.removeItem("gameID")
-    sessionStorage.removeItem("isWhitePlayer")
-    sessionStorage.removeItem("username")
-    return false;
-}
-
 

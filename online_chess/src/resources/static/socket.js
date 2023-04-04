@@ -2,6 +2,7 @@ console.log("SOCKET SCRIPT LOAD")
 
 let gameId;
 
+
 function displayGameInformation(loginName,playingWith,GameId){
     document.getElementById("loginName").innerHTML = loginName
     document.getElementById("playingWith").innerHTML = playingWith
@@ -9,11 +10,12 @@ function displayGameInformation(loginName,playingWith,GameId){
 }
 
 function connectToSocket(gameId) {
-    getUser()
-
+    
     console.log("connecting to the game");
-    let socket = new SockJS("/makeMove");
-    stompClient = Stomp.over(socket);
+    let gameSocket = new SockJS("/makeMove");
+
+    stompClient = Stomp.over(gameSocket);
+
     stompClient.connect({}, function (frame) {
         console.log("connected to the frame: " + frame);
         stompClient.subscribe("/topic/game-progress/" + gameId, function (response) {
@@ -27,10 +29,15 @@ function connectToSocket(gameId) {
     })
 
     console.log("connecting to the CHAT")
-    socket = new SockJS('/ws');
-    stompClient = Stomp.over(socket);
+    let chatSocket = new SockJS('/ws');
+    stompClient = Stomp.over(chatSocket);
     stompClient.connect({}, onConnected, onError);
 }
+
+function CLOSE(event) {
+    console.log('WebSocket closed CLOSECLOSECLOSE!!!!!!!!!!!!!!!:', event);
+    // Perform some action here
+  };
 
 function create_game() {
     console.log("create_game()")

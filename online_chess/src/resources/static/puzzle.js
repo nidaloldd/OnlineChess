@@ -1,14 +1,20 @@
 console.log("PUZZLE SCRIPT LOAD")
 
-const getPuzzleRoute = url+"/game/getPuzzle"
+const getRandomPuzzleRoute = url+"/game/getRandomPuzzle"
+const getPuzzleRoute = url+"/game/getPuzzle/"
+
+
 let solution = ""
 let enemyMoves = ""
 let gameID = ""
+let puzzleNumber = ""
 
-function getPuzzle(){
+document.getElementById("restartButton").classList.add("disabled")
+
+function getRandomPuzzle(){
 
     let xhr = new XMLHttpRequest()
-    xhr.open('GET',getPuzzleRoute,true)
+    xhr.open('GET',getRandomPuzzleRoute,true)
     xhr.onload = function(){
      if(xhr.status == 200){
         console.log("getPuzzle()");
@@ -16,14 +22,47 @@ function getPuzzle(){
 
         document.getElementById("solvedPuzzleDiv").replaceChildren();
 
+        let puzzleData = JSON.parse(this.response)
+        console.log(puzzleData);
 
-        let data = JSON.parse(this.response)
-        console.log(data);
         isGameOver = false;
-        getTableUpdatePuzzle(data.chessParty)
-        gameID = data.chessParty.id
-        solution = data.chessPuzzle.solutionMoves;
-        enemyMoves = data.chessPuzzle.enemyMoves;
+        getTableUpdatePuzzle(puzzleData.chessParty)
+        gameID = puzzleData.chessParty.id
+        solution = puzzleData.chessPuzzle.solutionMoves;
+        enemyMoves = puzzleData.chessPuzzle.enemyMoves;
+        puzzleNumber = puzzleData.chessPuzzle.id;
+        document.getElementById("restartButton").classList.remove("disabled")
+
+        console.log("solution",solution);
+        console.log("enemyMoves",enemyMoves);
+     }
+     else {
+         console.log("Problem with getRandomPuzzle request !!!")
+     }
+    }
+    xhr.send()
+}
+
+function getPuzzle(){
+
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET',getPuzzleRoute+puzzleNumber,true)
+    xhr.onload = function(){
+     if(xhr.status == 200){
+        console.log("getPuzzle()");
+        console.log(this.response);
+
+        document.getElementById("solvedPuzzleDiv").replaceChildren();
+
+        puzzleData = JSON.parse(this.response)
+        console.log(puzzleData);
+
+        isGameOver = false;
+        getTableUpdatePuzzle(puzzleData.chessParty)
+        gameID = puzzleData.chessParty.id
+        solution = puzzleData.chessPuzzle.solutionMoves;
+        enemyMoves = puzzleData.chessPuzzle.enemyMoves;
+
         console.log("solution",solution);
         console.log("enemyMoves",enemyMoves);
      }
@@ -200,5 +239,7 @@ function ClickSquare(event){
     }
 
 }
+
+
 
 

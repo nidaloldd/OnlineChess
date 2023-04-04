@@ -1,6 +1,8 @@
 package hu.deik.online_chess.web;
 
+import hu.deik.online_chess.manager.ChessGameManager;
 import hu.deik.online_chess.model.ChatMessage;
+import hu.deik.online_chess.model.GameStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +35,18 @@ public class WebSocketEventListener {
         if(username != null && gameID != null) {
             log.info("User Disconnected : " + username);
 
+            var game = ChessGameManager.getInstance().getGames().get(gameID);
+            game.getTable().isGameOver=true;
+            game.setStatus(GameStatus.FINISHED);
+            messagingTemplate.convertAndSend("/topic/game-progress/" + gameID, game);
+
+
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setType(ChatMessage.MessageType.LEAVE);
             chatMessage.setSender(username);
-
             messagingTemplate.convertAndSend("/topic/chat/"+gameID, chatMessage);
+
+            log.info("DISconnection");
         }
     }
 }

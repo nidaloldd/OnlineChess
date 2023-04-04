@@ -65,8 +65,9 @@ tr:nth-child(8) .whiteSquare, tr:nth-child(8) .blackSquare{
 @media only screen and (min-width: 750px) {
     .grid{
         display: grid;
-        grid-template-columns: 50px 1fr 50px;
+        grid-template-columns: 350px 1fr 350px;
         margin: auto;
+        margin-bottom: 1em;
     }
 }
 @media only screen and (max-width: 750px) {

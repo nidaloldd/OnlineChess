@@ -7,6 +7,7 @@ import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
+import hu.deik.online_chess.manager.ChessGameManager;
 import hu.deik.online_chess.manager.PuzzleManager;
 import hu.deik.online_chess.model.*;
 import hu.deik.online_chess.model.Draw.DrawFigure;
@@ -22,6 +23,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,9 +48,11 @@ public class ChessRestController {
     private PuzzleRepository puzzleRepository;
     @Autowired
     private CustomPlayerDetailsService playerDetailsService;
+    @Autowired
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     private final ChessPartyService chessPartyService;
-    private final SimpMessagingTemplate simpMessagingTemplate;
+
 
     @PostMapping("/start")
     public ResponseEntity<ChessParty> start(Authentication authentication) {
@@ -86,9 +90,9 @@ public class ChessRestController {
         return table.getFigureOn(pos).getValidMoves(table).stream().map(n -> Position.toString(n)).collect(Collectors.toList());
     }
 
-    @GetMapping("/getPuzzle")
-    public ResponseEntity<PuzzleRequest> getPuzzle(Authentication authentication)  {
-        log.info("getPuzzle");
+    @GetMapping("/getRandomPuzzle")
+    public ResponseEntity<PuzzleRequest> getRandomPuzzle(Authentication authentication)  {
+        log.info("getRandomPuzzle");
         Random random = new Random();
         int count = (int) puzzleRepository.count();
         int randomIndex = random.nextInt(count);
@@ -109,6 +113,24 @@ public class ChessRestController {
         return ResponseEntity.ok(new PuzzleRequest(game,puzzle));
     }
 
+    @GetMapping("/getPuzzle/{puzzleId}")
+    public ResponseEntity<PuzzleRequest> getPuzzle(final @PathVariable Long puzzleId,Authentication authentication)  {
+        log.info("getPuzzle");
+
+        Player player = playerRepository.findByUsername(authentication.getName());
+        ChessParty game = chessPartyService.createGame(player,GameStatus.IN_PROGRESS);
+
+        ChessPuzzle puzzle =  puzzleRepository.findById(puzzleId).get();
+
+        log.info("puzzle.getId() {}",puzzle.getId());
+        Table table = new Table(DrawTable.makeStringToFigureList(puzzle.getTableString()),puzzle.getColor());
+        game.setTable(table);
+
+        log.info(puzzle.getTableString());
+
+        return ResponseEntity.ok(new PuzzleRequest(game,puzzle));
+    }
+
     @GetMapping("/getLocalGame")
     public ResponseEntity<ChessParty> getLocalGame(Authentication authentication)  {
         log.info("getLocalGame");
@@ -122,6 +144,10 @@ public class ChessRestController {
         log.info("makeMove");
 
         ChessParty game = chessPartyService.makeMove(gameId,from,to);
+        if(game.getTable().isGameOver){
+            game.setStatus(GameStatus.FINISHED);
+        }
+
         simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
 
         return ResponseEntity.ok(game);
@@ -138,4 +164,5 @@ public class ChessRestController {
 
         return ResponseEntity.ok(scoreTable);
     }
+
 }

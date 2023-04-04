@@ -12,7 +12,9 @@
     <div th:if="${not getEnabled}" class="alert alert-danger">Not Activated Account</div>
     <main th:if="${getEnabled}">
         
-    <button onclick="getPuzzle()" class="btn btn-lg btn-primary btn-block" >Get random Puzzle</button>
+    <button onclick="getRandomPuzzle()" class="btn btn-lg btn-primary btn-block" >Get random Puzzle</button>
+    <button id="restartButton" onclick="getPuzzle()" class="btn btn-lg btn-primary btn-block" >Restart Puzzle</button>
+
     <div id="solvedPuzzleDiv"></div>
       <div class="grid">
         <div id="gameNotation"></div>

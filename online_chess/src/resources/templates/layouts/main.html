@@ -23,8 +23,9 @@
 </head>
 <body>
 <div class="container">
+
 	<nav th:if="${isAuthenticated}" class="navbar navbar-expand-lg ">
-		<div class="container-fluid">
+		<div class="container">
 			<a class="navbar-brand" href="#"><i class="fa-solid fa-chess fa-2xl"></i>Online Chess</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -40,9 +41,6 @@
 					<li id="userPageNav" class="nav-item">
 						<a href="/userPage"> <i class="navbarIcon fa-solid fa-house-user fa-lg"></i> user Page</a>
 					</li>
-					<li id="newsNav" class="nav-item">
-						<a href="/news"><i class="navbarIcon fa-solid fa-newspaper fa-lg"></i> News</a>
-					</li>
 					<li id="puzzleNav" class="nav-item">
 						<a href="/puzzle"><i class="navbarIcon fa-solid fa-puzzle-piece fa-lg"></i> Puzzles</a>
 					</li>
@@ -56,8 +54,8 @@
 							<li id="onlineGameNav" class="dropdown-item">
 								<a href="/onlineGame"> Online Game</a>
 							</li>
-							<li id="LocalGameNav" class="dropdown-item">
-								<a href="/localGame"> Local Game</a>
+							<li id="LocalGameNav" class="dropdown-item"> 
+								<a href="/localGame">  Local Game</a>
 							</li>
 						</ul>
 					</li>
@@ -76,37 +74,31 @@
 
 		</div>
 	</nav>
-
-	<div id="content" layout:fragment="content" style="height: fit-content;">
-
-	</div>
+</div>
 
 
-	<footer class=" " style="display:flex; justify-content: space-around;">
-		<a href="#"><i class="fa-brands fa-github fa-2xl"></i>Github</a>
-		<a href="#"><i class="fa-brands fa-youtube fa-2xl"></i>Youtube</a>
-	</footer>
+<div id="content" layout:fragment="content" class="container-fluid" style="height: fit-content;">
+
+
 </div>
 
 
 
+<footer class=" " style="display:flex; justify-content: space-around;">
+	<a href="#"><i class="fa-brands fa-github fa-2xl"></i>Github</a>
+	<a href="#"><i class="fa-brands fa-youtube fa-2xl"></i>Youtube</a>
+</footer>
+</div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
-</html>
 <script>
-	const fonts = document.getElementsByClassName("beatEffect");
 
-	console.log(fonts.length)
-	
-	Array.from(fonts).forEach((element) => {
-		element.parentNode.addEventListener('mouseover', () => {
-			//element.classList.add('fa-beat');
-		});
+	function logout(){
+		document.getElementById('frmlogout').submit(); 
+		sessionStorage.removeItem("gameID")
+		sessionStorage.removeItem("isWhitePlayer")
+		sessionStorage.removeItem("username")
+	}
 
-		element.parentNode.addEventListener('mouseout', () => {
-			//element.classList.remove('fa-beat');
-		});
-	});
-
-	
 </script>
+</html>
