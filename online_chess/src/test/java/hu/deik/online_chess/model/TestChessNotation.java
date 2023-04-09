@@ -5,7 +5,8 @@ import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.model.Draw.DrawTable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestChessNotation {
     ChessParty chessParty;

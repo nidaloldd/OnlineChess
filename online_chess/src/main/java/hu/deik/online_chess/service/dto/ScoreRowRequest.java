@@ -1,7 +1,5 @@
 package hu.deik.online_chess.service.dto;
 
-import hu.deik.online_chess.data.ChessParty;
-import hu.deik.online_chess.data.ChessPuzzle;
 import lombok.Data;
 
 @Data

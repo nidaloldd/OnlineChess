@@ -1,6 +1,5 @@
 package hu.deik.online_chess.manager;
 
-import hu.deik.online_chess.data.ChessParty;
 import hu.deik.online_chess.data.ChessPuzzle;
 
 import java.util.HashMap;

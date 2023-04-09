@@ -5,8 +5,9 @@ import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
-import hu.deik.online_chess.model.*;
-import hu.deik.online_chess.service.dto.MoveRequest;
+import hu.deik.online_chess.model.GameStatus;
+import hu.deik.online_chess.model.Position;
+import hu.deik.online_chess.model.Table;
 
 import java.util.List;
 

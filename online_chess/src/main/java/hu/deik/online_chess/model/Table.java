@@ -2,11 +2,12 @@ package hu.deik.online_chess.model;
 
 import hu.deik.online_chess.model.Draw.DrawTable;
 import hu.deik.online_chess.model.figures.*;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Table {

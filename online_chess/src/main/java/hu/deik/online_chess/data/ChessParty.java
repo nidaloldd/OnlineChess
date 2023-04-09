@@ -1,6 +1,5 @@
 package hu.deik.online_chess.data;
 
-import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.model.GameStatus;
 import hu.deik.online_chess.model.Table;
 import lombok.Data;

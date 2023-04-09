@@ -3,8 +3,8 @@ package hu.deik.online_chess.service.impl;
 import hu.deik.online_chess.populator.DBPopulator;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service

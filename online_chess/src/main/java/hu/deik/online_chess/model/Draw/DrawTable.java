@@ -1,8 +1,8 @@
 package hu.deik.online_chess.model.Draw;
 
 import hu.deik.online_chess.model.Color;
-import hu.deik.online_chess.model.Table;
 import hu.deik.online_chess.model.Position;
+import hu.deik.online_chess.model.Table;
 import hu.deik.online_chess.model.figures.*;
 
 import java.util.ArrayList;

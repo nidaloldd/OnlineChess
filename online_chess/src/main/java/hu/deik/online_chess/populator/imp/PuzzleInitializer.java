@@ -2,16 +2,11 @@ package hu.deik.online_chess.populator.imp;
 
 import hu.deik.online_chess.data.ChessPuzzle;
 import hu.deik.online_chess.model.Color;
-import hu.deik.online_chess.model.Draw.DrawTable;
-import hu.deik.online_chess.model.Table;
 import hu.deik.online_chess.populator.DBPopulator;
 import hu.deik.online_chess.repo.PuzzleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j

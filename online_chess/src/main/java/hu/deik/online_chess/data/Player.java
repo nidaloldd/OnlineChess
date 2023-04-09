@@ -2,8 +2,7 @@ package hu.deik.online_chess.data;
 
 
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
-import lombok.*;
+import lombok.Data;
 
 
 @Entity(name = "player")

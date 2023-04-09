@@ -4,8 +4,6 @@ import hu.deik.online_chess.manager.ChessGameManager;
 import hu.deik.online_chess.model.ChatMessage;
 import hu.deik.online_chess.model.GameStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;

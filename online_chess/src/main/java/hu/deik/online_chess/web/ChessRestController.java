@@ -1,34 +1,29 @@
 package hu.deik.online_chess.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.deik.online_chess.data.ChessParty;
 import hu.deik.online_chess.data.ChessPuzzle;
 import hu.deik.online_chess.data.Player;
 import hu.deik.online_chess.exeption.InvalidGameException;
 import hu.deik.online_chess.exeption.InvalidParamException;
 import hu.deik.online_chess.exeption.NotFoundException;
-import hu.deik.online_chess.manager.ChessGameManager;
-import hu.deik.online_chess.manager.PuzzleManager;
-import hu.deik.online_chess.model.*;
-import hu.deik.online_chess.model.Draw.DrawFigure;
+import hu.deik.online_chess.model.CustomPlayerDetails;
 import hu.deik.online_chess.model.Draw.DrawTable;
+import hu.deik.online_chess.model.GameStatus;
+import hu.deik.online_chess.model.Position;
+import hu.deik.online_chess.model.Table;
 import hu.deik.online_chess.repo.PlayerRepository;
 import hu.deik.online_chess.repo.PuzzleRepository;
 import hu.deik.online_chess.service.ChessPartyService;
-import hu.deik.online_chess.service.dto.MoveRequest;
 import hu.deik.online_chess.service.dto.PuzzleRequest;
 import hu.deik.online_chess.service.dto.ScoreRowRequest;
 import hu.deik.online_chess.service.impl.CustomPlayerDetailsService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 

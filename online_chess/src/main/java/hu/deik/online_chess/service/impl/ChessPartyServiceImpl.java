@@ -10,14 +10,14 @@ import hu.deik.online_chess.model.*;
 import hu.deik.online_chess.repo.PlayerRepository;
 import hu.deik.online_chess.service.ChessPartyService;
 import hu.deik.online_chess.service.PlayerService;
-import hu.deik.online_chess.service.dto.MoveRequest;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
+
 import static hu.deik.online_chess.model.GameStatus.*;
 
 @Service

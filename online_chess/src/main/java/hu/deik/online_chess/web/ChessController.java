@@ -1,18 +1,18 @@
 package hu.deik.online_chess.web;
 
-import hu.deik.online_chess.data.ChessPuzzle;
 import hu.deik.online_chess.data.Player;
-import hu.deik.online_chess.manager.PuzzleManager;
 import hu.deik.online_chess.repo.PlayerRepository;
 import hu.deik.online_chess.service.ChessPartyService;
-
 import hu.deik.online_chess.service.PlayerService;
+import hu.deik.online_chess.service.impl.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import hu.deik.online_chess.service.impl.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Slf4j
