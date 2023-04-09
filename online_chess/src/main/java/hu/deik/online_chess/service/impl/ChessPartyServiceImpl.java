@@ -47,7 +47,6 @@ public class ChessPartyServiceImpl implements ChessPartyService {
     public ChessParty connectToGame(Player player2, String gameId) throws InvalidParamException, InvalidGameException {
         log.info("connectToGame");
         log.info("getUsername:{}",player2.getUsername());
-        log.info("gameId:{}",gameId);
         gameId = gameId.substring(gameId.lastIndexOf(':')+2,gameId.length()-2);
         log.info("gameId:{}",gameId);
 
@@ -67,7 +66,6 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         if(newGame.isEmpty()){
             log.info("createGame");
             var size = ChessGameManager.getInstance().getGames().size();
-            log.info("ChessGameManager size :{}", size);
            return createGame(player2,GameStatus.NEW);
         }
         else {
@@ -80,7 +78,6 @@ public class ChessPartyServiceImpl implements ChessPartyService {
 
             log.info("connectToRandomGame");
             var size = ChessGameManager.getInstance().getGames().size();
-            log.info("ChessGameManager size :{}", size);
             return game;
         }
     }
@@ -114,29 +111,21 @@ public class ChessPartyServiceImpl implements ChessPartyService {
     private void handleScore(Player white,Player black, Player winner){
         if(white == null || black == null || winner==null){return;}
 
-        System.out.println("white.getScore() "+white.getScore());
-        System.out.println("black.getScore() "+black.getScore());
         if(white.getUsername().equals(winner.getUsername())){
 
             double ratingChange = playerService.absoluteRatingChange(white.getScore(),black.getScore(),GameResult.WIN);
-            System.out.println("ratingChange "+ratingChange);
             white.setScore(white.getScore()+ratingChange);
             black.setScore(black.getScore()-ratingChange);
 
         }
         else if(black.getUsername().equals(winner.getUsername())){
             double ratingChange = playerService.absoluteRatingChange(white.getScore(),black.getScore(),GameResult.LOSE);
-            System.out.println("ratingChange "+ratingChange);
             white.setScore(white.getScore()-ratingChange);
             black.setScore(black.getScore()+ratingChange);
         }
-        System.out.println("white.getScore() "+white.getScore());
-        System.out.println("black.getScore() "+black.getScore());
 
         playerRepository.save(white);
         playerRepository.save(black);
-        //playerRepository.updatePlayerScore(white.getId(), white.getScore());
-        //playerRepository.updatePlayerScore(black.getId(), black.getScore());
     }
 
     @Override

@@ -6,7 +6,6 @@ const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
 const connectingElement = document.querySelector('.connecting');
 
-///var stompClient = null;
 
 const colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',

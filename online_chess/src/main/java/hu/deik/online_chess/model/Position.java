@@ -1,12 +1,13 @@
 package hu.deik.online_chess.model;
 
 import hu.deik.online_chess.model.figures.Figure;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+@Slf4j
 public class Position {
     private int posX;
     private int posY;
@@ -83,7 +84,7 @@ public class Position {
         Pattern pattern = Pattern.compile("^([A-H][1-8])$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(str);
         if(!matcher.find()) {
-            System.out.println("Match not found");
+            log.error("Can't convert {} to Position ",str);
             return new Position(-1,-1);
         }
         ranksToPos.put('A',0);

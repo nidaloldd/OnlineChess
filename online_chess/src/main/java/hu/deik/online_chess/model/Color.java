@@ -6,7 +6,6 @@ public enum Color {
 
     public static Color getOpposite(Color color){
         if(color == Color.WHITE){return Color.BLACK;}
-        else if(color == Color.BLACK){return Color.WHITE;}
-        return null;
+        else {return Color.WHITE;}
     }
 }

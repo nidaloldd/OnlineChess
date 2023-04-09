@@ -7,14 +7,11 @@ function getScoreTable(){
     xhr.open('POST',scoreTableRoute,true)
     xhr.onload = function(){
      if(xhr.status == 200){
-        console.log("getScoreTable()");
+        console.log("getScoreTable succsess");
 
-        console.log(this.response);
         const data = JSON.parse(this.response);
 
         for (let index = 0; index < data.length; ++index){
-            
-            console.log(data[index]);
             
             const tr = document.createElement("tr")
             const th = document.createElement("th")
@@ -39,7 +36,7 @@ function getScoreTable(){
 
      }
      else {
-         console.log("Problem with getScoreTable request !!!")
+         console.log("Problem with getScoreTable request!")
      }
     }
     xhr.send()

@@ -4,25 +4,50 @@
       layout:decorate="layouts/main">
 <head>
   <title>Online Chess</title>
+
 </head>
 
 <style>
   .table{
     overflow: auto;
     height: 50vh;
-    background-color: lavenderblush;
   } 
+  .card{
+    background-color: #99ff95;
+  }
+
 </style>
 <body>
 
 <div layout:fragment="content">
 
-  <h2>User Page</h2>
-  <div th:text="${getName}"></div>
-  <div th:text="${getEmail}"></div>
-  <div th:text="${getEnabled}"></div>
-  <div th:text="${getActivation}"></div>
 
+	<div class="container">
+    <br>
+	  <div class="card" style="width:300px; margin: auto;">
+		<img src="/img/defaultUser.jpg" alt="defaultUserPic">
+		<div class="card-body" style="font-weight: bold;">
+			<div>
+				<label for="Name"><h5>Username:</h5></label>
+				<span name="Name" th:text="${getName}"></span>
+			</div>
+			<div>
+				<label for="Email"><h5>Email:</h5></label>
+				<span name="Email" th:text="${getEmail}"></span>
+			</div>
+			<div>
+				<label for="Enabled"><h5>Active account:</h5></label>
+				<span name="Enabled" th:text="${getEnabled}"></span>
+			</div>
+      <span name="Enabled" th:text="${getActivation}"></span>
+		</div>
+	  </div>
+
+	<div class="card"  style="width:fit-content;">
+		
+		
+	</div>
+  
   <div th:if="${activationSuccess}" class="alert alert-success">Activation success</div>
     <div th:if="${not getEnabled} ?: true">
       <form name="activation" th:action="@{/activation}" method="post" class="form-signin">
@@ -31,15 +56,17 @@
         <input type="text" id="activationCode" name="activationCode" class="form-control" placeholder="activation Code"  />
         <button class="btn btn-lg btn-primary btn-block" type="submit">Activate</button>
       </form>
+      <br>
       <form  name="resendEmail" th:action="@{/resendEmail/}+${getName}" method="post" class="form-signin">
         <div th:if="${sendEmailError}" class="alert alert-danger">resend Failed</div>
         <div th:if="${sendEmailSuccess}" class="alert alert-success">Email send success</div>
-        <button class="btn btn-lg btn-block" type="submit">Resend Activation Code</Button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Resend Activation Code</Button>
       </form>
     </div>
+</div>
 
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-striped" style="width: initial; margin: auto;">
+      <thead style="background-color: rgb(33 122 59);color: white; ">
         <tr>
           <th scope="col">#</th>
           <th scope="col">Name</th>
@@ -47,11 +74,11 @@
           <th scope="col">Score</th>
         </tr>
       </thead>
-      <tbody id="tableBody" >
+      <tbody id="tableBody" style="background-color: rgb(245 255 246);" >
       </tbody>
   
     </table>
-
+    <br><br><br>
   </div>
 
 

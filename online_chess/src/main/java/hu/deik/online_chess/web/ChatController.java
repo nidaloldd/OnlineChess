@@ -19,7 +19,6 @@ public class ChatController {
 
 
     @MessageMapping("/chat.sendMessage")
-    //@SendTo("/topic/chat")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
         simpMessagingTemplate.convertAndSend("/topic/chat", chatMessage);
 
@@ -27,10 +26,9 @@ public class ChatController {
     }
 
     @MessageMapping("/chat.addUser")
-    //@SendTo("/topic/chat")
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
                                SimpMessageHeaderAccessor headerAccessor) {
-        // Add username in web socket session
+
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
 
         simpMessagingTemplate.convertAndSend("/topic/chat", chatMessage);

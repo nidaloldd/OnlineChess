@@ -46,7 +46,7 @@ public class WebSocketEventListener {
             chatMessage.setSender(username);
             messagingTemplate.convertAndSend("/topic/chat/"+gameID, chatMessage);
 
-            log.info("DISconnection");
+            log.info("Disconnection");
         }
     }
 }

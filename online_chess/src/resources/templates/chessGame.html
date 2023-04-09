@@ -16,23 +16,25 @@
 
     <link rel="stylesheet" href="../static/css/chessTable.css" th:href="@{/css/chessTable.css}"/>
     <link rel="stylesheet" href="/css/chat.css" />
+
   </head>
   <body layout:fragment="content">
   <div th:if="${not getEnabled}" class="alert alert-danger">Not Activated Account</div>
 
   <main th:if="${getEnabled}">
 
-    <div id="gameInformation">
-
-      <div id="gameStatusDiv"></div>
-
-      <label for="playingWith">playingWith</label>
-      <div id="playingWith"></div>
-
-      <label for="GameID">GameID</label>
-      <div id="GameID"></div>
+    <div class="" id="gameInformation">
+      <div>
+        <label for="gameStatusDiv" style="font-weight:700;">Game Status:</label>
+        <span id="gameStatusDiv"></span>
+        <br>
+        <label for="playingWith" style="font-weight:700;">Playing with:</label>
+        <span id="playingWith"></span>
+        <br>
+        <label for="GameID" style="font-weight:700;">Game ID:</label>
+        <span id="GameID"></span>
+      </div>
     </div>
-
 
     <div class="grid">
       <div>

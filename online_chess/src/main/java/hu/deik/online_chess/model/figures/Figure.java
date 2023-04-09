@@ -89,7 +89,6 @@ public abstract class Figure implements Cloneable {
                 table.getFigures().remove(takenFigure);
             }
 
-            //table.getFigureOn(position).setPosition(p);
             position = p;
 
             if(Boolean.TRUE.equals(table.isKingInCheck(color))){
@@ -101,9 +100,6 @@ public abstract class Figure implements Cloneable {
             }
             position = startingPos;
         }
-        //table.getFigureOn(position).setPosition(startingPos);
-        //position = startingPos;
-        //table.setFigures(originalFigures);
         validMoves.removeAll(forRemove);
         table.setFigures(originalFigures);
         return validMoves;

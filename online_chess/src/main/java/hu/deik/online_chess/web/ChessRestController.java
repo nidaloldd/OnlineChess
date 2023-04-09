@@ -156,7 +156,7 @@ public class ChessRestController {
     @PostMapping("/scoreTable")
     public ResponseEntity<List<ScoreRowRequest>> makeMove() {
         List<ScoreRowRequest> scoreTable = new ArrayList<>();
-        var players = playerRepository.findAll();
+        var players = playerRepository.findAllByOrderByScoreDesc();
 
         for(Player player : players){
             scoreTable.add(new ScoreRowRequest(player.getUsername(), player.getEmail(),player.getScore()));

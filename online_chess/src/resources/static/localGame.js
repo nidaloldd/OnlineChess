@@ -1,5 +1,3 @@
-console.log("LocalGame SCRIPT LOAD")
-
 const localGameRoute = url+"/game/getLocalGame"
 let gameID = ""
 
@@ -12,10 +10,9 @@ function getLocalGame(){
         const data = JSON.parse(this.response)
         getTableUpdate(data)
         gameID = data.id
-        //sessionStorage.setItem("gameID",data.id)
      }
      else {
-         console.log("Problem with getLocalGame request !!!")
+         console.log("Problem with getLocalGame request!")
      }
     }
     xhr.send()
@@ -32,7 +29,7 @@ function makeMove(from,to){
         getTableUpdate(JSON.parse(this.response))
      }
      else {
-         console.log("Problem with getValidMoves request !!!")
+         console.log("Problem with makeMove request!")
      }
     }
     xhr.send()
@@ -40,15 +37,11 @@ function makeMove(from,to){
 
 function getTableUpdate(data){
 
-    console.log("data",data)
-    console.log("getTableUpdate getPuzzle")
+    console.log("getTableUpdate")
     const table = data["table"];
 
     const isWhitePlayer = data.table.activePlayerColor == 'WHITE';
     
-    console.log("isWhitePlayer",isWhitePlayer)
-
-    console.log("CLEAR ALL")
     allSquare.forEach(square => {
         square.replaceChildren();
         square.classList.remove("BLACK")
@@ -144,7 +137,6 @@ function getValidMoves(pos){
  
          const validMovesResponse = Array.from(JSON.parse(this.response))
  
-         console.log(validMovesResponse)
          Array.from(document.getElementsByClassName("validMove")).forEach(square => {
              square.classList.remove("validMove")
          })
@@ -157,7 +149,7 @@ function getValidMoves(pos){
          })
      }
      else {
-         console.log("Problem with getValidMoves request !!!")
+         console.log("Problem with getValidMoves request!")
      }
     }
     xhr.send()

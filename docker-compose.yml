@@ -1,14 +1,11 @@
 services:
-  online-chess-db:
+  mysqldb:
     image: mysql:8
-    command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: online_chess
-      MYSQL_USER: chess_admin
-      MYSQL_PASSWORD: s3CR3t
+      MYSQL_DATABASE: chess_db
 
   adminer:
     image: adminer

@@ -1,5 +1,3 @@
-console.log("PUZZLE SCRIPT LOAD")
-
 const getRandomPuzzleRoute = url+"/game/getRandomPuzzle"
 const getPuzzleRoute = url+"/game/getPuzzle/"
 
@@ -17,13 +15,11 @@ function getRandomPuzzle(){
     xhr.open('GET',getRandomPuzzleRoute,true)
     xhr.onload = function(){
      if(xhr.status == 200){
-        console.log("getPuzzle()");
-        console.log(this.response);
+        console.log("getRandomPuzzle success");
 
         document.getElementById("solvedPuzzleDiv").replaceChildren();
 
         let puzzleData = JSON.parse(this.response)
-        console.log(puzzleData);
 
         isGameOver = false;
         getTableUpdatePuzzle(puzzleData.chessParty)
@@ -33,11 +29,9 @@ function getRandomPuzzle(){
         puzzleNumber = puzzleData.chessPuzzle.id;
         document.getElementById("restartButton").classList.remove("disabled")
 
-        console.log("solution",solution);
-        console.log("enemyMoves",enemyMoves);
      }
      else {
-         console.log("Problem with getRandomPuzzle request !!!")
+         console.log("Problem with getRandomPuzzle request!")
      }
     }
     xhr.send()
@@ -49,13 +43,11 @@ function getPuzzle(){
     xhr.open('GET',getPuzzleRoute+puzzleNumber,true)
     xhr.onload = function(){
      if(xhr.status == 200){
-        console.log("getPuzzle()");
-        console.log(this.response);
+        console.log("getPuzzle success");
 
         document.getElementById("solvedPuzzleDiv").replaceChildren();
 
         puzzleData = JSON.parse(this.response)
-        console.log(puzzleData);
 
         isGameOver = false;
         getTableUpdatePuzzle(puzzleData.chessParty)
@@ -63,11 +55,9 @@ function getPuzzle(){
         solution = puzzleData.chessPuzzle.solutionMoves;
         enemyMoves = puzzleData.chessPuzzle.enemyMoves;
 
-        console.log("solution",solution);
-        console.log("enemyMoves",enemyMoves);
      }
      else {
-         console.log("Problem with getPuzzle request !!!")
+         console.log("Problem with getPuzzle request!")
      }
     }
     xhr.send()
@@ -80,9 +70,8 @@ function makeMovePuzzle(from,to){
     xhr.open('GET',makeMoveRoute+"/"+gameID+"/"+from+"/"+to,true)
     xhr.onload = function(){
      if(xhr.status == 200){
-        console.log("makeMove()");
-        console.log("solution",solution)
-        console.log("from+to",from+"-"+to)
+        console.log("makeMove success");
+
 
         if(document.getElementById(from).classList.contains("WHITE")){
 
@@ -91,7 +80,7 @@ function makeMovePuzzle(from,to){
         getTableUpdatePuzzle(JSON.parse(this.response))
      }
      else {
-         console.log("Problem with getValidMoves request !!!")
+         console.log("Problem with makeMove request!")
      }
     }
     xhr.send()
@@ -104,13 +93,10 @@ function handlePuzzleSolutions(from,to){
     if(subSolution==""){subSolution = solution}
 
     if(subSolution == from+"-"+to){
-        console.log("HELYES")
 
         solution = solution.substring(6,solution.length);
 
-        console.log("solution%!!!!!!!!",solution)
         if(solution == ""){
-            console.log("GYŐZELEM")
 
             const div = document.createElement("div");
             document.getElementById("solvedPuzzleDiv").appendChild(div);
@@ -123,17 +109,14 @@ function handlePuzzleSolutions(from,to){
             isGameOver = true;
         }
         else{
-            console.log("ELENFÉL LÉP")
             let subenemyMoves = enemyMoves.substring(0,enemyMoves.indexOf(","));
             if(subenemyMoves==""){subenemyMoves = enemyMoves}
             
-            console.log("!!",subenemyMoves.substring(0,2)+":"+subenemyMoves.substring(3,5))
             makeMovePuzzle(subenemyMoves.substring(0,2),subenemyMoves.substring(3,5))
             enemyMoves = enemyMoves.substring(6,enemyMoves.length);
         }
     }
     else{
-        console.log("NEM HELYES")
 
         const div = document.createElement("div");
         document.getElementById("solvedPuzzleDiv").appendChild(div);
@@ -149,16 +132,12 @@ function handlePuzzleSolutions(from,to){
 
 function getTableUpdatePuzzle(data){
 
-    console.log("data",data)
-    console.log("getTableUpdate getPuzzle")
+    console.log("getTableUpdate")
     const table = data.table;
 
 
     const isWhitePlayer = table.activePlayerColor == 'WHITE';
-    
-    console.log("isWhitePlayer",isWhitePlayer)
 
-    console.log("CLEAR ALL")
     allSquare.forEach(square => {
         square.replaceChildren();
         square.classList.remove("BLACK")

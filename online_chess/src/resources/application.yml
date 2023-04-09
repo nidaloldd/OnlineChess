@@ -1,9 +1,9 @@
-spring.config.import: optional:secrets.properties
-
 server:
   port: ${PORT:8081}
 
 spring:
+  config:
+    import: optional:secrets.properties
   cache.type: caffeine
   cache.caffeine.spec: maximumSize=1000,expireAfterAccess=5m
   thymeleaf :
@@ -12,11 +12,14 @@ spring:
   mvc.locale.resolver: fixed
   jpa:
     hibernate.ddl-auto=update:
-    database-platform: org.hibernate.dialect.MySQL5Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate.ddl-auto: update
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/chessdb
+    url: jdbc:mysql://localhost:3306/chess_db?user=root&password=root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
   mail:
     host: smtp.zoho.eu
     port: 587

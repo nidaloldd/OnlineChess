@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PlayerRepository extends JpaRepository<Player,Long> {
     Player findByUsername(String username);
     Player findByActivation(String code);
-    @Modifying
-    @Query("UPDATE player p SET p.score = :newScore WHERE p.id = :playerId")
-    void updatePlayerScore(@Param("playerId") Long playerId, @Param("newScore") double score);
+    List<Player> findAllByOrderByScoreDesc();
 }

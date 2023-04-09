@@ -1,5 +1,3 @@
-console.log("SOCKET SCRIPT LOAD")
-
 let gameId;
 
 
@@ -11,8 +9,8 @@ function displayGameInformation(loginName,playingWith,GameId){
 
 function connectToSocket(gameId) {
     
-    console.log("connecting to the game");
-    let gameSocket = new SockJS("/makeMove");
+    console.log("connecting to the Socket");
+    let gameSocket = new SockJS("/chessWs");
 
     stompClient = Stomp.over(gameSocket);
 
@@ -29,15 +27,11 @@ function connectToSocket(gameId) {
     })
 
     console.log("connecting to the CHAT")
-    let chatSocket = new SockJS('/ws');
+    let chatSocket = new SockJS('/chatWs');
     stompClient = Stomp.over(chatSocket);
     stompClient.connect({}, onConnected, onError);
 }
 
-function CLOSE(event) {
-    console.log('WebSocket closed CLOSECLOSECLOSE!!!!!!!!!!!!!!!:', event);
-    // Perform some action here
-  };
 
 function create_game() {
     console.log("create_game()")
@@ -122,7 +116,6 @@ function getUser(){
             console.log("getUser",data)
 
             sessionStorage.setItem('username', data.username)
-            console.log("username ",sessionStorage.getItem('username') )
         },
         error: function (error) {
             console.log(error);

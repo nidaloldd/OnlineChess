@@ -153,10 +153,9 @@ public class Table {
         return getEnemyValidMoves(color).contains(getKing(color).getPosition());
     }
     public void handleCheckMate(Color color){
-        List<Position> enemyMoves = new ArrayList<>();
-        for (int i = 0; i < figures.size(); i++) {
-            if(figures.get(i).getColor() == Color.getOpposite(color)){
-                if(!figures.get(i).getValidMoves(this).isEmpty()){
+        for (Figure figure : figures) {
+            if (figure.getColor() == Color.getOpposite(color)) {
+                if (!figure.getValidMoves(this).isEmpty()) {
                     return;
                 }
             }

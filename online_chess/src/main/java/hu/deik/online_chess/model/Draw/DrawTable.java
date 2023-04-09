@@ -97,20 +97,4 @@ public class DrawTable {
         return figures;
     }
 
-    public static void main(String[] args) {
-        List<Figure> figures = makeStringToFigureList( "00  00  BB  00  00  00  00  00\n" +
-                                                                "00  00  BP  00  BB  WQ  00  00\n" +
-                                                                "00  00  BK  00  BP  00  00  00\n" +
-                                                                "00  00  00  BP  00  00  00  00\n" +
-                                                                "00  00  00  00  00  WP  00  00\n" +
-                                                                "00  00  00  00  BQ  00  00  00\n" +
-                                                                "00  00  00  00  00  00  WP  WP\n" +
-                                                                "00  00  00  00  00  WR  00  WK"
-        );
-
-        Table table = new Table(figures,Color.WHITE);
-
-        System.out.println( makeTableToString(table));
-
-    }
 }
