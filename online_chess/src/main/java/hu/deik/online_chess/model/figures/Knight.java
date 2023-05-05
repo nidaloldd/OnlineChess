@@ -28,7 +28,7 @@ public class Knight extends Figure implements ChessFigure {
         return validMoves;
     }
 
-    public List<Position> getValidMovesFromOneDirection(Table table,Direction direction){
+    private List<Position> getValidMovesFromOneDirection(Table table,Direction direction){
         List<Position> validMoves = new ArrayList<>();
         Position stepPosition = position;
 
@@ -54,7 +54,7 @@ public class Knight extends Figure implements ChessFigure {
     }
 
     @Override
-    public String toString() {
+    public String figureAsString() {
         if(color == Color.WHITE){
             return " WN ";
         }

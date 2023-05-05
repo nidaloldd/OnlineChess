@@ -12,12 +12,12 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Table {
     public static final int TABLE_SIZE = 8;
-    public int numberOfMoves;
     public Boolean isGameOver;
-    public  StringBuilder gameNotation;
+    public StringBuilder gameNotation;
     private Color activePlayerColor;
     private King whiteKing;
     private King blackKing;
+    private int numberOfMoves;
     private List<Figure> figures = new ArrayList<>();
     private List<Figure> takenFigures = new ArrayList<>();
     public List<Figure> getFigures() {
@@ -84,7 +84,6 @@ public class Table {
         return whiteKingNumber != 0 && blackKingNumber != 0;
     }
     public Table(List<Figure> figures, Color activePlayerColor){
-        if(!isContainsTheTwoKing(figures)){return;}
         this.isGameOver = false;
         this.gameNotation = new StringBuilder("");
         this.numberOfMoves = 0;
@@ -154,9 +153,9 @@ public class Table {
         return getEnemyValidMoves(color).contains(getKing(color).getPosition());
     }
     public void handleCheckMate(Color color){
-        for (Figure figure : figures) {
-            if (figure.getColor() == Color.getOpposite(color)) {
-                if (!figure.getValidMoves(this).isEmpty()) {
+        for(int i = 0;i<figures.size();i++){
+            if (figures.get(i).getColor() == Color.getOpposite(color)) {
+                if (!figures.get(i).getValidMoves(this).isEmpty()) {
                     return;
                 }
             }
@@ -203,6 +202,13 @@ public class Table {
 
     }
 
+    public void makeMove(String notation){
+        Position[] pos = notationToPositions(notation);
+        makeMove(pos[0], pos[1]);
+    }
+    public void  makeMove(String moveFrom, String moveTo){
+        makeMove(Position.toPosition(moveFrom), Position.toPosition(moveTo));
+    }
     public void  makeMove(Position moveFrom, Position moveTo){
         if(!isMoveValid(moveFrom,moveTo) || isGameOver ){
             return;
@@ -233,6 +239,7 @@ public class Table {
 
         log.info(DrawTable.makeTableToString(this));
     }
+
     private String[] getSmallCastleMove(Color color){
         if(color == Color.WHITE){
             return new String[]{"E1", "G1"};
@@ -323,11 +330,6 @@ public class Table {
                 getFigureOn(moveTo.stepToDirection(back)) instanceof Pawn &&
                 getFigureOn(moveTo.stepToDirection(back)).getColor() == Color.getOpposite(activePlayerColor);
     }
-    public void makeMove(String str){
-        Position[] pos = notationToPositions(str);
-        makeMove(pos[0], pos[1]);
-    }
-
     public String positionsToNotation(Position moveFrom, Position moveTo){
         if(moveFrom.isPositionNotValid() || moveTo.isPositionNotValid()){return " ";}
 

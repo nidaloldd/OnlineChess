@@ -12,7 +12,7 @@ const makeMoveRoute = url+"/game/makeMove"
 const validMovesRoute = url+"/game/validMoves/"
 const newGameRoute = url+'/updateTable/newGame'
 const gameStartRoute = url+"/game/start"
-const connectRandomRoute = url+"/game/connect/random"
+const connectRandomRoute = url+"/game/connectRandom"
 const connectRoute = url+"/game/connect"
 const dashboardRoute = url+"/dashboard"
 const onlineGameRoute = url+"/onlineGame"
@@ -39,6 +39,7 @@ function makeMove(from,to){
     xhr.onload = function(){
      if(xhr.status == 200){
         console.log("makeMove()");
+        console.log("response",this.response);
         getTableUpdate(JSON.parse(this.response))
      }
      else {
@@ -51,6 +52,7 @@ function makeMove(from,to){
  function getTableUpdate(data){
 
         console.log("getTableUpdate")
+        console.log(data);
 
         document.getElementById("gameStatusDiv").innerText = data.status
 

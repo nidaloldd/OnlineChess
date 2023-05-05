@@ -19,7 +19,7 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @GetMapping("/img/{imageName}")
+    @GetMapping("/img/figures/{imageName}")
     public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
         byte[] data = imageService.getCachedImage(imageName);
         HttpHeaders headers = new HttpHeaders();

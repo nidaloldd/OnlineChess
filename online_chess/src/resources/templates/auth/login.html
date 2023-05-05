@@ -195,7 +195,7 @@ a{
 			<div class="login-show">
 				<h2 class="form-signin-heading">Please Authenticate yourself</h2>
 				<form name="login" th:action="@{/login}" method="post" class="form-signin">
-					<div id="err" th:if="${param.error}" class="alert alert-danger">Bad Username and Password</div>
+					<div id="err" th:if="${param.error}" class="alert alert-danger">Incorrect username or password</div>
 					<div th:if="${param.logout}" class="alert alert-success">Logout Successfully</div>
 					<input type="text" id="username" name="username" class="form-control" placeholder="Username" required="true" />
 					<input type="password" id="password" name="password" class="form-control" placeholder="Password" required="true" />

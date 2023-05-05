@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public class OnlineChessApplication {
 
     public static void main(final String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(OnlineChessApplication.class, args);
-
+        SpringApplication.run(OnlineChessApplication.class, args);
     }
 }
 

@@ -19,7 +19,7 @@ public class ImageService {
 
     @Cacheable("img")
     public byte[] getCachedImage(String imageName) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:static/img/" + imageName);
+        Resource resource = resourceLoader.getResource("classpath:static/img/figures/" + imageName);
         InputStream inputStream = resource.getInputStream();
         byte[] data = IOUtils.toByteArray(inputStream);
         inputStream.close();

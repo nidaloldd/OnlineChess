@@ -219,6 +219,33 @@ function ClickSquare(event){
 
 }
 
+function getValidMoves(pos){
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET',validMovesRoute+gameID+'/'+pos ,true)
+    xhr.onload = function(){
+     if(xhr.status == 200){
+         console.log("getValidMoves success")
+ 
+         const validMovesResponse = Array.from(JSON.parse(this.response))
+ 
+         Array.from(document.getElementsByClassName("validMove")).forEach(square => {
+             square.classList.remove("validMove")
+         })
+ 
+         validMovesResponse.forEach(validMove => {
+             document.getElementById(validMove).classList.add("validMove")
+             document.getElementById(validMove).removeEventListener("click",ClickFigure)
+             document.getElementById(validMove).addEventListener("click",ClickSquare,true)
+ 
+         })
+     }
+     else {
+         console.log("Problem with getValidMoves request!")
+     }
+    }
+    xhr.send()
+ }
+
 
 
 

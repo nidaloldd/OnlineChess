@@ -99,7 +99,7 @@ public class Pawn extends Figure implements ChessFigure {
     }
 
     @Override
-    public String toString() {
+    public String figureAsString() {
         if(color == Color.WHITE){
             return " WP ";
         }

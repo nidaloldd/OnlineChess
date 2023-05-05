@@ -61,7 +61,7 @@ public class ChessRestController {
         return ResponseEntity.ok(chessPartyService.connectToGame(getPlayer(authentication), gameId));
     }
 
-    @PostMapping("/connect/random")
+    @PostMapping("/connectRandom")
     public ResponseEntity<ChessParty> connectRandom(Authentication authentication) throws NotFoundException {
         Player player2 = getPlayer(authentication);
         log.info("connectRandom game request: {}", player2.getUsername());
@@ -73,16 +73,7 @@ public class ChessRestController {
     }
     public Player getPlayer(Authentication authentication){
         String username = authentication.getName();
-        CustomPlayerDetails playerDetails = (CustomPlayerDetails) playerDetailsService.loadUserByUsername(username);
-        return playerDetails.getPlayer();
-    }
-
-    @GetMapping("/validMoves/{gameId}/{pos}")
-
-    List<String> getValidMoves(final @PathVariable String gameId,final @PathVariable String pos) {
-        log.info("getValidMoves");
-        var table = chessPartyService.getTable(gameId);
-        return table.getFigureOn(pos).getValidMoves(table).stream().map(n -> Position.toString(n)).collect(Collectors.toList());
+        return playerRepository.findByUsername(username);
     }
 
     @GetMapping("/getRandomPuzzle")
@@ -135,7 +126,10 @@ public class ChessRestController {
     }
 
     @GetMapping("/makeMove/{gameId}/{from}/{to}")
-    public ResponseEntity<ChessParty> makeMove(final @PathVariable String gameId,final @PathVariable String from,final @PathVariable String to) throws NotFoundException, InvalidGameException   {
+    public ResponseEntity<ChessParty> makeMove(final @PathVariable String gameId,
+                                               final @PathVariable String from,
+                                               final @PathVariable String to)
+            throws NotFoundException, InvalidGameException   {
         log.info("makeMove");
 
         ChessParty game = chessPartyService.makeMove(gameId,from,to);
@@ -146,6 +140,12 @@ public class ChessRestController {
         simpMessagingTemplate.convertAndSend("/topic/game-progress/" + game.getId(), game);
 
         return ResponseEntity.ok(game);
+    }
+    @GetMapping("/validMoves/{gameId}/{position}")
+    public List<String> getValidMoves(final @PathVariable String gameId,final @PathVariable String position) {
+        log.info("getValidMoves");
+        var table = chessPartyService.getTable(gameId);
+        return table.getFigureOn(position).getValidMoves(table).stream().map(n -> Position.toString(n)).collect(Collectors.toList());
     }
 
     @PostMapping("/scoreTable")

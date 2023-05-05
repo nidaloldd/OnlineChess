@@ -12,8 +12,6 @@ public class TestChessNotation {
     ChessParty chessParty;
     @BeforeEach
     void init() {
-        Player player1 = new Player();
-        Player player2 = new Player();
         chessParty = new ChessParty();
     }
 

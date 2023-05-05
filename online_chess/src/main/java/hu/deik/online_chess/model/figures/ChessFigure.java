@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ChessFigure {
     public List<Position> getValidMoves(Table table, boolean handleKingInCheck);
-    @Override
-    public String toString();
+
+    public String figureAsString();
 }

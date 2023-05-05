@@ -28,8 +28,6 @@ public class ChessController {
         this.emailService = emailService;
         this.playerRepository = playerRepository;
     }
-
-
     @RequestMapping("/")
     public String index(Model model, Authentication authentication){
         model.addAttribute("getName",authentication.getName());
@@ -44,20 +42,6 @@ public class ChessController {
         return "userPage";
     }
 
-    public void setUserPage(Model model, Authentication authentication){
-        model.addAttribute("isAuthenticated",authentication.isAuthenticated());
-        Player player = playerRepository.findByUsername(authentication.getName());
-
-        model.addAttribute("getName",player.getUsername());
-        model.addAttribute("getEmail",player.getEmail());
-        model.addAttribute("getActivation",player.getActivation());
-        model.addAttribute("getEnabled",player.getEnabled());
-        model.addAttribute("sendEmailError",false);
-        model.addAttribute("activationError",false);
-
-        model.addAttribute("sendEmailSuccess",false);
-        model.addAttribute("activationSuccess",false);
-    }
     @RequestMapping("/onlineGame")
     public String onlineGame(Model model, Authentication authentication){
         Player player = playerRepository.findByUsername(authentication.getName());
@@ -122,15 +106,14 @@ public class ChessController {
         model.addAttribute("activationError",true);
         return "userPage";
     }
-    @PostMapping("/resendEmail/{username}")
-    public String resendEmail(@PathVariable String username,Model model, Authentication authentication) {
+    @PostMapping("/resendEmail")
+    public String resendEmail(Model model, Authentication authentication) {
         log.info("resendEmail");
-        log.info(username);
         try {
-            Player player = playerRepository.findByUsername(username);
+            Player player = playerRepository.findByUsername(authentication.getName());
             player.setActivation(playerService.generateKey());
             playerRepository.save(player);
-            emailService.sendMessage(username);
+            emailService.sendMessage(authentication.getName());
             setUserPage(model,authentication);
             setUserPage(model,authentication);
             model.addAttribute("sendEmailSuccess",true);
@@ -142,6 +125,21 @@ public class ChessController {
         }
 
 
+    }
+
+    public void setUserPage(Model model, Authentication authentication){
+        model.addAttribute("isAuthenticated",authentication.isAuthenticated());
+        Player player = playerRepository.findByUsername(authentication.getName());
+
+        model.addAttribute("getName",player.getUsername());
+        model.addAttribute("getEmail",player.getEmail());
+        model.addAttribute("getActivation",player.getActivation());
+        model.addAttribute("getEnabled",player.getEnabled());
+        model.addAttribute("sendEmailError",false);
+        model.addAttribute("activationError",false);
+
+        model.addAttribute("sendEmailSuccess",false);
+        model.addAttribute("activationSuccess",false);
     }
 
 }

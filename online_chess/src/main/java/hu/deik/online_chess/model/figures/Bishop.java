@@ -26,7 +26,7 @@ public class Bishop extends Figure implements ChessFigure {
         return validMoves;
     }
     @Override
-    public String toString() {
+    public String figureAsString() {
         if(color == Color.WHITE){
             return " WB ";
         }

@@ -11,11 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public abstract class Figure implements Cloneable {
+public abstract class Figure {
     public final String imageSource;
     private boolean isFigureNotMoved;
     protected Color color;
     protected Position position;
+
+    protected Figure(Color color, Position position){
+        this.color = color;
+        this.position = position;
+        isFigureNotMoved = true;
+        imageSource = DrawFigure.getPNG(this);
+    }
 
     public Color getColor() {
         return color;
@@ -31,21 +38,11 @@ public abstract class Figure implements Cloneable {
     public boolean getIfFigureNotMoved(){
         return isFigureNotMoved;
     }
-
-    protected Figure(Color color, Position position){
-        this.color = color;
-        this.position = position;
-        isFigureNotMoved = true;
-        imageSource = DrawFigure.getPNG(this);
-    }
-
-    public List<Position> get(Table table) {
-        return getValidMoves(table,true);
-    }
     public List<Position> getValidMoves(Table table) {
         return getValidMoves(table,true);
     }
     public abstract List<Position> getValidMoves(Table table,boolean handleKingInCheck);
+    public abstract String figureAsString();
     public List<Position> getValidMoveFromOneDirectionOnlyOneStep(Table table,Direction direction){
         List<Position> validMoves = new ArrayList<>();
         Position actualPosition = position;

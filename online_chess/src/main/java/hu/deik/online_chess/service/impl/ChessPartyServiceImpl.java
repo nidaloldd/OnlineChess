@@ -35,18 +35,18 @@ public class ChessPartyServiceImpl implements ChessPartyService {
     }
 
     @Override
-    public ChessParty createGame(Player player1,GameStatus gameStatus) {
+    public ChessParty createGame(Player player,GameStatus gameStatus) {
         chessParty = new ChessParty();
         chessParty.setId(UUID.randomUUID().toString());
-        chessParty.setWhitePlayer(player1);
+        chessParty.setWhitePlayer(player);
         chessParty.setStatus(gameStatus);
         ChessGameManager.getInstance().setGame(chessParty);
         return chessParty;
     }
     @Override
-    public ChessParty connectToGame(Player player2, String gameId) throws InvalidParamException, InvalidGameException {
+    public ChessParty connectToGame(Player player, String gameId) throws InvalidParamException, InvalidGameException {
         log.info("connectToGame");
-        log.info("getUsername:{}",player2.getUsername());
+        log.info("getUsername:{}",player.getUsername());
         gameId = gameId.substring(gameId.lastIndexOf(':')+2,gameId.length()-2);
         log.info("gameId:{}",gameId);
 
@@ -59,25 +59,23 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         return game;
     }
     @Override
-    public ChessParty connectToRandomGame(Player player2) throws NotFoundException {
+    public ChessParty connectToRandomGame(Player player) throws NotFoundException {
         var newGame = ChessGameManager.getInstance().getGames().values().stream()
                 .filter(it -> it.getStatus().equals(NEW)).findAny();
 
         if(newGame.isEmpty()){
             log.info("createGame");
-            var size = ChessGameManager.getInstance().getGames().size();
-           return createGame(player2,GameStatus.NEW);
+           return createGame(player,GameStatus.NEW);
         }
         else {
             var game = newGame.get();
 
-            game.setBlackPlayer(player2);
+            game.setBlackPlayer(player);
 
             game.setStatus(IN_PROGRESS);
             ChessGameManager.getInstance().setGame(game);
 
             log.info("connectToRandomGame");
-            var size = ChessGameManager.getInstance().getGames().size();
             return game;
         }
     }
@@ -95,7 +93,7 @@ public class ChessPartyServiceImpl implements ChessPartyService {
             throw new InvalidGameException("Game is already finished");
         }
 
-        game.getTable().makeMove(Position.toPosition(from),Position.toPosition(to));
+        game.getTable().makeMove(from,to);
 
         if (game.getTable().isGameOver) {
             game.setWinner(getActivePlayer(gameID));
@@ -145,7 +143,7 @@ public class ChessPartyServiceImpl implements ChessPartyService {
     @Override
     public Table getTable(String gameId){
         ChessParty game = ChessGameManager.getInstance().getGames().get(gameId);
-        return chessParty.getTable();
+        return game.getTable();
     }
 
 }
