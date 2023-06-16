@@ -62,18 +62,6 @@ public class PuzzleInitializer implements DBPopulator {
                             00  00  00  00  BR  00  00  00
                             00  00  00  00  00  WK  00  00
                             """
-                    ,Color.WHITE,"B5-H5,B4-C6,D7-A7","F3-H5,H5-F3"),
-            new ChessPuzzle(
-                    """
-                            00  00  00  BR  00  00  00  BR
-                            00  00  00  00  00  00  00  00
-                            00  00  00  00  00  00  00  00
-                            WR  00  00  00  00  00  00  00
-                            00  00  00  00  WQ  00  00  WQ
-                            00  00  00  00  00  00  00  00
-                            00  00  00  00  00  00  00  00
-                            WR  00  00  00  00  00  00  WQ
-                            """
                     ,Color.WHITE,"B5-H5,B4-C6,D7-A7","F3-H5,H5-F3")
     );
 }

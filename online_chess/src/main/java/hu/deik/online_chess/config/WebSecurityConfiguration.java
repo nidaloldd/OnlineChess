@@ -34,7 +34,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/registration").permitAll()
                         .requestMatchers("/reg").permitAll()
                         .requestMatchers("/resendEmail/**").permitAll()
-                        .requestMatchers("/static/**").permitAll()
+                        .requestMatchers("/static/**", "/img/**").permitAll()
                         .anyRequest().authenticated()
         ).csrf().disable()
                 .formLogin().successForwardUrl("/")

@@ -26,7 +26,7 @@
   }
 
   .hero-image {
-    background-image: url(https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PedroPinhata/phpMEPMs7.png);
+    background-image: url(http://localhost:8081/img/Background.png);
     background-size: cover;
     height: 500px;
     display: flex;
@@ -84,7 +84,7 @@ footer{
 body{
     font-family: 'Mukta', sans-serif;
 	min-height:550px;
-	background-image: url(https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/PedroPinhata/phpm9PJli.png);
+	background-image: url(http://localhost:8081/img/Background.png);
 	background-repeat: no-repeat;
 	background-size:cover;
 	background-position:inherit;
