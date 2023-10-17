@@ -1,4 +1,4 @@
-package hu.deik.online_chess;
+package java.hu.deik.online_chess;
 
 import hu.deik.online_chess.model.GameResult;
 import hu.deik.online_chess.service.PlayerService;

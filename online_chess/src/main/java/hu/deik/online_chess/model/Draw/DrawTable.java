@@ -29,7 +29,7 @@ public class DrawTable {
     private static void FillTableWithFigures(Table table,String[][] tableMatrix){
         for (Figure figure : table.getFigures()) {
             Position pos = figure.getPosition();
-            tableMatrix[pos.getPosX()][pos.getPosY()] = figure.figureAsString();
+            tableMatrix[pos.getPosX()][pos.getPosY()] = figure.getFigureAsString();
         }
     }
     private static void markValidMovesOnTable(Table table,String[][] tableMatrix,Position position){

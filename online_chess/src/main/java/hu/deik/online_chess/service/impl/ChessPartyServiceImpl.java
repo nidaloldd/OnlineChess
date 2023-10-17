@@ -40,7 +40,7 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         chessParty.setId(UUID.randomUUID().toString());
         chessParty.setWhitePlayer(player);
         chessParty.setStatus(gameStatus);
-        ChessGameManager.getInstance().setGame(chessParty);
+        ChessGameManager.getGameManager().setGame(chessParty);
         return chessParty;
     }
     @Override
@@ -50,17 +50,17 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         gameId = gameId.substring(gameId.lastIndexOf(':')+2,gameId.length()-2);
         log.info("gameId:{}",gameId);
 
-        if (!ChessGameManager.getInstance().getGames().containsKey(gameId)) {
+        if (!ChessGameManager.getGameManager().getGames().containsKey(gameId)) {
             throw new InvalidParamException("Game with provided id doesn't exist");
         }
-        ChessParty game = ChessGameManager.getInstance().getGames().get(gameId);
+        ChessParty game = ChessGameManager.getGameManager().getGames().get(gameId);
 
-        ChessGameManager.getInstance().setGame(game);
+        ChessGameManager.getGameManager().setGame(game);
         return game;
     }
     @Override
     public ChessParty connectToRandomGame(Player player) throws NotFoundException {
-        var newGame = ChessGameManager.getInstance().getGames().values().stream()
+        var newGame = ChessGameManager.getGameManager().getGames().values().stream()
                 .filter(it -> it.getStatus().equals(NEW)).findAny();
 
         if(newGame.isEmpty()){
@@ -73,7 +73,7 @@ public class ChessPartyServiceImpl implements ChessPartyService {
             game.setBlackPlayer(player);
 
             game.setStatus(IN_PROGRESS);
-            ChessGameManager.getInstance().setGame(game);
+            ChessGameManager.getGameManager().setGame(game);
 
             log.info("connectToRandomGame");
             return game;
@@ -84,25 +84,25 @@ public class ChessPartyServiceImpl implements ChessPartyService {
     @Override
     public ChessParty makeMove(String gameID,String from,String to) throws NotFoundException, InvalidGameException {
 
-        if (!ChessGameManager.getInstance().getGames().containsKey(gameID)) {
+        if (!ChessGameManager.getGameManager().getGames().containsKey(gameID)) {
             throw new NotFoundException("Game not found");
         }
 
-        ChessParty game = ChessGameManager.getInstance().getGames().get(gameID);
+        ChessParty game = ChessGameManager.getGameManager().getGames().get(gameID);
         if (game.getStatus().equals(FINISHED)) {
             throw new InvalidGameException("Game is already finished");
         }
 
         game.getTable().makeMove(from,to);
 
-        if (game.getTable().isGameOver) {
+        if (game.getTable().isGameOver()) {
             game.setWinner(getActivePlayer(gameID));
 
             handleScore(game.getWhitePlayer(),game.getBlackPlayer(), game.getWinner());
         }
 
 
-        ChessGameManager.getInstance().setGame(game);
+        ChessGameManager.getGameManager().setGame(game);
         return game;
     }
 
@@ -142,7 +142,7 @@ public class ChessPartyServiceImpl implements ChessPartyService {
     }
     @Override
     public Table getTable(String gameId){
-        ChessParty game = ChessGameManager.getInstance().getGames().get(gameId);
+        ChessParty game = ChessGameManager.getGameManager().getGames().get(gameId);
         return game.getTable();
     }
 

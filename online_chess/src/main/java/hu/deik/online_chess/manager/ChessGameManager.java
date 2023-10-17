@@ -8,16 +8,16 @@ import java.util.Map;
 public class ChessGameManager {
 
     private static Map<String, ChessParty> games;
-    private static ChessGameManager instance;
+    private static ChessGameManager gameManager;
     private ChessGameManager() {
         games = new HashMap<>();
     }
 
-    public static synchronized ChessGameManager getInstance() {
-        if (instance == null) {
-            instance = new ChessGameManager();
+    public static synchronized ChessGameManager getGameManager() {
+        if (gameManager == null) {
+            gameManager = new ChessGameManager();
         }
-        return instance;
+        return gameManager;
     }
 
     public Map<String, ChessParty> getGames() {

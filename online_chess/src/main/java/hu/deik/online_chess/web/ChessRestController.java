@@ -133,7 +133,7 @@ public class ChessRestController {
         log.info("makeMove");
 
         ChessParty game = chessPartyService.makeMove(gameId,from,to);
-        if(game.getTable().isGameOver){
+        if(game.getTable().isGameOver()){
             game.setStatus(GameStatus.FINISHED);
         }
 

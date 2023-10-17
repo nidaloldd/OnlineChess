@@ -33,8 +33,8 @@ public class WebSocketEventListener {
         if(username != null && gameID != null) {
             log.info("User Disconnected : " + username);
 
-            var game = ChessGameManager.getInstance().getGames().get(gameID);
-            game.getTable().isGameOver=true;
+            var game = ChessGameManager.getGameManager().getGames().get(gameID);
+            game.getTable().setGameOver(true);
             game.setStatus(GameStatus.FINISHED);
             messagingTemplate.convertAndSend("/topic/game-progress/" + gameID, game);
 

@@ -13,20 +13,19 @@ public class Bishop extends Figure implements ChessFigure {
     public Bishop(Color color, String strPos) {
         super(color, Position.toPosition(strPos));
     }
-    @Override
-    public List<Position> getValidMoves(Table table,boolean handleKingInCheck){
+
+    public List<Position> getAllPossibleMoves(Table table) {
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction direction : Direction.getDiagonalDirections()){
             validMoves.addAll(getValidMovesFromOneDirectionManyStep(table,direction));
         }
-        if(handleKingInCheck){
-            validMoves = handleKingInCheck(table,validMoves);
-        }
+
         return validMoves;
     }
+
     @Override
-    public String figureAsString() {
+    public String getFigureAsString() {
         if(color == Color.WHITE){
             return " WB ";
         }

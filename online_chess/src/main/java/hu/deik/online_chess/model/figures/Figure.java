@@ -7,21 +7,110 @@ import hu.deik.online_chess.model.Position;
 import hu.deik.online_chess.model.Table;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
 public abstract class Figure {
     public final String imageSource;
-    private boolean isFigureNotMoved;
+    private boolean isFigureMoved;
     protected Color color;
     protected Position position;
 
-    protected Figure(Color color, Position position){
+    protected Figure(Color color, Position position) {
         this.color = color;
         this.position = position;
-        isFigureNotMoved = true;
+        isFigureMoved = false;
         imageSource = DrawFigure.getPNG(this);
+    }
+
+    public List<Position> getValidMoves(Table table) {
+        return removeKingInCheckMoves(table, getAllPossibleMoves(table));
+    }
+
+    public List<Position> removeKingInCheckMoves(Table table, List<Position> validMoves) {
+
+        List<Position> forRemove = new ArrayList<>();
+
+        for (Position squareToMove : validMoves) {
+            simulateMoveToRemoveKingInCheckMoves(table, squareToMove, forRemove);
+        }
+        validMoves.removeAll(forRemove);
+        return validMoves;
+    }
+
+    private void simulateMoveToRemoveKingInCheckMoves(Table table, Position squareToMove, List<Position> forRemove) {
+        Position startingPos = new Position(position.getPosX(), position.getPosY());
+        List<Figure> originalFigures = new ArrayList<>(table.getFigures());
+
+        removeFigureIfThereIsAPossibleTake(table, squareToMove);
+
+        position = squareToMove;
+        if (table.isKingInCheck(color)) {
+            forRemove.add(squareToMove);
+        }
+
+        table.setFigures(originalFigures);
+        position = startingPos;
+    }
+
+    private void removeFigureIfThereIsAPossibleTake(Table table, Position squareToMove) {
+
+        if (table.getFigureOn(squareToMove) != null) {
+            table.getFigures().remove(table.getFigureOn(squareToMove));
+        }
+
+    }
+
+    public abstract List<Position> getAllPossibleMoves(Table table);
+
+    public List<Position> getValidMovesFromOneDirectionManyStep(Table table, Direction direction) {
+        List<Position> validMoves = new ArrayList<>();
+        Position actualPosition = position;
+        while (true) {
+            actualPosition = actualPosition.stepToDirection(direction);
+            if (actualPosition.isPositionNotValid()) {
+                return validMoves;
+            }
+            if (table.isPositionOccupiedByEnemy(actualPosition, color)) {
+                validMoves.add(actualPosition);
+                return validMoves;
+            }
+            if (table.isPositionNotOccupied(actualPosition)) {
+                validMoves.add(actualPosition);
+            } else {
+                return validMoves;
+            }
+        }
+    }
+
+    public boolean isFigureMoved() {
+        return isFigureMoved;
+    }
+
+    public abstract String getFigureAsString();
+
+    public static Class<?> getFigureTypeBy(Character character) {
+
+        return switch (character) {
+            case 'K' -> King.class;
+            case 'Q' -> Queen.class;
+            case 'B' -> Bishop.class;
+            case 'N' -> Knight.class;
+            case 'R' -> Rook.class;
+            default -> Object.class;
+        };
+    }
+
+    public static Character getCharacterBy(Class<?> type) {
+
+        return switch (type.getSimpleName()) {
+            case "King" -> 'K';
+            case "Queen" -> 'Q';
+            case "Bishop" -> 'B';
+            case "Knight" -> 'N';
+            case "Rook" -> 'R';
+            default -> 'X';
+        };
     }
 
     public Color getColor() {
@@ -31,99 +120,13 @@ public abstract class Figure {
     public Position getPosition() {
         return position;
     }
+
     public void setPosition(Position position) {
-        isFigureNotMoved = false;
+        if (!isFigureMoved) {
+            isFigureMoved = true;
+        }
         this.position = position;
     }
-    public boolean getIfFigureNotMoved(){
-        return isFigureNotMoved;
-    }
-    public List<Position> getValidMoves(Table table) {
-        return getValidMoves(table,true);
-    }
-    public abstract List<Position> getValidMoves(Table table,boolean handleKingInCheck);
-    public abstract String figureAsString();
-    public List<Position> getValidMoveFromOneDirectionOnlyOneStep(Table table,Direction direction){
-        List<Position> validMoves = new ArrayList<>();
-        Position actualPosition = position;
-
-        actualPosition = actualPosition.stepToDirection(direction);
-        if(actualPosition.isPositionNotValid() || table.isPositionOccupiedByAlly(actualPosition,color)){
-            return validMoves;
-        }
-        validMoves.add(actualPosition);
-        return validMoves;
-    }
-    public List<Position> getValidMovesFromOneDirectionManyStep(Table table,Direction direction ){
-        List<Position> validMoves = new ArrayList<>();
-        Position actualPosition = position;
-        while (true){
-            actualPosition = actualPosition.stepToDirection(direction);
-            if(actualPosition.isPositionNotValid()){return validMoves;}
-            if(table.isPositionOccupiedByEnemy(actualPosition,color)){
-                validMoves.add(actualPosition);
-                return validMoves;
-            }
-            if(table.isPositionNotOccupied(actualPosition)) {
-                validMoves.add(actualPosition);
-            }
-            else {
-                return validMoves;
-            }
-        }
-    }
-
-    public List<Position> handleKingInCheck(Table table,List<Position> validMoves){
-
-        Position startingPos = new Position(position.getPosX(), position.getPosY());
-        List<Position>forRemove = new ArrayList<>();
-        List<Figure> originalFigures = new ArrayList<>(table.getFigures());
-
-        for(Position p : validMoves){
-            Figure takenFigure = null;
-            if(table.getFigureOn(p) != null){
-                takenFigure = table.getFigureOn(p);
-                table.getFigures().remove(takenFigure);
-            }
-
-            position = p;
-
-            if(Boolean.TRUE.equals(table.isKingInCheck(color))){
-                forRemove.add(p);
-            }
-
-            if(takenFigure != null){
-                table.getFigures().add(takenFigure);
-            }
-            position = startingPos;
-        }
-        validMoves.removeAll(forRemove);
-        table.setFigures(originalFigures);
-        return validMoves;
-    }
-
-    public static Class<?> getFigureTypeBy(Character character){
-        HashMap<Character,  Class<?>> figureTypes = new HashMap<>();
-        figureTypes.put('K', King.class);
-        figureTypes.put('Q', Queen.class);
-        figureTypes.put('B', Bishop.class);
-        figureTypes.put('N', Knight.class);
-        figureTypes.put('R', Rook.class);
-
-        return figureTypes.getOrDefault(character, Object.class);
-    }
-
-    public static Character getCharacterBy(Class<?> type){
-        HashMap<Class<?>,Character> figureTypes = new HashMap<>();
-        figureTypes.put(King.class,'K');
-        figureTypes.put(Queen.class,'Q');
-        figureTypes.put(Bishop.class,'B');
-        figureTypes.put(Knight.class,'N');
-        figureTypes.put(Rook.class,'R');
-
-        return figureTypes.getOrDefault(type, 'X');
-    }
-
 
 }
 

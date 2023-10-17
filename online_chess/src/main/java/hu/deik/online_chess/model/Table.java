@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Table {
     public static final int TABLE_SIZE = 8;
-    public Boolean isGameOver;
+    private boolean isGameOver;
     public StringBuilder gameNotation;
     private Color activePlayerColor;
     private King whiteKing;
@@ -20,70 +20,12 @@ public class Table {
     private int numberOfMoves;
     private List<Figure> figures = new ArrayList<>();
     private List<Figure> takenFigures = new ArrayList<>();
-    public List<Figure> getFigures() {
-        return figures;
-    }
-    public void setFigures(List<Figure> figures) {
-         this.figures = figures;
-    }
 
-    public List<Figure> getTakenFigures() {
-        return takenFigures;
-    }
-    public void setTakenFigures(List<Figure> takenFigures) {
-        this.takenFigures = takenFigures;
-    }
-
-    public King getKing(Color color){
-        if(color == Color.WHITE){
-            return whiteKing;
-        }
-        else {
-            return  blackKing;
-        }
-    }
-    public Color getActivePlayerColor() {
-        return activePlayerColor;
-    }
-
-    public Figure getFigureOn(Position position){
-        for (Figure f : figures){
-            if(position.equals(f.getPosition())){
-                return f;
-            }
-        }
-        return null;
-    }
-    public Figure getFigureOn(String strPos){
-        Position position = Position.toPosition(strPos);
-        return getFigureOn(position);
-    }
-    public void setFigureOn(Position position,Figure figure){
-        this.figures.remove(getFigureOn(position));
-        this.figures.add(figure);
-    }
-    public Table(){
+    public Table() {
         setUpStartingTable();
     }
 
-    private boolean isContainsTheTwoKing(List<Figure> figures){
-        if(figures.isEmpty()){return false;}
-        int whiteKingNumber = 0;
-        int blackKingNumber = 0;
-        for(Figure figure : figures){
-            if(figure instanceof King ){
-                if(figure.getColor()==Color.WHITE){
-                    whiteKingNumber += 1;
-                }
-                else {
-                    blackKingNumber += 1;
-                }
-                if(whiteKingNumber > 1 || blackKingNumber>1){ return false;}
-            }
-        }
-        return whiteKingNumber != 0 && blackKingNumber != 0;
-    }
-    public Table(List<Figure> figures, Color activePlayerColor){
+    public Table(List<Figure> figures, Color activePlayerColor) {
         this.isGameOver = false;
         this.gameNotation = new StringBuilder("");
         this.numberOfMoves = 0;
@@ -92,403 +34,382 @@ public class Table {
         this.figures.addAll(figures);
         this.activePlayerColor = activePlayerColor;
 
-        for (Figure figure:figures) {
-            if(!(figure instanceof King)){continue;}
+        for (Figure figure : figures) {
+            if (!(figure instanceof King)) {
+                continue;
+            }
 
-            if(figure.getColor() == Color.WHITE){
+            if (figure.getColor() == Color.WHITE) {
                 this.whiteKing = (King) figure;
             } else {
                 this.blackKing = (King) figure;
             }
         }
     }
-    public void setUpStartingTable(){
+
+    private void setUpStartingTable() {
         isGameOver = false;
         gameNotation = new StringBuilder("");
         figures.clear();
         takenFigures.clear();
         numberOfMoves = 0;
         activePlayerColor = Color.WHITE;
-        whiteKing = (new King(Color.WHITE,"E1"));
-        blackKing = (new King(Color.BLACK,"E8"));
+        whiteKing = (new King(Color.WHITE, "E1"));
+        blackKing = (new King(Color.BLACK, "E8"));
 
-        figures.add((new Rook(Color.WHITE,"A1")));
-        figures.add((new Knight(Color.WHITE,"B1")));
-        figures.add((new Bishop(Color.WHITE,"C1")));
-        figures.add((new Queen(Color.WHITE,"D1")));
+        figures.add((new Rook(Color.WHITE, "A1")));
+        figures.add((new Knight(Color.WHITE, "B1")));
+        figures.add((new Bishop(Color.WHITE, "C1")));
+        figures.add((new Queen(Color.WHITE, "D1")));
         figures.add(whiteKing);
-        figures.add((new Bishop(Color.WHITE,"F1")));
-        figures.add((new Knight(Color.WHITE,"G1")));
-        figures.add((new Rook(Color.WHITE,"H1")));
+        figures.add((new Bishop(Color.WHITE, "F1")));
+        figures.add((new Knight(Color.WHITE, "G1")));
+        figures.add((new Rook(Color.WHITE, "H1")));
 
-        figures.add((new Pawn(Color.WHITE,"A2")));
-        figures.add((new Pawn(Color.WHITE,"B2")));
-        figures.add((new Pawn(Color.WHITE,"C2")));
-        figures.add((new Pawn(Color.WHITE,"D2")));
-        figures.add((new Pawn(Color.WHITE,"E2")));
-        figures.add((new Pawn(Color.WHITE,"F2")));
-        figures.add((new Pawn(Color.WHITE,"G2")));
-        figures.add((new Pawn(Color.WHITE,"H2")));
+        figures.add((new Pawn(Color.WHITE, "A2")));
+        figures.add((new Pawn(Color.WHITE, "B2")));
+        figures.add((new Pawn(Color.WHITE, "C2")));
+        figures.add((new Pawn(Color.WHITE, "D2")));
+        figures.add((new Pawn(Color.WHITE, "E2")));
+        figures.add((new Pawn(Color.WHITE, "F2")));
+        figures.add((new Pawn(Color.WHITE, "G2")));
+        figures.add((new Pawn(Color.WHITE, "H2")));
 
-        figures.add((new Rook(Color.BLACK,"A8")));
-        figures.add((new Knight(Color.BLACK,"B8")));
-        figures.add((new Bishop(Color.BLACK,"C8")));
-        figures.add((new Queen(Color.BLACK,"D8")));
+        figures.add((new Rook(Color.BLACK, "A8")));
+        figures.add((new Knight(Color.BLACK, "B8")));
+        figures.add((new Bishop(Color.BLACK, "C8")));
+        figures.add((new Queen(Color.BLACK, "D8")));
         figures.add(blackKing);
-        figures.add((new Bishop(Color.BLACK,"F8")));
-        figures.add((new Knight(Color.BLACK,"G8")));
-        figures.add((new Rook(Color.BLACK,"H8")));
+        figures.add((new Bishop(Color.BLACK, "F8")));
+        figures.add((new Knight(Color.BLACK, "G8")));
+        figures.add((new Rook(Color.BLACK, "H8")));
 
-        figures.add((new Pawn(Color.BLACK,"A7")));
-        figures.add((new Pawn(Color.BLACK,"B7")));
-        figures.add((new Pawn(Color.BLACK,"C7")));
-        figures.add((new Pawn(Color.BLACK,"D7")));
-        figures.add((new Pawn(Color.BLACK,"E7")));
-        figures.add((new Pawn(Color.BLACK,"F7")));
-        figures.add((new Pawn(Color.BLACK,"G7")));
-        figures.add((new Pawn(Color.BLACK,"H7")));
+        figures.add((new Pawn(Color.BLACK, "A7")));
+        figures.add((new Pawn(Color.BLACK, "B7")));
+        figures.add((new Pawn(Color.BLACK, "C7")));
+        figures.add((new Pawn(Color.BLACK, "D7")));
+        figures.add((new Pawn(Color.BLACK, "E7")));
+        figures.add((new Pawn(Color.BLACK, "F7")));
+        figures.add((new Pawn(Color.BLACK, "G7")));
+        figures.add((new Pawn(Color.BLACK, "H7")));
     }
 
-    public Boolean isKingInCheck(Color color){
-        return getEnemyValidMoves(color).contains(getKing(color).getPosition());
-    }
-    public void handleCheckMate(Color color){
-        for(int i = 0;i<figures.size();i++){
-            if (figures.get(i).getColor() == Color.getOpposite(color)) {
-                if (!figures.get(i).getValidMoves(this).isEmpty()) {
-                    return;
-                }
-            }
-        }
-        isGameOver = true;
-    }
-    public List<Position> getEnemyValidMoves(Color color){
-        List<Position> enemyMoves = new ArrayList<>();
-        for(Figure figure : figures){
-            if(figure.getColor() == color){continue;}
-
-            if(figure instanceof King){
-                for(Direction direction : Direction.getAllDirections()){
-                    enemyMoves.addAll(figure.getValidMoveFromOneDirectionOnlyOneStep(this,direction));
-                }
-            }
-            else if(figure instanceof Pawn){
-                enemyMoves.addAll(((Pawn) figure).getPossibleAttackMoves());
-            }
-            else {
-                enemyMoves.addAll(figure.getValidMoves(this,false));
-            }
-
-        }
-        return enemyMoves;
-    }
-    private boolean isMoveValid(Position moveFrom, Position moveTo){
-        if(getFigureOn(moveFrom)==null){log.info("There is no Figure on Position "+ Position.toString(moveFrom)); return false; }
-        if(getFigureOn(moveFrom).getColor() != activePlayerColor){log.info("Other Player Turn");return false;}
-        List<Position> validMoves = getFigureOn(moveFrom).getValidMoves(this);
-        if(!validMoves.contains(moveTo)){log.info(moveTo.toString()+" is Not Valid move"); return false;}
-        return true;
-    }
-    private void addMoveToGameNotation(Position moveFrom, Position moveTo){
-        if(activePlayerColor == Color.WHITE){
-            gameNotation.append(numberOfMoves+": ");
-            gameNotation.append(positionsToNotation(moveFrom,moveTo));
-        }
-        else {
-            gameNotation.append(" - ");
-            gameNotation.append(positionsToNotation(moveFrom,moveTo));
-            gameNotation.append("\n");
-        }
-
-    }
-
-    public void makeMove(String notation){
-        Position[] pos = notationToPositions(notation);
+    public void makeMove(String notation) {
+        Position[] pos = NotationConverter.notationToPositions(this, notation);
         makeMove(pos[0], pos[1]);
     }
-    public void  makeMove(String moveFrom, String moveTo){
+
+    public void makeMove(String moveFrom, String moveTo) {
         makeMove(Position.toPosition(moveFrom), Position.toPosition(moveTo));
     }
-    public void  makeMove(Position moveFrom, Position moveTo){
-        if(!isMoveValid(moveFrom,moveTo) || isGameOver ){
+
+    public void makeMove(Position moveFrom, Position moveTo) {
+        if (!canMove(moveFrom, moveTo)) {
             return;
         }
-        if(activePlayerColor== Color.WHITE){
-            numberOfMoves++;
-        }
-        addMoveToGameNotation(moveFrom,moveTo);
 
-        if(isPositionOccupiedByEnemy(moveTo,activePlayerColor)){
-            takeFigure(getFigureOn(moveTo));
-        }
-        handleCastle(moveFrom,moveTo);
-        handleEnPassant(moveFrom,moveTo);
-        handlePawnPromotion(moveFrom,moveTo);
-
+        handleTakeFigure(moveTo);
+        handleCastle(moveFrom, moveTo);
+        handleEnPassant(moveFrom, moveTo);
+        handlePawnPromotion(moveFrom, moveTo);
+        isGameOver = handleCheckMate(activePlayerColor);
+        addMoveToGameNotation(moveFrom, moveTo);
         getFigureOn(moveFrom).setPosition(moveTo);
 
-        handleCheckMate(activePlayerColor);
 
-        if(!isGameOver){
+        if (!isGameOver) {
             activePlayerColor = Color.getOpposite(activePlayerColor);
-        }
-        else {
-            gameNotation.deleteCharAt(gameNotation.lastIndexOf("+"));
-            gameNotation.append("#");
         }
 
         log.info(DrawTable.makeTableToString(this));
     }
 
-    private String[] getSmallCastleMove(Color color){
-        if(color == Color.WHITE){
-            return new String[]{"E1", "G1"};
-        }else {
-            return new String[]{"E8", "G8"};
+    private void addMoveToGameNotation(Position moveFrom, Position moveTo) {
+        if (activePlayerColor == Color.WHITE) {
+            gameNotation.append(++numberOfMoves + ": ");
+            gameNotation.append(NotationConverter.positionsToNotation(this, moveFrom, moveTo));
+        } else {
+            gameNotation.append(" - ");
+            gameNotation.append(NotationConverter.positionsToNotation(this, moveFrom, moveTo));
+            gameNotation.append("\n");
         }
-    }
-    private String[] getBigCastleMove(Color color){
-        if(color == Color.WHITE){
-            return new String[]{"E1", "C1"};
-        }else {
-            return new String[]{"E8", "C8"};
-        }
-    }
-    private boolean isBigCastle(Position moveFrom,Position moveTo,Color color){
 
-        return moveFrom.equals(Position.toPosition(getBigCastleMove(color)[0])) &&
-                moveTo.equals(Position.toPosition(getBigCastleMove(color)[1]));
     }
 
-    private boolean isSmallCastle(Position moveFrom,Position moveTo,Color color){
+    private void handleTakeFigure(Position moveTo) {
+        if (isPositionOccupiedByEnemy(moveTo, activePlayerColor)) {
+            takeFigure(moveTo);
+        }
+    }
+
+    private void handleCastle(Position moveFrom, Position moveTo) {
+        if (!isKing(moveFrom)) {
+            return;
+        }
+
+        handleRookMovementWhileCastle(moveFrom, moveTo);
+    }
+
+    private void handleRookMovementWhileCastle(Position kingMoveFrom, Position kingMoveTo) {
+        if (isSmallCastle(kingMoveFrom, kingMoveTo, Color.WHITE)) {
+            getFigureOn(Position.toPosition("H1")).setPosition(Position.toPosition("F1"));
+        } else if (isBigCastle(kingMoveFrom, kingMoveTo, Color.WHITE)) {
+            getFigureOn(Position.toPosition("A1")).setPosition(Position.toPosition("D1"));
+        } else if (isSmallCastle(kingMoveFrom, kingMoveTo, Color.BLACK)) {
+            getFigureOn(Position.toPosition("H8")).setPosition(Position.toPosition("F8"));
+        } else if (isBigCastle(kingMoveFrom, kingMoveTo, Color.BLACK)) {
+            getFigureOn(Position.toPosition("A8")).setPosition(Position.toPosition("D8"));
+        }
+    }
+
+    boolean isSmallCastle(Position moveFrom, Position moveTo, Color color) {
 
         return moveFrom.equals(Position.toPosition(getSmallCastleMove(color)[0])) &&
                 moveTo.equals(Position.toPosition(getSmallCastleMove(color)[1]));
     }
 
-    private void handleCastle(Position moveFrom, Position moveTo) {
-        if(!(getFigureOn(moveFrom) instanceof King)){return;}
+    boolean isBigCastle(Position moveFrom, Position moveTo, Color color) {
 
-        if(isSmallCastle(moveFrom,moveTo,Color.WHITE)){
-            getFigureOn(Position.toPosition("H1")).setPosition(Position.toPosition("F1"));
-        }
-        else if(isBigCastle(moveFrom,moveTo,Color.WHITE)){
-            getFigureOn(Position.toPosition("A1")).setPosition(Position.toPosition("D1"));
-        }
-        else if(isSmallCastle(moveFrom,moveTo,Color.BLACK)){
-            getFigureOn(Position.toPosition("H8")).setPosition(Position.toPosition("F8"));
-        }
-        else if(isBigCastle(moveFrom,moveTo,Color.BLACK)){
-            getFigureOn(Position.toPosition("A8")).setPosition(Position.toPosition("D8"));
-        }
-    }
-    private void takeFigure(Figure figure){
-        takenFigures.add(figure);
-        figures.remove(figure);
+        return moveFrom.equals(Position.toPosition(getBigCastleMove(color)[0])) &&
+                moveTo.equals(Position.toPosition(getBigCastleMove(color)[1]));
     }
 
-    private void handlePawnPromotion(Position moveFrom, Position moveTo){
-        if(!(getFigureOn(moveFrom) instanceof Pawn)){return;}
-
-        if(moveTo.isLastRow(getFigureOn(moveFrom).getColor())){
-            setFigureOn(moveFrom,new Queen(activePlayerColor,Position.toString(moveFrom)));
+    private void handleEnPassant(Position moveFrom, Position moveTo) {
+        if (!(getFigureOn(moveFrom) instanceof Pawn)) {
+            return;
         }
+        setAllPawnsFalseToEnPassant();
+        setPawnToBeAbleToEnPassant(moveFrom, moveTo);
+        takeEnemyPawnIfEnPassant(moveFrom, moveTo);
     }
-    private void handleEnPassant(Position moveFrom, Position moveTo){
-        for(Figure figure : figures){
-            if(figure instanceof Pawn){
+
+    private void setAllPawnsFalseToEnPassant() {
+        for (Figure figure : figures) {
+            if (figure instanceof Pawn) {
                 ((Pawn) figure).makeEnPassantFalse();
             }
         }
-        if(!(getFigureOn(moveFrom) instanceof Pawn)){return;}
-
-        if(Math.abs(moveFrom.getPosY()-moveTo.getPosY()) == 2){
-            var rightNeighbor = getFigureOn(moveTo.stepToDirection(Direction.RIGHT));
-            var leftNeighbor = getFigureOn(moveTo.stepToDirection(Direction.LEFT));
-
-                if( rightNeighbor instanceof Pawn  && rightNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
-                    ((Pawn) rightNeighbor).setCanDoEntPassantLeft(true);
-                }
-
-                if(leftNeighbor instanceof Pawn  && leftNeighbor.getColor() == Color.getOpposite(activePlayerColor)){
-                    ((Pawn) leftNeighbor).setCanDoEntPassantRight(true);
-
-                }
-        }
-
-        var back = Direction.getDirectionForward(Color.getOpposite(activePlayerColor));
-        if(isEnPassantMove(moveFrom,moveTo)){
-            takeFigure(getFigureOn(moveTo.stepToDirection(back)));
-        }
-    }
-    private boolean isEnPassantMove(Position moveFrom,Position moveTo){
-        var forwardLeft = Direction.getDirectionForwardLeft(activePlayerColor);
-        var forwardRight = Direction.getDirectionForwardRight(activePlayerColor);
-        var back = Direction.getDirectionForward(Color.getOpposite(activePlayerColor));
-        return moveTo.isEmpty(this) &&
-                (moveFrom.stepToDirection(forwardLeft).equals(moveTo) || moveFrom.stepToDirection(forwardRight).equals(moveTo)) &&
-                getFigureOn(moveTo.stepToDirection(back)) instanceof Pawn &&
-                getFigureOn(moveTo.stepToDirection(back)).getColor() == Color.getOpposite(activePlayerColor);
-    }
-    public String positionsToNotation(Position moveFrom, Position moveTo){
-        if(moveFrom.isPositionNotValid() || moveTo.isPositionNotValid()){return " ";}
-
-        boolean isCapture = getFigureOn(moveTo) != null;
-        Figure moveFromFigure = getFigureOn(moveFrom);
-        if(isSmallCastle(moveFrom,moveTo,moveFromFigure.getColor())){
-            return "O-O";
-        }
-        if(isBigCastle(moveFrom,moveTo,moveFromFigure.getColor())){
-            return "O-O-O";
-        }
-        String result = "";
-
-        if(!(moveFromFigure instanceof Pawn)){
-            result += Figure.getCharacterBy(moveFromFigure.getClass());
-        }
-
-        String xAngle = "";
-        String yAngle = "";
-        for(int i = 0;i<figures.size(); i++){
-            boolean sameColor = figures.get(i).getColor() == moveFromFigure.getColor();
-            boolean sameFigureType = figures.get(i).getClass().equals(moveFromFigure.getClass());
-            boolean haveSameValidMove = figures.get(i).getValidMoves(this,true).contains(moveTo) && !figures.get(i).equals(moveFromFigure);
-
-            boolean isKnight = result.equals("N");
-            boolean isPawn = xAngle.equals("");
-            if(sameColor && sameFigureType && haveSameValidMove){
-                boolean sameAngleX = figures.get(i).getPosition().getPosX() == moveFromFigure.getPosition().getPosX() && yAngle.equals("");
-                boolean sameAngleY = figures.get(i).getPosition().getPosY() == moveFromFigure.getPosition().getPosY() && xAngle.equals("");
-
-                    if(sameAngleX){
-                        yAngle = Position.toString(moveFromFigure.getPosition()).substring(1,2);
-                    }
-                    if(sameAngleY){
-                        xAngle = Position.toString(moveFromFigure.getPosition()).substring(0,1).toLowerCase();
-                    }
-                    if(isKnight && isPawn && yAngle.equals("")  ){
-                        xAngle = Position.toString(moveFromFigure.getPosition()).substring(0,1).toLowerCase();
-                    }
-                }
-                if(isPawn && isCapture){
-                    xAngle = Position.toString(moveFromFigure.getPosition()).substring(0,1).toLowerCase();
-                }
-        }
-
-        result += xAngle+yAngle;
-
-        if(isCapture){
-            result += "x";
-        }
-        result += Position.toString(moveTo).toLowerCase();
-        Position originalPos = new Position(moveFromFigure.getPosition());
-        moveFromFigure.setPosition(moveTo);
-
-        if(isGameOver){
-            result += "#";
-        }
-        else if(isKingInCheck(Color.getOpposite(moveFromFigure.getColor()))){
-                result += "+";
-        }
-
-        moveFromFigure.setPosition(originalPos);
-        return result;
     }
 
-    public Position[] notationToPositions(String str){
-        Pattern pattern = Pattern.compile("^O-O|O-O-O|[KQBNR][a-h][1-8]x?[a-h][1-8][\\+\\#]?|[a-h][1-8]x?[a-h][1-8][\\+\\#]?|[1-8]x?[a-h][1-8][\\+\\#]?|[a-h]x?[a-h][1-8][\\+\\#]?|[KQBNR][1-8]x?[a-h][1-8][\\+\\#]?|[KQBNR][a-h]x?[a-h][1-8][\\+\\#]?|[KQBNR]x?[a-h][1-8][\\+\\#]?|[a-h][1-8]x?[\\+\\#]?", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(str);
-        boolean isValidInput = matcher.find();
-        if(!isValidInput) {
-            log.info("Match not found: "+str);
-            return new Position[] {};
-        }
+    private void setPawnToBeAbleToEnPassant(Position moveFrom, Position moveTo) {
+        if (isDoubleForwardMove(moveFrom, moveTo)) {
+            Figure rightNeighbor = getFigureOn(moveTo.stepToDirection(Direction.RIGHT));
+            Figure leftNeighbor = getFigureOn(moveTo.stepToDirection(Direction.LEFT));
 
-        StringBuilder chessNotation = new StringBuilder(str);
-        Position moveFrom ;
-        Position moveTo;
-
-        if(str.equals("O-O")){
-            moveFrom = Position.toPosition(getSmallCastleMove(activePlayerColor)[0]);
-            moveTo = Position.toPosition( getSmallCastleMove(activePlayerColor)[1] );
-            return new Position[] {moveFrom,moveTo};
-        }
-        else if(str.equals("O-O-O")){
-            moveFrom = Position.toPosition( getBigCastleMove(activePlayerColor)[0] );
-            moveTo = Position.toPosition( getBigCastleMove(activePlayerColor)[1] );
-            return new Position[] {moveFrom,moveTo};
-        }
-
-        Class<?> typeOfFigure;
-        if(Character.isLowerCase(str.charAt(0))){
-            typeOfFigure = Pawn.class;
-        }
-        else {
-            typeOfFigure = Figure.getFigureTypeBy(chessNotation.charAt(0));
-            chessNotation.deleteCharAt(0);
-        }
-
-        if(chessNotation.indexOf("x")!=-1){
-            chessNotation.deleteCharAt(chessNotation.indexOf("x"));
-        }
-        if(chessNotation.indexOf("+")!=-1){
-            chessNotation.deleteCharAt(chessNotation.indexOf("+"));
-        }
-        if(chessNotation.indexOf("#")!=-1){
-            chessNotation.deleteCharAt(chessNotation.indexOf("#"));
-        }
-
-        String sub = chessNotation.substring(chessNotation.length()-2,chessNotation.length());
-
-        moveTo = Position.toPosition(sub);
-        chessNotation.delete(chessNotation.length()-2,chessNotation.length());
-
-        moveFrom = findTheCorrectFigurePosition(typeOfFigure,chessNotation.toString(),moveTo);
-
-        return new Position[] {moveFrom,moveTo};
-    }
-    private Position findTheCorrectFigurePosition(Class<?> typeOfFigure, String matchingAngle, Position moveTo){
-            for (int i = 0; i < figures.size() ; i++) {
-
-                if( figures.get(i).getClass().equals(typeOfFigure)&& figures.get(i).getColor() == activePlayerColor && figures.get(i).getValidMoves(this).contains(moveTo)){
-                    switch (matchingAngle.length()){
-                        case 0: return figures.get(i).getPosition();
-                        case 1:
-                            if(Character.isAlphabetic(matchingAngle.charAt(0))&&
-                                    figures.get(i).getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
-                                return  figures.get(i).getPosition();
-                            }
-                            if(Character.isDigit(matchingAngle.charAt(0))&&
-                                    figures.get(i).getPosition().getPosY()==Position.filesToPos.get(Character.toUpperCase(matchingAngle.charAt(0)))){
-                                return figures.get(i).getPosition();
-                            }
-                            break;
-                        case 2:
-                            if(figures.get(i).getPosition().getPosX()==Position.ranksToPos.get(Character.toUpperCase(matchingAngle.charAt(0))) &&
-                                    figures.get(i).getPosition().getPosY()==Position.filesToPos.get(matchingAngle.charAt(1))){
-                                return figures.get(i).getPosition();
-                            }
-                            break;
-                        default:
-                    }
-                }
+            if (isEnemyPawn(rightNeighbor)) {
+                ((Pawn) rightNeighbor).setCanDoEnPassantLeft(true);
             }
 
-        return new Position(-1,-1);
+            if (isEnemyPawn(leftNeighbor)) {
+                ((Pawn) leftNeighbor).setCanDoEnPassantRight(true);
+
+            }
+        }
     }
 
-    public boolean isPositionNotOccupied(Position position){
+    private void takeEnemyPawnIfEnPassant(Position moveFrom, Position moveTo) {
+        Direction back = Direction.getDirectionForward(Color.getOpposite(activePlayerColor));
+        if (isEnPassantMove(moveFrom, moveTo)) {
+            takeFigure(moveTo.stepToDirection(back));
+        }
+    }
+
+    public boolean handleCheckMate(Color color) {
+        for (Figure opponentFigure : getOpponentsFigures(color)) {
+            if (!opponentFigure.getValidMoves(this).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<Figure> getOpponentsFigures(Color color) {
+        List<Figure> opponentsFigures = new ArrayList<>();
+        for (Figure figure : figures) {
+            if (figure.getColor() == Color.getOpposite(color)) {
+                opponentsFigures.add(figure);
+            }
+        }
+        return opponentsFigures;
+    }
+
+    public boolean isKingInCheck(Color color) {
+        return getOpponentsPossibleMoves(color).contains(getKing(color).getPosition());
+    }
+
+    public List<Position> getOpponentsPossibleMoves(Color color) {
+        List<Position> enemyMoves = new ArrayList<>();
+        for (Figure opponentFigure : getOpponentsFigures(color)) {
+
+            if (opponentFigure instanceof King) {
+                enemyMoves.addAll(((King) opponentFigure).getValidMoveOnlyOneStepToAllDirections(this));
+            } else if (opponentFigure instanceof Pawn) {
+                enemyMoves.addAll(((Pawn) opponentFigure).getPossibleAttackMoves());
+            } else {
+                enemyMoves.addAll(opponentFigure.getAllPossibleMoves(this));
+            }
+
+        }
+        return enemyMoves;
+    }
+
+
+    private void handlePawnPromotion(Position moveFrom, Position moveTo) {
+        if (!(getFigureOn(moveFrom) instanceof Pawn)) {
+            return;
+        }
+
+        if (moveTo.isLastRow(getActivePlayerColor())) {
+            setFigureOn(moveFrom, new Queen(activePlayerColor, Position.toString(moveFrom)));
+        }
+    }
+
+    private boolean canMove(Position moveFrom, Position moveTo) {
+        return isMoveValid(moveFrom, moveTo) && !isGameOver;
+    }
+
+    private boolean isMoveValid(Position moveFrom, Position moveTo) {
+        if (getFigureOn(moveFrom) == null) {
+            log.info("There is no Figure on Position " + Position.toString(moveFrom));
+            return false;
+        }
+        if (getFigureOn(moveFrom).getColor() != activePlayerColor) {
+            log.info("Other Player Turn");
+            return false;
+        }
+
+        List<Position> validMoves = getFigureOn(moveFrom).getValidMoves(this);
+        if (!validMoves.contains(moveTo)) {
+            log.info(moveTo.toString() + " is Not Valid move");
+            return false;
+        }
+        return true;
+    }
+
+
+    String[] getSmallCastleMove(Color color) {
+        if (color == Color.WHITE) {
+            return new String[]{"E1", "G1"};
+        } else {
+            return new String[]{"E8", "G8"};
+        }
+    }
+
+    String[] getBigCastleMove(Color color) {
+        if (color == Color.WHITE) {
+            return new String[]{"E1", "C1"};
+        } else {
+            return new String[]{"E8", "C8"};
+        }
+    }
+
+
+    private boolean isKing(Position position) {
+        return getFigureOn(position) instanceof King;
+    }
+
+    private void takeFigure(Position position) {
+        Figure figure = getFigureOn(position);
+        takenFigures.add(figure);
+        figures.remove(figure);
+
+    }
+
+
+    private boolean isEnemyPawn(Figure figure) {
+        return figure instanceof Pawn && figure.getColor() == Color.getOpposite(activePlayerColor);
+    }
+
+
+    private boolean isDoubleForwardMove(Position moveFrom, Position moveTo) {
+        return Math.abs(moveFrom.getPosY() - moveTo.getPosY()) == 2;
+    }
+
+    private boolean isEnPassantMove(Position moveFrom, Position moveTo) {
+        Direction back = Direction.getDirectionForward(Color.getOpposite(activePlayerColor));
+        Pawn pawn = (Pawn) getFigureOn(moveFrom);
+
+        return moveTo.isEmpty(this) &&
+                pawn.isAttackMove(moveFrom, moveTo) &&
+                isEnemyPawn(getFigureOn(moveTo.stepToDirection(back)));
+
+    }
+
+    public boolean isPositionNotOccupied(Position position) {
         return getFigureOn(position) == null;
     }
-    public boolean isPositionOccupiedByEnemy(Position position, Color color){
-        if(isPositionNotOccupied(position)){return false;}
+
+    public boolean isPositionOccupiedByEnemy(Position position, Color color) {
+        if (isPositionNotOccupied(position)) {
+            return false;
+        }
 
         return getFigureOn(position).getColor() == Color.getOpposite(color);
     }
-    public boolean isPositionOccupiedByAlly(Position position, Color color){
-        if(isPositionNotOccupied(position)){return false;}
+
+    public boolean isPositionOccupiedByAlly(Position position, Color color) {
+        if (isPositionNotOccupied(position)) {
+            return false;
+        }
 
         return getFigureOn(position).getColor() == color;
+    }
+
+    public List<Figure> getFigures() {
+        return figures;
+    }
+
+    public void setFigures(List<Figure> figures) {
+        this.figures = figures;
+    }
+
+    public List<Figure> getTakenFigures() {
+        return takenFigures;
+    }
+
+    public void setTakenFigures(List<Figure> takenFigures) {
+        this.takenFigures = takenFigures;
+    }
+
+
+    public King getKing(Color color) {
+        if (color == Color.WHITE) {
+            return whiteKing;
+        } else {
+            return blackKing;
+        }
+    }
+
+
+    public Color getActivePlayerColor() {
+        return activePlayerColor;
+    }
+
+    public Figure getFigureOn(Position position) {
+        for (Figure f : figures) {
+            if (position.equals(f.getPosition())) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public Figure getFigureOn(String strPos) {
+        Position position = Position.toPosition(strPos);
+        return getFigureOn(position);
+    }
+
+    public void setFigureOn(Position position, Figure figure) {
+        this.figures.remove(getFigureOn(position));
+        this.figures.add(figure);
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
     }
 
 }

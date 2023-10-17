@@ -13,55 +13,81 @@ public class King extends Figure implements ChessFigure {
         super(color, Position.toPosition(strPos));
     }
 
-    @Override
-    public List<Position> getValidMoves(Table table,boolean handleKingInCheck){
+    public List<Position> getAllPossibleMoves(Table table) {
         List<Position> validMoves = new ArrayList<>();
 
-        for(Direction direction : Direction.getAllDirections()){
-           validMoves.addAll(getValidMoveFromOneDirectionOnlyOneStep(table,direction));
-        }
-        validMoves.removeAll(table.getEnemyValidMoves(color));
-        addPossibleCastle(table,validMoves);
+        validMoves.addAll(getValidMoveOnlyOneStepToAllDirections(table));
+        validMoves.addAll(getPossibleCastleMoves(table, validMoves));
+        validMoves.removeAll(table.getOpponentsPossibleMoves(color));
+        return validMoves;
+    }
 
-        if(handleKingInCheck){
-            validMoves = this.handleKingInCheck(table,validMoves);
+    public List<Position> getValidMoveOnlyOneStepToAllDirections(Table table) {
+        List<Position> validMoves = new ArrayList<>();
+        for (Direction direction : Direction.getAllDirections()) {
+            Position actualPosition = position;
+
+            actualPosition = actualPosition.stepToDirection(direction);
+            if (actualPosition.isPositionValid() && !table.isPositionOccupiedByAlly(actualPosition, color)) {
+                validMoves.add(actualPosition);
+            }
         }
         return validMoves;
     }
-    private void addPossibleCastle(Table table,List<Position> validMoves){
-        validMoves.addAll(addPossibleCastleForColor(table,validMoves,color));
+
+    private List<Position> getPossibleCastleMoves(Table table, List<Position> validMoves) {
+        List<Position> result = new ArrayList<>();
+        if (!canCastle(table)) {
+            return validMoves;
+        }
+
+        String row = getStartingRow();
+
+        if (isSmallCastle(table, row, validMoves)) {
+            result.add(Position.toPosition("G" + row));
+        }
+        if (isBigCastle(table, row, validMoves)) {
+            result.add(Position.toPosition("C" + row));
+        }
+
+        return result;
     }
-    private List<Position> addPossibleCastleForColor(Table table,List<Position> validMoves, Color color){
-        if(!table.getKing(color).getIfFigureNotMoved() || table.isKingInCheck(color)){return validMoves;}
 
-        final String row;
-        if(color == Color.WHITE){row = "1";}
-        else {row = "8";}
+    private boolean isSmallCastle(Table table, String row, List<Position> validMoves) {
 
-        if( table.getFigureOn("F"+row)== null &&
-                table.getFigureOn("G"+row)== null &&
-                table.getFigureOn("H"+row)!= null &&
-                table.getFigureOn("H"+row).getIfFigureNotMoved() &&
-                validMoves.contains(Position.toPosition("F"+row)))
-        {
-            validMoves.add(Position.toPosition("G"+row));
+        return (table.getFigureOn("F" + row) == null &&
+                table.getFigureOn("G" + row) == null &&
+                table.getFigureOn("H" + row) != null &&
+                (!table.getFigureOn("H" + row).isFigureMoved()) &&
+                validMoves.contains(Position.toPosition("F" + row))
+        );
+    }
+
+    private boolean isBigCastle(Table table, String row, List<Position> validMoves) {
+        return (table.getFigureOn("D" + row) == null &&
+                table.getFigureOn("C" + row) == null &&
+                table.getFigureOn("B" + row) == null &&
+                table.getFigureOn("A" + row) != null &&
+                (!table.getFigureOn("A" + row).isFigureMoved()) &&
+                validMoves.contains(Position.toPosition("D" + row))
+        );
+    }
+
+    private boolean canCastle(Table table) {
+        return !table.getKing(color).isFigureMoved() && !table.isKingInCheck(color);
+    }
+
+    private String getStartingRow() {
+        if (color == Color.WHITE) {
+            return "1";
+        } else {
+            return "8";
         }
-        if( table.getFigureOn("D"+row)== null &&
-                table.getFigureOn("C"+row)== null &&
-                table.getFigureOn("B"+row)== null &&
-                table.getFigureOn("A"+row)!=null &&
-                table.getFigureOn("A"+row).getIfFigureNotMoved()&&
-                validMoves.contains(Position.toPosition("D"+row)))
-        {
-            validMoves.add(Position.toPosition("C"+row));
-        }
-
-        return validMoves;
     }
 
     @Override
-    public String figureAsString() {
-        if(color == Color.WHITE){
+    public String getFigureAsString() {
+        if (color == Color.WHITE) {
             return " WK ";
         }
         return " BK ";

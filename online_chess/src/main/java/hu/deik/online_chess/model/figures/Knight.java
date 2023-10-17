@@ -13,16 +13,13 @@ public class Knight extends Figure implements ChessFigure {
     public Knight(Color color, String strPos) {
         super(color, Position.toPosition(strPos));
     }
+
     @Override
-    public List<Position> getValidMoves(Table table, boolean handleKingInCheck){
+    public List<Position> getAllPossibleMoves(Table table) {
         List<Position> validMoves = new ArrayList<>();
 
         for(Direction diagonalDir : Direction.getDiagonalDirections()){
             validMoves.addAll(getValidMovesFromOneDirection(table,diagonalDir));
-        }
-
-        if(handleKingInCheck){
-            validMoves = handleKingInCheck(table,validMoves);
         }
 
         return validMoves;
@@ -54,7 +51,7 @@ public class Knight extends Figure implements ChessFigure {
     }
 
     @Override
-    public String figureAsString() {
+    public String getFigureAsString() {
         if(color == Color.WHITE){
             return " WN ";
         }

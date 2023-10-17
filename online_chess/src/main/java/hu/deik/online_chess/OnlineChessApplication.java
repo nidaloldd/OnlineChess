@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @EnableJpaRepositories
 @CrossOrigin
 public class OnlineChessApplication {
-
     public static void main(final String[] args) {
         SpringApplication.run(OnlineChessApplication.class, args);
     }

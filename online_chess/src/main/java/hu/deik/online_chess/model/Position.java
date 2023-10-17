@@ -122,6 +122,9 @@ public class Position {
         return posX >= Table.TABLE_SIZE || posX < 0 ||
                 posY >= Table.TABLE_SIZE || posY < 0;
     }
+    public boolean isPositionValid(){
+        return !isPositionNotValid();
+    }
 
     public Position stepToDirection(final Direction direction) {
         return new Position(posX + direction.getXChange(),
