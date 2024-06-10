@@ -45,9 +45,10 @@ public class ChessRestController {
     private CustomPlayerDetailsService playerDetailsService;
     @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
-
+    @Autowired
     private final ChessPartyService chessPartyService;
-
+    //@Autowired
+    //private  final WebSocketEventListener socketListener;
 
     @PostMapping("/start")
     public ResponseEntity<ChessParty> start(Authentication authentication) {

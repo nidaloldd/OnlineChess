@@ -61,7 +61,7 @@ public class ChessPartyServiceImpl implements ChessPartyService {
     @Override
     public ChessParty connectToRandomGame(Player player) throws NotFoundException {
         var newGame = ChessGameManager.getGameManager().getGames().values().stream()
-                .filter(it -> it.getStatus().equals(NEW)).findAny();
+                .filter(it -> it.getStatus().equals(NEW)).filter(it -> it.getWhitePlayer().getId() != player.getId()).findAny();
 
         if(newGame.isEmpty()){
             log.info("createGame");
@@ -69,12 +69,9 @@ public class ChessPartyServiceImpl implements ChessPartyService {
         }
         else {
             var game = newGame.get();
-
             game.setBlackPlayer(player);
-
             game.setStatus(IN_PROGRESS);
             ChessGameManager.getGameManager().setGame(game);
-
             log.info("connectToRandomGame");
             return game;
         }

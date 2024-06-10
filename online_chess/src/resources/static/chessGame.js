@@ -5,7 +5,6 @@ let Whitefigures = []
 let Blackfigures = []
 let isGameOver = false
 
-
 const allSquare = Array.from(document.getElementsByClassName('whiteSquare')).concat(Array.from(document.getElementsByClassName('blackSquare')));
 const url = 'http://localhost:8081'
 const makeMoveRoute = url+"/game/makeMove"
@@ -19,9 +18,7 @@ const onlineGameRoute = url+"/onlineGame"
 const getPlayerRoute = url+"/game/getPlayer"
 
 
-
 function Start(){
-    
     getUser()
     if(sessionStorage.getItem("gameID") == 'undefined' || sessionStorage.getItem("gameID") == undefined){
         connectToRandom();
@@ -49,7 +46,7 @@ function makeMove(from,to){
     xhr.send()
 }
 
- function getTableUpdate(data){
+function getTableUpdate(data){
 
         console.log("getTableUpdate")
         console.log(data);
@@ -180,7 +177,6 @@ function PositionToNotation(posX,posY){
     return notation;
 }
 
-
 function getValidMoves(pos){
    let xhr = new XMLHttpRequest()
    xhr.open('GET',validMovesRoute+sessionStorage.getItem("gameID")+'/'+pos ,true)
@@ -209,7 +205,7 @@ function getValidMoves(pos){
 }
 
 function newGame(){
-    let xhr = new XMLHttpRequest()
+   let xhr = new XMLHttpRequest()
    xhr.open('GET',newGameRoute,true)
    xhr.onload = function(){
         if(xhr.status == 200){
@@ -236,7 +232,6 @@ function ClickFigure(event){
     
     getValidMoves(clickedFigure)
 }
-
 
 function ClickSquare(event){
     if(isGameOver){ return;}

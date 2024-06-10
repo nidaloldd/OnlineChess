@@ -32,4 +32,6 @@ public class Player {
         this.email = email;
         this.password = password;
     }
+
+
 }
