@@ -25,7 +25,9 @@ function onChessSocketConnected(frame){
     gameId = sessionStorage.getItem("gameID");
     if (gameId != null && gameId != undefined) {
         console.log("connected to the frame: " + frame);
+
         gameStompClient.subscribe("/topic/game-progress/" + gameId, onChessMessageReceived)
+    
     }
 }
 
