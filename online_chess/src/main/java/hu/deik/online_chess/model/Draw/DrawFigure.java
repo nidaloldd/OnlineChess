@@ -5,7 +5,7 @@ import hu.deik.online_chess.model.figures.*;
 
 
 public class DrawFigure {
-    private static final String IMAGESOURCE = "/img/figures/";
+    private static final String IMAGESOURCE = "static/img/figures/";
     public static String getPNG(Figure figure){
 
         if(figure.getColor() == Color.WHITE){

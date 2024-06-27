@@ -25,19 +25,19 @@
 	<div class="container">
     <br>
 	  <div class="card" style="width:300px; margin: auto;">
-		<img src="/img/defaultUser.jpg" alt="defaultUserPic">
+		<img src="static/img/defaultUser.jpg" alt="defaultUserPic">
 		<div class="card-body" style="font-weight: bold;">
 			<div>
 				<label for="Name"><h5>Username:</h5></label>
-				<span name="Name" th:text="${getName}"></span>
+				<span id="Name" th:text="${getName}"></span>
 			</div>
 			<div>
 				<label for="Email"><h5>Email:</h5></label>
-				<span name="Email" th:text="${getEmail}"></span>
+				<span id="Email" th:text="${getEmail}"></span>
 			</div>
 			<div>
 				<label for="Enabled"><h5>Active account:</h5></label>
-				<span name="Enabled" th:text="${getEnabled}"></span>
+				<span id="Enabled" th:text="${getEnabled}"></span>
 			</div>
             <!--   <span name="Enabled" th:text="${getActivation}"></span>  -->
 		</div>
@@ -80,12 +80,9 @@
     </table>
     <br><br><br>
   </div>
-
-
-
 </body>
 </html>
-<script>
-	document.getElementById("userPageNav").classList.add("activeNav");
-</script>
-<script src="/userPage.js"></script>
+
+<script type="module" src="/static/userPage.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/1616414061.js" crossorigin="anonymous"></script>

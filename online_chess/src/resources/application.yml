@@ -1,7 +1,9 @@
 server:
+  address: 0.0.0.0
   port: ${PORT:8081}
-
 spring:
+  resources:
+    static-locations=classpath : /static/
   config:
     import: optional:secrets.properties
   cache.type: caffeine
@@ -9,7 +11,9 @@ spring:
   thymeleaf :
     enabled: true
     cache: false
-  mvc.locale.resolver: fixed
+  mvc:
+    locale.resolver: fixed
+    static-path-pattern: /static/**
   jpa:
     hibernate.ddl-auto=update:
     database-platform: org.hibernate.dialect.MySQL8Dialect

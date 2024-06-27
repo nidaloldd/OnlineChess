@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Mukta');
+
 body{
   font-family: 'Mukta', sans-serif;
 	height:100vh;
 	min-height:550px;
-	background-image: url(http://localhost:8081/img/Background.png);
+	background-image: url(http://localhost:8081/static/img/Background.png);
 	background-repeat: no-repeat;
 	background-size:cover;
 	background-position:center;
@@ -124,7 +125,7 @@ a{
 .register-show input[type="button"] {
     max-width: 150px;
     width: 100%;
-    background: #44444;
+    background: #444;
     color: #f9f9f9;
     border: none;
     padding: 10px;
@@ -151,6 +152,19 @@ a{
   text-decoration:none;
   color:#2c7715;
 }
-    
+
+.fade {
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+.show {
+    opacity: 1;
+}
+.show-log-panel {
+    display: block;
+}
+.right-log {
+    /* Add your CSS for the right-log class */
+}
     
     

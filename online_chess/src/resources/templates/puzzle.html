@@ -4,7 +4,7 @@
       layout:decorate="layouts/main">
 <head>
     <title>Online Chess</title>
-    <link rel="stylesheet" href="../static/css/chessTable.css" th:href="@{/css/chessTable.css}"/>
+    <link rel="stylesheet" href="/static/css/chessTable.css"/>
 </head>
 <body layout:fragment="content">
 
@@ -12,8 +12,8 @@
     <div th:if="${not getEnabled}" class="alert alert-danger">Not Activated Account</div>
     <main th:if="${getEnabled}">
         
-    <button onclick="getRandomPuzzle()" class="btn btn-lg btn-primary btn-block" >Get random Puzzle</button>
-    <button id="restartButton" onclick="getPuzzle()" class="btn btn-lg btn-primary btn-block" >Restart Puzzle</button>
+    <button id="getRandomPuzzleButton" class="btn btn-lg btn-primary btn-block" >Get random Puzzle</button>
+    <button id="restartPuzzleButton" class="btn btn-lg btn-primary btn-block" >Restart Puzzle</button>
 
     <div id="solvedPuzzleDiv"></div>
       <div class="grid">
@@ -125,11 +125,10 @@
           <div id="takenFiguresWhite"></div>
         </div>
       </div>
-      <script src="/chessGame.js"></script>
-      <script src="/puzzle.js"></script>
     </main>
   </body>
 </html>
-<script>
-	document.getElementById("puzzleNav").classList.add("activeNav");
-</script>
+
+<script type="module" src="/static/puzzle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/1616414061.js" crossorigin="anonymous"></script>

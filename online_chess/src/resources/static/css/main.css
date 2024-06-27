@@ -26,7 +26,7 @@
   }
 
   .hero-image {
-    background-image: url(http://localhost:8081/img/Background.png);
+    background-image: url(http://localhost:8081/static/img/Background.png);
     background-size: cover;
     height: 500px;
     display: flex;
@@ -76,15 +76,19 @@ footer{
 	left: 0;
 	bottom: 0;
 	width: 100%;
-  background-color: rgba(88, 129, 87, 0.9);
-	color: white;
+    background-color: rgba(88, 129, 87, 0.9);
 	text-align: center;
+    display: flex;
+    justify-content: space-evenly;
+}
+footer a {
+    color: black;
 }
 
 body{
     font-family: 'Mukta', sans-serif;
 	min-height:550px;
-	background-image: url(http://localhost:8081/img/Background.png);
+	background-image: url(http://localhost:8081/static/img/Background.png);
 	background-repeat: no-repeat;
 	background-size:cover;
 	background-position:inherit;
@@ -120,7 +124,7 @@ nav{
 }
 .activeNav{
 	background-color: #226857;
-};
+}
 
 
 
